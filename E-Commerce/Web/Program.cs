@@ -1,5 +1,12 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using Web.Repository;
 
+var builder = WebApplication.CreateBuilder(args);
+// Connection DB
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:E-CommerceDB"]);
+});
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

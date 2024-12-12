@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Models
 {
-    [Table("Category")]
     public class CategoryModel
     {
         [Key]
