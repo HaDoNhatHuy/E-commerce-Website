@@ -1,0 +1,12 @@
+﻿@model IEnumerable<CategoryModel>
+@foreach (var item in Model)
+{    
+        <div id="collapse-1" class="collapse show" data-parent="#widget-cat-acc">
+            <div class="collapse-wrap">
+                <ul>
+                    <li><a href="#">@item.Name</a></li>
+                </ul>
+            </div><!-- End .collapse-wrap -->
+        </div><!-- End .collapse -->
+    <!-- End .acc-item -->
+}

@@ -1,0 +1,12 @@
+﻿@model IEnumerable<BrandModel>
+@foreach (var item in Model)
+{
+    <div class="filter-item">
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="brand-1">
+            <label class="custom-control-label" for="brand-1">@item.Name</label>
+        </div><!-- End .custom-checkbox -->
+    </div>
+
+    <!-- End .filter-item -->
+}
