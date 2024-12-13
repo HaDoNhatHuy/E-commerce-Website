@@ -4,7 +4,7 @@
     <div class="filter-item">
         <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="brand-1">
-            <label class="custom-control-label" for="brand-1">@item.Name</label>
+            <label class="custom-control-label" for="brand-1"><a asp-action="Index" asp-controller="Brand" asp-route-Slug="@item.Slug">@item.Name</a></label>
         </div><!-- End .custom-checkbox -->
     </div>
 

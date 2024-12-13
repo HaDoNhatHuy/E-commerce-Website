@@ -66,7 +66,7 @@
 
     <div class="products mb-3">
         <div class="row justify-content-center">
-            @foreach(var item in Model)
+            @foreach (var item in Model)
             {
                 <div class="col-6 col-md-4 col-lg-4 col-xl-3">
                     <div class="product product-7 text-center">
@@ -89,11 +89,11 @@
 
                         <div class="product-body">
                             <div class="product-cat">
-                                <a href="#">@item.Category.Name</a>
+                                <a href="#">@item.Brand.Name</a>
                             </div><!-- End .product-cat -->
                             <h3 class="product-title"><a href="product.html">@item.Name</a></h3><!-- End .product-title -->
                             <div class="product-price">
-                               @item.Price
+                                @item.Price
                             </div><!-- End .product-price -->
                             <div class="ratings-container">
                                 <div class="ratings">
@@ -119,9 +119,8 @@
                 </div>
 
                 <!-- End .col-sm-6 col-lg-4 col-xl-3 -->
-            }
-            
-            
+            }           
+
         </div><!-- End .row -->
     </div><!-- End .products -->
 

@@ -15,8 +15,8 @@ namespace Web.Repository
                 BrandModel apple = new BrandModel { Name = "Apple", Slug = "apple", Description = "Apple is large brand in the world", Status = 1 };
                 BrandModel samsung = new BrandModel { Name = "Samsung", Slug = "samsung", Description = "Samsung is large brand in the world", Status = 1 };
                 _context.Products.AddRange(
-                    new ProductModel { Name = "Macbook", Slug = "Macbook", Description = "Macbook is an American Brand", Picture = "1.jpg", Category = Laptop, Brand = apple, Price = 123456 },
-                    new ProductModel { Name = "Samsung", Slug = "Samsung", Description = "Samsung is an Korean Brand", Picture = "1.jpg", Category = Phone, Brand = samsung, Price = 123456 }
+                    new ProductModel { Name = "Macbook ProM1", Slug = "Macbook", Description = "Macbook is an American Brand", Picture = "1.jpg", Category = Laptop, Brand = apple, Price = 123456 },
+                    new ProductModel { Name = "Samsung Galaxy ZFold", Slug = "Samsung", Description = "Samsung is an Korean Brand", Picture = "1.jpg", Category = Phone, Brand = samsung, Price = 123456 }
                 );
                 _context.SaveChanges();
             }
