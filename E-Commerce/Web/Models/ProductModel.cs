@@ -13,8 +13,8 @@ namespace Web.Models
         public string Slug { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public Guid CategoryId { get; set; }
-        public Guid BrandId { get; set; }
+        public int CategoryId { get; set; }
+        public int BrandId { get; set; }
         public CategoryModel Category { get; set; }
         public BrandModel Brand { get; set; }
     }

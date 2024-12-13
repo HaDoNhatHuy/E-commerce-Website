@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<ProductModel>
+@Html.Partial("_SidebarPartial")
 <div class="col-lg-9 col-xl-4-5col">
     <div class="category-banners-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl"
          data-owl-options='{
@@ -208,11 +209,11 @@
     }
     }'>
         @foreach (var item in Model)
-        {
+        {            
             <div class="product">
                 <figure class="product-media">
                     <span class="product-label label-top">Top</span>
-                    <a href="product.html">
+                    <a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">
                         <img src="/assets/images/demos/demo-13/products/product-7.jpg" alt="Product image" class="product-image">
                     </a>
 
@@ -229,9 +230,8 @@
                 <div class="product-body">
                     <div class="product-cat">
                         <a href="#">@item.Category.Name</a>
-                        <a href="#" style="float:right">@item.Brand.Name</a>
                     </div><!-- End .product-cat -->
-                    <h3 class="product-title"><a href="product.html">@item.Name</a></h3><!-- End .product-title -->
+                    <h3 class="product-title"><a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">@item.Name</a></h3><!-- End .product-title -->
                     <div class="product-price">
                        @item.Price
                     </div><!-- End .product-price -->

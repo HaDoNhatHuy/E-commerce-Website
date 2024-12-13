@@ -6,7 +6,7 @@ namespace Web.Models
     public class CategoryModel
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [Required, MinLength(4, ErrorMessage = "Yêu cầu nhập tên Danh mục")]
         public string Name { get; set; }
         [Required, MinLength(4, ErrorMessage = "Yêu cầu nhập Mô tả Danh mục")]
