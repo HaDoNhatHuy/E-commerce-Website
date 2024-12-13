@@ -26,5 +26,22 @@ namespace Web.Controllers
         {
             return View("~/Views/Checkout/Index.cshtml");
         }
+        public async Task<IActionResult> Add(int Id)
+        {
+            ProductModel product = await _dataContext.Products.FindAsync(Id);
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            CartItemModel cartItem = cart.Where(i => i.ProductId == Id).FirstOrDefault();
+            if (cartItem == null)
+            {
+                cart.Add(new CartItemModel(product));
+            }
+            else
+            {
+                cartItem.Quantity += 1;
+            }
+            HttpContext.Session.SetJson("Cart", cart);
+            return Redirect(Request.Headers["Referer"].ToString());//trả về trang hiện tại
+        }
+
     }
 }
