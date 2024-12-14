@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="/assets/css/nouislider.css">
     <link rel="stylesheet" href="/assets/css/skin-demo-13.css">
     <link rel="stylesheet" href="/assets/css/demo-13.css">
+    @RenderSectionAsync("Css", required: false)
 </head>
 
 <body>
@@ -740,7 +741,7 @@
             <div class="page-content">
                 <div class="container">
                     <div class="row">
-
+                        @* @Html.Partial("_NotificationPartial") *@
                         @RenderBody()
 
                     </div><!-- End .row -->

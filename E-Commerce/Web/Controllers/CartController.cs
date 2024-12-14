@@ -40,6 +40,7 @@ namespace Web.Controllers
                 cartItem.Quantity += 1;
             }
             HttpContext.Session.SetJson("Cart", cart);
+            TempData["success"] = "Thêm sản phẩm vào giỏ hàng thành công";
             return Redirect(Request.Headers["Referer"].ToString());//trả về trang hiện tại
         }
         public async Task<IActionResult> Decrease(int Id)
@@ -98,6 +99,11 @@ namespace Web.Controllers
             {
                 HttpContext.Session.SetJson("Cart", cart);
             }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Clear()
+        {
+            HttpContext.Session.Remove("Cart");
             return RedirectToAction("Index");
         }
 
