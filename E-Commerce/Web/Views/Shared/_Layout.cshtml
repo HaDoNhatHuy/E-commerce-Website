@@ -741,8 +741,8 @@
                 <div class="container">
                     <div class="row">
 
-                       @RenderBody()
-                       
+                        @RenderBody()
+
                     </div><!-- End .row -->
                 </div><!-- End .container -->
             </div><!-- End .page-content -->
@@ -1247,6 +1247,7 @@
     <script src="/assets/js/jquery.magnific-popup.min.js"></script>
     <!-- Main JS File -->
     <script src="/assets/js/main.js"></script>
+    @RenderSectionAsync("Js", required: false)
 </body>
 
 

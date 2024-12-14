@@ -39,24 +39,26 @@
                                         <td class="quantity-col">
                                             <div class="cart-product-quantity">
                                                 @* <input type="number" class="form-control" value="@item.Quantity" min="1" max="10" step="1" data-decimals="0" required> *@
-                                                <form asp-controller="Cart" asp-action="UpdateQuantity" method="post">
-                                                    <!-- Truyền ProductId qua hidden input -->
-                                                    <input type="hidden" name="ProductId" value="@item.ProductId" />
-
-                                                    <!-- Input đã có nút tăng giảm -->
-                                                    <input type="number"
-                                                           name="Quantity"
-                                                           class="form-control text-center"
-                                                           value="@item.Quantity"
-                                                           min="1"
-                                                           max="100"
-                                                           step="1"
-                                                           onchange="this.form.submit()" />
-                                                </form>
+                                                
+                                                <div class="input-group  input-spinner">
+                                                    <div class="input-group-prepend">
+                                                        <a asp-action="Decrease" asp-controller="Cart" asp-route-Id="@item.ProductId"><button style="min-width: 26px" class="btn btn-decrement btn-spinner" type="button">
+                                                            <i class="icon-minus"></i>
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                    <input type="text" style="text-align: center" class="form-control " required="" placeholder="@item.Quantity">
+                                                    <div class="input-group-append">
+                                                        <a asp-action="Increase" asp-controller="Cart" asp-route-Id="@item.ProductId"><button style="min-width: 26px" class="btn btn-increment btn-spinner" type="button">
+                                                            <i class="icon-plus"></i>
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div><!-- End .cart-product-quantity -->
                                         </td>
                                         <td class="total-col">@Model.CartItems.Where(i => i.ProductId == @item.ProductId).Sum(x => x.Quantity * x.Price)</td>
-                                        <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                                        <td class="remove-col"><a asp-action="Remove" asp-controller="Cart" asp-route-Id="@item.ProductId"><button class="btn-remove"><i class="icon-close"></i></button></a></td>
                                     </tr>
                                 }
                             }
@@ -152,3 +154,33 @@
         </div><!-- End .container -->
     </div><!-- End .cart -->
 </div><!-- End .page-content -->
+@* @section Js {
+    <script>
+                function updateQuantity(inputElement, productId) {
+            const newQuantity = inputElement.value;
+
+            if (newQuantity < 1 || newQuantity > 10) {
+                alert("Quantity must be between 1 and 10.");
+                inputElement.value = 1; // Reset về giá trị mặc định
+                return;
+            }
+
+            fetch(`/Cart/UpdateQuantity?Id=${productId}&quantity=${newQuantity}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Tải lại trang hoặc cập nhật tổng tiền giỏ hàng
+                    location.reload();
+                } else {
+                    alert("Failed to update quantity. Please try again.");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+    </script>
+} *@

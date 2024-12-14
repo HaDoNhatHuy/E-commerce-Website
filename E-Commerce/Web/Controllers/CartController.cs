@@ -42,6 +42,64 @@ namespace Web.Controllers
             HttpContext.Session.SetJson("Cart", cart);
             return Redirect(Request.Headers["Referer"].ToString());//trả về trang hiện tại
         }
+        public async Task<IActionResult> Decrease(int Id)
+        {
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
+            CartItemModel cartItem = cart.Where(i => i.ProductId == Id).FirstOrDefault();
+            if (cartItem.Quantity > 1)
+            {
+                --cartItem.Quantity;
+            }
+            else
+            {
+                cart.RemoveAll(i => i.ProductId == Id);
+            }
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Increase(int Id)
+        {
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
+            CartItemModel cartItem = cart.Where(i => i.ProductId == Id).FirstOrDefault();
+            if (cartItem.Quantity >= 1)
+            {
+                ++cartItem.Quantity;
+            }
+            else
+            {
+                cart.RemoveAll(i => i.ProductId == Id);
+            }
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Remove(int Id)
+        {
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
+            cart.RemoveAll(i => i.ProductId == Id);
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+            return RedirectToAction("Index");
+        }
 
     }
 }
