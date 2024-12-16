@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Web.Repository;
 
 namespace Web.Areas.Admin.Controllers
@@ -12,9 +13,10 @@ namespace Web.Areas.Admin.Controllers
             _dataContext = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+
+            return View(await _dataContext.Products.OrderByDescending(i => i.Id).Include(i=>i.Brand).Include(i => i.Category).ToListAsync());
         }
     }
 }
