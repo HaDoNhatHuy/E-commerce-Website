@@ -1,15 +1,15 @@
 ﻿@model ProductModel
 @{
-    ViewData["Title"] = "Create Product";
+    ViewData["Title"] = "Edit Product";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 <div class="card card-success">
     <div class="card-header">
-        <h3 class="card-title">Thêm sản phẩm</h3>
+        <h3 class="card-title">Cập nhật sản phẩm</h3>
     </div>
     <!-- /.card-header -->
     <!-- form start -->
-    <form asp-action="Create" enctype="multipart/form-data">
+    <form asp-action="Edit" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="card-body">
             <div class="form-group">
@@ -21,6 +21,7 @@
                 <label>Picture</label>
                 <input type="file" class="form-control" asp-for="PictureUpload">
                 <span asp-validation-for="PictureUpload" class="text-danger"></span>
+                <img src="/assets/images/productImages/@Model.Picture" alt="@Model.Name" width="100" />
             </div>
             <div class="form-group">
                 <label>Price</label>
@@ -45,12 +46,12 @@
                     <option value="value">---- Choose a Brand ----</option>
                 </select>
                 <span asp-validation-for="BrandId" class="text-danger"></span>
-            </div>            
+            </div>
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
             <button type="submit" class="btn btn-success">
-                Create
+                Update
             </button>
         </div>
     </form>
@@ -60,7 +61,7 @@
         </a>
     </div>
 </div>
-@section Js{
+@section Js {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

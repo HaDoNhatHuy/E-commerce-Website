@@ -32,18 +32,19 @@
                     <td>
                         @item.Name
                     </td>
-                    <td><img src="/assets/images/@item.Picture" alt="@item.Name" width="100" /></td>
-                    <td>@item.Description</td>
+                    <td><img src="/assets/images/productImages/@item.Picture" alt="@item.Name" width="100" /></td>
+                    <td>@Html.Raw(item.Description)</td> @* sử dụng @Html.Raw() để giữ nguyên định dạng *@                    
                     <td>@item.Price</td>
+                    @* <td>@Html.Raw(item.Price)</td> *@
                     <td>@item.Slug</td>
                     <td>@item.Category.Name</td>
                     <td>@item.Brand.Name</td>
                     <td>
                         <div class="d-flex justify-content-between">
-                            <a asp-action="Edit" asp-controller="Product" class="btn btn-sm btn-warning" title="Sửa">
+                            <a asp-action="Edit" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-warning" title="Sửa">
                                 <i class="fas fa-edit"></i> Sửa
                             </a>
-                            <a asp-action="Delete" asp-controller="Product" class="btn btn-sm btn-danger ml-2" title="Xóa">
+                            <a asp-action="Delete" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-danger ml-2" title="Xóa">
                                 <i class="fas fa-trash"></i> Xóa
                             </a>
                         </div>
