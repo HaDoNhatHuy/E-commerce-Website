@@ -74,7 +74,10 @@
                         <figure class="product-media">
                             <span class="product-label label-new">New</span>
                             <a href="product.html">
-                                <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
+                                <img src="/assets/images/productImages/@item.Picture"
+                                     alt="Product image"
+                                     class="product-image"
+                                     style="width: 255px; height: 255px; object-fit: cover;">
                             </a>
 
                             <div class="product-action-vertical">
@@ -84,7 +87,7 @@
                             </div><!-- End .product-action-vertical -->
 
                             <div class="product-action">
-                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id" class="btn-product btn-cart"><span>add to cart</span></a>
                             </div><!-- End .product-action -->
                         </figure><!-- End .product-media -->
 

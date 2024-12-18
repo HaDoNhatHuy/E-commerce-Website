@@ -209,12 +209,16 @@
     }
     }'>
         @foreach (var item in Model)
-        {            
+        {
             <div class="product">
                 <figure class="product-media">
                     <span class="product-label label-top">Top</span>
                     <a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">
-                        <img src="/assets/images/demos/demo-13/products/product-7.jpg" alt="Product image" class="product-image">
+                        @* <img src="/assets/images/productImages/@item.Picture" alt="Product image" class="product-image"> *@
+                        <img src="/assets/images/productImages/@item.Picture"
+                             alt="Product image"
+                             class="product-image"
+                             style="width: 255px; height: 255px; object-fit: cover;">
                     </a>
 
                     <div class="product-action-vertical">
@@ -233,7 +237,7 @@
                     </div><!-- End .product-cat -->
                     <h3 class="product-title"><a asp-action="Details" asp-controller="Product" asp-route-Id="@item.Id">@item.Name</a></h3><!-- End .product-title -->
                     <div class="product-price">
-                       @item.Price
+                        @item.Price
                     </div><!-- End .product-price -->
                     <div class="ratings-container">
                         <div class="ratings">
