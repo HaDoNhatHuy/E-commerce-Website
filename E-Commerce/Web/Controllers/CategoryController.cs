@@ -20,6 +20,5 @@ namespace Web.Controllers
             var productsByCategory = _dataContext.Products.Where(i => i.CategoryId == category.Id);
             return View(await productsByCategory.OrderByDescending(i => i.Id).ToListAsync());
         }
-
     }
 }
