@@ -21,6 +21,7 @@
                 <label>Picture</label>
                 <input type="file" class="form-control" asp-for="PictureUpload">
                 <span asp-validation-for="PictureUpload" class="text-danger"></span>
+                <img id="imgpreview" class="pt-2"/>
             </div>
             <div class="form-group">
                 <label>Price</label>
@@ -64,6 +65,11 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $("#PictureUpload").change(function(){
+            readURL(this);
+        })
+    </script>
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
         CKEDITOR.replace( 'Description' );
