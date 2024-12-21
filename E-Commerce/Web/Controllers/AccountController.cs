@@ -74,5 +74,10 @@ namespace Web.Controllers
 
             return View("Account", model);
         }
+        public async Task<IActionResult> Logout(string returnUrl = "/")
+        {
+            await _signInManager.SignOutAsync();
+            return Redirect(returnUrl);
+        }
     }
 }

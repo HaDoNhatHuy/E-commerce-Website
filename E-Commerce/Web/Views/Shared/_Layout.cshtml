@@ -32,6 +32,10 @@
     <link rel="stylesheet" href="/assets/css/nouislider.css">
     <link rel="stylesheet" href="/assets/css/skin-demo-13.css">
     <link rel="stylesheet" href="/assets/css/demo-13.css">
+    <!--Font Awesome-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    
+
     @await RenderSectionAsync("Css", required: false)
 </head>
 
@@ -56,7 +60,16 @@
                             <li>
                                 <a href="#">Links</a>
                                 <ul>
-                                    <li><a asp-controller="Account" asp-action="Account"><i class="icon-user"></i>Login</a></li>
+                                    @if (User.Identity?.IsAuthenticated ?? false)
+                                    {
+                                        <li><a asp-controller="Account" asp-action="Logout"><i class="icon-user"></i>Welcome, @User.Identity.Name!</a><span style="margin:0 5px 0 5px">|</span><i class="fas fa-sign-out-alt"></i><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                        
+                                    }
+                                    else
+                                    {
+                                        <li><a asp-controller="Account" asp-action="Account"><i class="icon-user"></i>Login</a></li>
+                                        
+                                    }
                                 </ul>
                             </li>
                         </ul><!-- End .top-menu -->
