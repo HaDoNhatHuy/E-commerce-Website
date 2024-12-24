@@ -17,7 +17,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.IsEssential = true;
 });
-
+// Khai bao Identity
 builder.Services.AddIdentity<AppUserModel, IdentityRole>()
     .AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
 
@@ -28,7 +28,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
-    //options.Password.RequiredLength = 6;
+    options.Password.RequiredLength = 4;
     //options.Password.RequiredUniqueChars = 1;
 
     // Lockout settings.
@@ -56,10 +56,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication();//Login - Before
+//app.UseAuthorization();
 
-app.UseAuthorization();
+app.UseAuthorization();//Check Roles - After
 
 app.MapControllerRoute(
     name: "Areas",

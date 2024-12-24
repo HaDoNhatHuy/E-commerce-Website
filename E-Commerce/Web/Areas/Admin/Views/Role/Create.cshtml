@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">Add Role</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>            
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success">
+                Create
+            </button>
+        </div>
+    </form>
+    <div class="mt-3 d-flex justify-content-end">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Role List
+        </a>
+    </div>
+</div>
+@section Js {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
