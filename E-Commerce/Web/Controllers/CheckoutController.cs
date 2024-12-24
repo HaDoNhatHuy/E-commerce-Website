@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Web.Areas.Admin.Repository;
 using Web.Models;
 using Web.Repository;
 
@@ -8,9 +9,11 @@ namespace Web.Controllers
     public class CheckoutController : Controller
     {
         private readonly DataContext _dataContext;
-        public CheckoutController(DataContext dataContext)
+        private readonly IEmailSender _emailSender;
+        public CheckoutController(DataContext dataContext, IEmailSender emailSender)
         {
             _dataContext = dataContext;
+            _emailSender = emailSender;
         }
 
         //public IActionResult Index()
@@ -47,6 +50,12 @@ namespace Web.Controllers
                     await _dataContext.SaveChangesAsync();
                 }
                 HttpContext.Session.Remove("Cart");
+                //Send Email when order success
+                var receiver = userEmail;
+                var subject = "Đặt hàng thành công";
+                var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
+                await _emailSender.SendEmailAsync(receiver, subject, message);
+
                 TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
                 return RedirectToAction("Index", "Cart");
             }
