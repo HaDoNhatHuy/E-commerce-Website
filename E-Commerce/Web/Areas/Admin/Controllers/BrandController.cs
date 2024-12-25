@@ -8,7 +8,7 @@ using Web.Repository;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin,Author")]
+    //[Authorize(Roles = "Admin,Author")]
     public class BrandController : Controller
     {
         private readonly DataContext _dataContext;

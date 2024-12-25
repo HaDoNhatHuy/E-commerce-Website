@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/assets/dist/css/adminlte.min.css">
     <!-- summernote -->
     <link rel="stylesheet" href="/assets/plugins/summernote/summernote-bs4.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.15.3/dist/sweetalert2.min.css" rel="stylesheet">
     @await RenderSectionAsync("Css", required: false)
 </head>
 <body class="sidebar-mini layout-fixed" style="height: auto;">
@@ -925,7 +926,15 @@
     <script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData" data-requestid="1eb99c2378ed4a4096f689afdac95bb7" data-requestmappingfromserver="false" data-connecturl="http://localhost:58000/bf81059ff8964a64a05abebcea4a3388/browserLink"></script>
     <!-- End Browser Link -->
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.15.3/dist/sweetalert2.all.min.js"></script>
+    <script>
+        $(function(){
+            var message='@TempData["success"]'
+            if(message!=''){
+                Swal.fire(message);
+            }
+        });
+    </script>
     @await RenderSectionAsync("Js", required: false)
-
 </body>
 </html>
