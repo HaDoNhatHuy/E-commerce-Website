@@ -33,7 +33,7 @@ namespace Web.Controllers
                 var orderItem = new OrderModel();
                 orderItem.OrderCode = orderCode;
                 orderItem.UserName = userEmail;
-                orderItem.Status = 1;
+                orderItem.Status = 0;
                 orderItem.CreatedDate = DateTime.Now;
                 _dataContext.Add(orderItem);
                 await _dataContext.SaveChangesAsync();

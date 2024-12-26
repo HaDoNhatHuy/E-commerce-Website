@@ -24,5 +24,26 @@ namespace Web.Areas.Admin.Controllers
             var orderDetails = await _dataContext.OrderDetails.Include(i => i.Product).Where(i => i.OrderCode == orderCode).ToListAsync();
             return View(orderDetails);
         }
+        [HttpPost]
+        [Route("UpdateOrder")]
+        public async Task<IActionResult> UpdateOrder(string orderCode, int status)
+        {
+            var order = await _dataContext.Orders.Where(i => i.OrderCode == orderCode).FirstOrDefaultAsync();
+            if (order == null)
+            {
+                return NotFound();
+            }
+            order.Status = status;
+            try
+            {
+                await _dataContext.SaveChangesAsync();
+                return Ok(new { success = true, message = "Trạng thái đơn hàng đã được cập nhật." });
+            }
+            catch (Exception ex)
+            {
+                //return StatusCode(500, "An error occured while updating the order status");
+                return Ok(new { success = false, message = "Đã xảy ra lỗi khi cập nhật trạng thái đơn hàng." });
+            }
+        }
     }
 }

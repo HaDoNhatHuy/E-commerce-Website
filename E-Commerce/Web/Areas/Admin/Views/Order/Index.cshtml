@@ -26,11 +26,11 @@
                     <td>
                         @if (item.Status == 1)
                         {
-                            <span class="badge badge-status badge-success">Đã thanh toán</span>
+                            <span class="badge badge-status badge-success">Đã xử lý</span>
                         }
-                        else
+                        @if (item.Status == 0)
                         {
-                            <span class="badge badge-status badge-danger">Chưa thanh toán</span>
+                            <span class="badge badge-status badge-danger">Chưa xử lý</span>
                         }
                     </td>
                     <td>
