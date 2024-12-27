@@ -20,6 +20,14 @@ namespace Web.Controllers
             if (Id == null)
                 return RedirectToAction("Index");
             var productById = _dataContext.Products.Include("Category").Include("Brand").Where(i => i.Id == Id).FirstOrDefault();
+            //var productById = await _dataContext.Products.Where(p => p.Id == Id).FirstOrDefaultAsync();
+
+            //Related Product
+            var relatedProducts = await _dataContext.Products
+                .Where(i => i.CategoryId == productById.CategoryId && i.Id != productById.Id)
+                .Take(4)
+                .ToListAsync();
+            ViewBag.RelatedProducts = relatedProducts;
             return View(productById);
         }
         [HttpPost]
