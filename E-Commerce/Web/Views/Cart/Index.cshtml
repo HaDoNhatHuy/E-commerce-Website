@@ -26,7 +26,7 @@
                                             <div class="product">
                                                 <figure class="product-media">
                                                     <a href="#">
-                                                        <img src="/assets/images/products/table/product-1.jpg" alt="Product image">
+                                                        <img src="/assets/images/productImages/@item.Picture" alt="Product image">
                                                     </a>
                                                 </figure>
 
@@ -35,7 +35,7 @@
                                                 </h3><!-- End .product-title -->
                                             </div><!-- End .product -->
                                         </td>
-                                        <td class="price-col">$@item.Price</td>
+                                        <td class="price-col">@item.Price.ToString("#,##0 VNĐ")</td>
                                         <td class="quantity-col">
                                             <div class="cart-product-quantity">
                                                 @* <input type="number" class="form-control" value="@item.Quantity" min="1" max="10" step="1" data-decimals="0" required> *@
@@ -57,7 +57,7 @@
                                                 </div>
                                             </div><!-- End .cart-product-quantity -->
                                         </td>
-                                        <td class="total-col">@Model.CartItems.Where(i => i.ProductId == @item.ProductId).Sum(x => x.Quantity * x.Price)</td>
+                                        <td class="total-col">@Model.CartItems.Where(i => i.ProductId == @item.ProductId).Sum(x => x.Quantity * x.Price).ToString("#,##0 VNĐ")</td>
                                         <td class="remove-col"><a asp-action="Remove" asp-controller="Cart" asp-route-Id="@item.ProductId"><button class="btn-remove"><i class="icon-close"></i></button></a></td>
                                     </tr>
                                 }
@@ -103,7 +103,7 @@
                             <tbody>
                                 <tr class="summary-subtotal">
                                     <td>Subtotal:</td>
-                                    <td>@Model.GrandTotal.ToString()</td>
+                                    <td>@Model.GrandTotal.ToString("#,##0 VNĐ")</td>
                                 </tr><!-- End .summary-subtotal -->
                                 <tr class="summary-shipping">
                                     <td>Shipping:</td>

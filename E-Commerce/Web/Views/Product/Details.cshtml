@@ -10,7 +10,7 @@
                                 <div class="product-gallery">
                                     <figure class="product-main-image">
                                         <span class="product-label label-top">Top</span>
-                                        <img id="product-zoom" src="/assets/images/products/single/sidebar-gallery/1.jpg" data-zoom-image="/assets/images/products/single/sidebar-gallery/1-big.jpg" alt="product image">
+                                        <img id="product-zoom" src="/assets/images/productImages/@Model.Picture" data-zoom-image="/assets/images/products/single/sidebar-gallery/1-big.jpg" alt="product image">
 
                                         <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                             <i class="icon-arrows"></i>
@@ -49,7 +49,7 @@
                                     </div><!-- End .rating-container -->
 
                                     <div class="product-price">
-                                        $@Model.Price
+                                        @Model.Price.ToString("#,##0 VNĐ")
                                     </div><!-- End .product-price -->
 
                                     <div class="product-content">
