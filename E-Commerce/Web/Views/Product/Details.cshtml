@@ -1,4 +1,9 @@
-﻿<main class="main">
+﻿@using Web.Models.ViewModels
+@model ProductDetailsViewModel
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+<main class="main">
 
     <div class="page-content">
         <div class="container">
@@ -10,7 +15,7 @@
                                 <div class="product-gallery">
                                     <figure class="product-main-image">
                                         <span class="product-label label-top">Top</span>
-                                        <img id="product-zoom" src="/assets/images/productImages/@Model.Picture" data-zoom-image="/assets/images/products/single/sidebar-gallery/1-big.jpg" alt="product image">
+                                        <img id="product-zoom" src="/assets/images/productImages/@Model.ProductDetails.Picture" data-zoom-image="/assets/images/products/single/sidebar-gallery/1-big.jpg" alt="product image">
 
                                         <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                             <i class="icon-arrows"></i>
@@ -39,7 +44,7 @@
 
                             <div class="col-md-6">
                                 <div class="product-details product-details-sidebar">
-                                    <h1 class="product-title">@Model.Name</h1><!-- End .product-title -->
+                                    <h1 class="product-title">@Model.ProductDetails.Name</h1><!-- End .product-title -->
 
                                     <div class="ratings-container">
                                         <div class="ratings">
@@ -49,11 +54,11 @@
                                     </div><!-- End .rating-container -->
 
                                     <div class="product-price">
-                                        @Model.Price.ToString("#,##0 VNĐ")
+                                        @Model.ProductDetails.Price.ToString("#,##0 VNĐ")
                                     </div><!-- End .product-price -->
 
                                     <div class="product-content">
-                                        <p>@Html.Raw(@Model.Description)</p>
+                                        <p>@Html.Raw(@Model.ProductDetails.Description)</p>
                                     </div><!-- End .product-content -->
 
                                     <div class="details-filter-row details-row-size">
@@ -99,13 +104,13 @@
                                     <div class="product-details-footer details-footer-col">
                                         <div class="product-cat">
                                             <span>Category:</span>
-                                            <a href="#">@Model.Category.Name</a>,
+                                            <a href="#">@Model.ProductDetails.Category.Name</a>,
                                             <a href="#">Dresses</a>,
                                             <a href="#">Yellow</a>
                                         </div><!-- End .product-cat -->
                                         <div class="product-cat">
                                             <span>Brand:</span>
-                                            <a href="#">@Model.Brand.Name</a>
+                                            <a href="#">@Model.ProductDetails.Brand.Name</a>
                                         </div><!-- End .product-cat -->
                                         <div class="social-icons social-icons-sm">
                                             <span class="social-label">Share:</span>
@@ -123,7 +128,7 @@
                     <div class="product-details-tab">
                         <ul class="nav nav-pills justify-content-center" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                                <a class="nav-link" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="false">Description</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
@@ -132,11 +137,11 @@
                                 <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
+                                <a class="nav-link active" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="true">Reviews (2)</a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
+                            <div class="tab-pane fade" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
                                 <div class="product-desc-content">
                                     <h3>Product Information</h3>
                                     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
@@ -177,61 +182,109 @@
                                     </p>
                                 </div><!-- End .product-desc-content -->
                             </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
+                            <div class="tab-pane fade show active" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
                                 <div class="reviews">
                                     <h3>Reviews (2)</h3>
-                                    <div class="review">
-                                        <div class="row no-gutters">
-                                            <div class="col-auto">
-                                                <h4><a href="#">Samanta J.</a></h4>
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                </div><!-- End .rating-container -->
-                                                <span class="review-date">6 days ago</span>
-                                            </div><!-- End .col -->
-                                            <div class="col">
-                                                <h4>Good, perfect size</h4>
+                                    @* @foreach (var ratingModel in ViewBag.ListComments as IEnumerable<RatingModel>) *@
+                                    @foreach (var ratingModel in Model.ListComments)
+                                    {
+                                        <div class="review">
+                                            <div class="row no-gutters">
+                                                <div class="col-auto">
+                                                    <h4><a href="#">@ratingModel.Name</a></h4>
+                                                    <div class="ratings-container">
+                                                        <div class="ratings">
+                                                            @if (ratingModel.Rating == 0)
+                                                            {
+                                                                <div class="ratings-val" style="width: 0%;"></div>
+                                                            }
+                                                            @if (ratingModel.Rating == 1)
+                                                            {
+                                                                <div class="ratings-val" style="width: 20%;"></div>
+                                                            }
+                                                            @if (ratingModel.Rating == 2)
+                                                            {
+                                                                <div class="ratings-val" style="width: 40%;"></div>
+                                                            }
+                                                            @if (ratingModel.Rating == 3)
+                                                            {
+                                                                <div class="ratings-val" style="width: 60%;"></div>
+                                                            }
+                                                            @if (ratingModel.Rating == 4)
+                                                            {
+                                                                <div class="ratings-val" style="width: 80%;"></div>
+                                                            }
+                                                            @if (ratingModel.Rating == 5)
+                                                            {
+                                                                <div class="ratings-val" style="width: 100%;"></div>
+                                                            }
+                                                        </div><!-- End .ratings -->
+                                                    </div><!-- End .rating-container -->
+                                                    <span class="review-date">6 days ago</span>
+                                                </div><!-- End .col -->
+                                                <div class="col">
+                                                    <h4>Good, perfect size</h4>
 
-                                                <div class="review-content">
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!</p>
-                                                </div><!-- End .review-content -->
+                                                    <div class="review-content">
+                                                        <p>@ratingModel.Comment</p>
+                                                    </div><!-- End .review-content -->
 
-                                                <div class="review-action">
-                                                    <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                                    <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                </div><!-- End .review-action -->
-                                            </div><!-- End .col-auto -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .review -->
+                                                    <div class="review-action">
+                                                        <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
+                                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                                    </div><!-- End .review-action -->
+                                                </div><!-- End .col-auto -->
+                                            </div><!-- End .row -->
+                                        </div>
 
-                                    <div class="review">
-                                        <div class="row no-gutters">
-                                            <div class="col-auto">
-                                                <h4><a href="#">John Doe</a></h4>
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                </div><!-- End .rating-container -->
-                                                <span class="review-date">5 days ago</span>
-                                            </div><!-- End .col -->
-                                            <div class="col">
-                                                <h4>Very good</h4>
-
-                                                <div class="review-content">
-                                                    <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure illum repellendus, blanditiis perspiciatis beatae!</p>
-                                                </div><!-- End .review-content -->
-
-                                                <div class="review-action">
-                                                    <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                                    <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                </div><!-- End .review-action -->
-                                            </div><!-- End .col-auto -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .review -->
+                                        <!-- End .review -->
+                                    }
                                 </div><!-- End .reviews -->
+                                <div class="review-form-container">
+                                    <h2>Đánh giá sản phẩm</h2>
+                                    <form asp-action="Rating" asp-controller="Product" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" asp-for="@Model.ProductDetails.Id" name="ProductId" />
+                                        @* <input type="hidden" name="Rating" value="4" /> *@
+                                        <div class="form-group">
+                                            <label>Tên của bạn:</label>
+                                            <input type="text" asp-for="@Model.Name" class="form-control" required placeholder="Nhập tên của bạn">
+                                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email:</label>
+                                            <input type="email" asp-for="@Model.Email" class="form-control" required placeholder="Nhập email của bạn">
+                                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Nội dung đánh giá:</label>
+                                            <textarea asp-for="@Model.Comment" class="form-control" rows="4" required placeholder="Nhập nội dung đánh giá"></textarea>
+                                            <span asp-validation-for="@Model.Comment" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Đánh giá:</label>
+                                            <div class="star-rating">
+                                                <input type="radio" id="star5" name="rating" value="5" required>
+                                                <label for="star5" title="5 sao">☆</label>
+                                                <input type="radio" id="star4" name="rating" value="4">
+                                                <label for="star4" title="4 sao">☆</label>
+                                                <input type="radio" id="star3" name="rating" value="3">
+                                                <label for="star3" title="3 sao">☆</label>
+                                                <input type="radio" id="star2" name="rating" value="2">
+                                                <label for="star2" title="2 sao">☆</label>
+                                                <input type="radio" id="star1" name="rating" value="1">
+                                                <label for="star1" title="1 sao">☆</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tải hình ảnh:</label>
+                                            <input type="file" name="ImageUpload" class="form-control" accept="image/*">
+                                            <img id="imgpreview" class="pt-2" />
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn-submit">Gửi đánh giá</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div><!-- .End .tab-pane -->
                         </div><!-- End .tab-content -->
                     </div><!-- End .product-details-tab -->
@@ -420,7 +473,7 @@
                     <div class="sidebar sidebar-product">
                         <div class="widget widget-products">
                             <h4 class="widget-title">Related Product</h4><!-- End .widget-title -->
-                            
+
                             <div class="products">
                                 @foreach (var relatedProducts in @ViewBag.RelatedProducts as IEnumerable<ProductModel>)
                                 {
@@ -442,7 +495,7 @@
                                     </div>
 
                                     <!-- End .product product-sm -->
-                                }                               
+                                }
                             </div><!-- End .products -->
 
                             <a href="category.html" class="btn btn-outline-dark-3"><span>View More Products</span><i class="icon-long-arrow-right"></i></a>
@@ -464,3 +517,83 @@
         </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+@section Css {
+    <style>
+        .review-form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+            .review-form-container h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 5px;
+            font-size: 24px;
+            direction: rtl;
+        }
+
+            .star-rating input[type="radio"] {
+                display: none;
+            }
+
+            .star-rating label {
+                cursor: pointer;
+                color: #ddd;
+            }
+
+            .star-rating input:checked ~ label {
+                color: #f5b301;
+            }
+
+        .btn-submit {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+            .btn-submit:hover {
+                background-color: #0056b3;
+            }
+
+    </style>
+}
+@section Js {
+    <script>
+        $("#ImageUpload").change(function(){
+            readURL(this);
+        })
+    </script>
+}

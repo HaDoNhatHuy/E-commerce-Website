@@ -550,7 +550,7 @@
                             <nav class="main-nav">
                                 <ul class="menu sf-arrows">
                                     <li class="megamenu-container">
-                                        <a asp-controller="Home">Home</a>
+                                        <a asp-controller="Home" asp-action="Index">Home</a>
                                     </li>
                                     <li>
                                         <a asp-action="Index" asp-controller="Product" class="sf-with-ul">Shop</a>
@@ -1259,11 +1259,10 @@
     <script src="/assets/js/owl.carousel.min.js"></script>
     <script src="/assets/js/bootstrap-input-spinner.js"></script>
     <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="/backends/js/site.js"></script>
     <!-- Main JS File -->
     <script src="/assets/js/main.js"></script>
     @await RenderSectionAsync("Js", required: false)
 </body>
-
-
 <!-- molla/category-market.html  22 Nov 2019 10:03:00 GMT -->
 </html>

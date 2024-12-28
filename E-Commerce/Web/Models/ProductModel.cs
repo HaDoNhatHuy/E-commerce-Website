@@ -28,6 +28,9 @@ namespace Web.Models
         public CategoryModel Category { get; set; }
         public BrandModel Brand { get; set; }
         public string Picture { get; set; } = "noimage.jpg";
+        //[ForeignKey("RatingId")]
+        //public int RatingId { get; set; }
+        public RatingModel Ratings { get; set; }
         [NotMapped]
         [FileExtension]
         [Required(ErrorMessage = "Vui lòng chọn ảnh sản phẩm")]
