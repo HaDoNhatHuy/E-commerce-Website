@@ -1,0 +1,110 @@
+﻿<div class="category-banners-slider owl-carousel owl-simple owl-nav-inside owl-loaded owl-drag" data-toggle="owl" data-owl-options="{
+&quot;nav&quot;: false,
+&quot;responsive&quot;: {
+&quot;768&quot;: {
+&quot;nav&quot;: true
+}
+}
+}">
+    <!-- End .banner -->
+    <!-- End .banner -->
+    <div class="owl-stage-outer">
+        <div class="owl-stage" style="transform: translate3d(-2186px, 0px, 0px); transition: 0.4s; width: 4373px;">
+            @* <div class="owl-item cloned" style="width: 728.8px;">
+                <div class="banner banner-poster">
+
+                    <a href="#">
+                        <img src="/assets/images/demos/demo-13/banners/banner-7.jpg" alt="Banner">
+                    </a>
+
+                    <div class="banner-content banner-content-right">
+                        <h3 class="banner-subtitle"><a href="#">Amazing Value</a></h3><!-- End .banner-subtitle -->
+                        <h2 class="banner-title"><a href="#">High Performance 4K TVs</a></h2><!-- End .banner-title -->
+                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                    </div><!-- End .banner-content -->
+                </div>
+            </div> *@
+            @* <div class="owl-item cloned" style="width: 728.8px;">
+                <div class="banner banner-poster">
+                    <a href="#">
+                        <img src="/assets/images/demos/demo-13/banners/banner-8.jpg" alt="Banner">
+                    </a>
+
+                    <div class="banner-content">
+                        <h3 class="banner-subtitle"><a href="#">Weekend Deal</a></h3><!-- End .banner-subtitle -->
+                        <h2 class="banner-title"><a href="#">Apple &amp; Accessories</a></h2><!-- End .banner-title -->
+                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                    </div><!-- End .banner-content -->
+                </div>
+            </div> *@
+            @foreach (var banner in ViewBag.BannersGroup1)
+            {
+                <div class="owl-item" style="width: 728.8px;">
+                    <div class="banner banner-poster">
+
+                        <a href="#">
+                            <img src="/assets/images/bannerImages/@banner.Image" alt="Banner">
+                        </a>
+
+                        <div class="banner-content banner-content-right">
+                            <h3 class="banner-subtitle"><a href="#">Amazing Value</a></h3><!-- End .banner-subtitle -->
+                            <h2 class="banner-title"><a href="#">High Performance 4K TVs</a></h2><!-- End .banner-title -->
+                            <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                        </div><!-- End .banner-content -->
+                    </div>
+                </div>
+            }
+            @foreach (var banner in ViewBag.BannersGroup2)
+            {
+            <div class="owl-item active" style="width: 728.8px;">
+                    <div class="banner banner-poster">
+                        <a href="#">
+                            <img src="/assets/images/bannerImages/@banner.Image" alt="Banner">
+                        </a>
+
+                        <div class="banner-content">
+                            <h3 class="banner-subtitle"><a href="#">Weekend Deal</a></h3><!-- End .banner-subtitle -->
+                            <h2 class="banner-title"><a href="#">Apple &amp; Accessories</a></h2><!-- End .banner-title -->
+                            <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                        </div><!-- End .banner-content -->
+                    </div>
+                </div>
+            }            
+            @* <div class="owl-item cloned" style="width: 728.8px;">
+                <div class="banner banner-poster">
+
+                    <a href="#">
+                        <img src="/assets/images/demos/demo-13/banners/banner-7.jpg" alt="Banner">
+                    </a>
+
+                    <div class="banner-content banner-content-right">
+                        <h3 class="banner-subtitle"><a href="#">Amazing Value</a></h3><!-- End .banner-subtitle -->
+                        <h2 class="banner-title"><a href="#">High Performance 4K TVs</a></h2><!-- End .banner-title -->
+                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                    </div><!-- End .banner-content -->
+                </div>
+            </div> *@
+            @* <div class="owl-item cloned" style="width: 728.8px;">
+                <div class="banner banner-poster">
+                    <a href="#">
+                        <img src="/assets/images/demos/demo-13/banners/banner-8.jpg" alt="Banner">
+                    </a>
+
+                    <div class="banner-content">
+                        <h3 class="banner-subtitle"><a href="#">Weekend Deal</a></h3><!-- End .banner-subtitle -->
+                        <h2 class="banner-title"><a href="#">Apple &amp; Accessories</a></h2><!-- End .banner-title -->
+                        <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
+                    </div><!-- End .banner-content -->
+                </div>
+            </div> *@
+        </div>
+    </div>
+    <div class="owl-nav">
+        <button type="button" role="presentation" class="owl-prev"><i class="icon-angle-left"></i></button>
+        <button type="button" role="presentation" class="owl-next"><i class="icon-angle-right"></i></button>
+    </div>
+    <div class="owl-dots">
+        <button role="button" class="owl-dot"><span></span></button>
+        <button role="button" class="owl-dot active"><span></span></button>
+    </div>
+</div>

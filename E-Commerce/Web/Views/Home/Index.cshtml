@@ -4,7 +4,7 @@
 @model IEnumerable<ProductModel>
 @Html.Partial("_SidebarPartial")
 <div class="col-lg-9 col-xl-4-5col">
-    <div class="category-banners-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl"
+    @* <div class="category-banners-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl"
          data-owl-options='{
     "nav": false,
     "responsive": {
@@ -37,8 +37,9 @@
                 <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
             </div><!-- End .banner-content -->
         </div><!-- End .banner -->
-    </div><!-- End .owl-carousel -->
+    </div> *@<!-- End .owl-carousel -->
 
+    @Html.Partial("BannerPartial")
     <div class="mb-3"></div><!-- End .mb-3 -->
 
     <div class="owl-carousel owl-simple owl-nav-align" data-toggle="owl"

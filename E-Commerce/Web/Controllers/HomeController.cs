@@ -20,6 +20,17 @@ namespace Web.Controllers
         public IActionResult Index()
         {
             var products = _dataContext.Products.Include("Category").Include("Brand").ToList();
+
+            //var banners = _dataContext.Banners.Where(i => i.Status == 1).ToList();
+            // Tách danh sách banner thành hai nhóm
+            var bannersGroup1 =  _dataContext.Banners.Take(1).ToList();
+            var bannersGroup2 =  _dataContext.Banners.Skip(1).Take(1).ToList();
+
+            ViewBag.BannersGroup1 = bannersGroup1;
+            ViewBag.BannersGroup2 = bannersGroup2;
+
+            //ViewBag.Banners = banners;
+            
             return View(products);
         }
 
@@ -38,7 +49,7 @@ namespace Web.Controllers
             else
             {
                 return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-            }            
+            }
         }
     }
 }
