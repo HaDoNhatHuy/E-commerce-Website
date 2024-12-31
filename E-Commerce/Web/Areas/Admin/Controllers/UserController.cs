@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using Web.Models;
 using Web.Repository;
 
@@ -29,6 +30,9 @@ namespace Web.Areas.Admin.Controllers
                                        join ur in _dataContext.UserRoles on u.Id equals ur.UserId
                                        join r in _dataContext.Roles on ur.RoleId equals r.Id
                                        select new { User = u, RoleName = r.Name }).ToListAsync();
+
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.LoggedInUser = loggedInUserId;
             return View(userWithRoles);
         }
         [HttpGet]
