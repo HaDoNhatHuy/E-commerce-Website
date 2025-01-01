@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Web.Areas.Admin.Repository;
 using Web.Models;
+using Web.Models.ViewModels;
 using Web.Repository;
 
 namespace Web.Controllers
@@ -16,11 +17,18 @@ namespace Web.Controllers
             _emailSender = emailSender;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-        public async Task<IActionResult> Checkout()
+        public IActionResult Index()
+        {
+            List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            CartItemViewModel cartVM = new()
+            {
+                CartItems = cartItems,
+                GrandTotal = cartItems.Sum(i => i.Quantity * i.Price)
+            };
+            return View(cartVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CheckoutSuccess(CartItemViewModel model)
         {
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail == null)
@@ -33,7 +41,7 @@ namespace Web.Controllers
                 var orderItem = new OrderModel();
                 orderItem.OrderCode = orderCode;
                 orderItem.UserName = userEmail;
-                orderItem.Status = 0;
+                orderItem.Status = 1;
                 orderItem.CreatedDate = DateTime.Now;
                 _dataContext.Add(orderItem);
                 await _dataContext.SaveChangesAsync();
@@ -42,23 +50,27 @@ namespace Web.Controllers
                 {
                     var orderDetails = new OrderDetails();
                     orderDetails.OrderCode = orderCode;
-                    orderDetails.UserName = userEmail;
+                    orderDetails.UserName = model.UserName;
+                    orderDetails.Address = model.Address;
+                    orderDetails.Phone = model.Phone;
+                    orderDetails.Email = model.Email;
+                    orderDetails.Note = model.Note;
                     orderDetails.ProductId = item.ProductId;
                     orderDetails.Price = item.Price;
                     orderDetails.Quantity = item.Quantity;
                     _dataContext.Add(orderDetails);
                     await _dataContext.SaveChangesAsync();
                 }
+                TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
                 HttpContext.Session.Remove("Cart");
                 //Send Email when order success
                 var receiver = userEmail;
                 var subject = "Đặt hàng thành công";
                 var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
-                await _emailSender.SendEmailAsync(receiver, subject, message);
-
-                TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
+                await _emailSender.SendEmailAsync(receiver, subject, message);                
                 return RedirectToAction("Index", "Cart");
             }
         }
     }
 }
+

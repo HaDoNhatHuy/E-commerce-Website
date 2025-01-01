@@ -4,6 +4,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
     decimal total = 0;
     decimal subTotal = 0;
+    var firstItem = Model.FirstOrDefault(); // Lấy đối tượng đầu tiên từ danh sách
 }
 
 <!-- Main content -->
@@ -24,12 +25,13 @@
         <div class="col-sm-6 invoice-col">
             To
             <address>
-                @* <strong>@Model.Order.UserName</strong><br> *@
-                @* 795 Folsom Ave, Suite 600<br>
-                                    San Francisco, CA 94107<br>
-                                    Phone: (555) 539-1037<br> *@
-                @* Email: @Model.Order.UserName *@
+                <strong>@firstItem.UserName</strong><br>
+                Address: @firstItem.Address<br>
+                @* San Francisco, CA 94107<br> *@
+                Phone: @firstItem.Phone<br>
+                Email: @firstItem.Email
             </address>
+
         </div>
         <!-- /.col -->
         <div class="col-sm-6 invoice-col">
@@ -59,15 +61,15 @@
                     @foreach (var item in Model)
                     {
                         subTotal = item.Quantity * item.Price;
-                        total += subTotal;
+                        total += subTotal;                        
                         <tr>
                             <input type="hidden" asp-for="@item.OrderCode" class="getId" />
                             @* <td>@Model.ProductId</td> *@
                             <td>@item.Product.Name</td>
                             <td>@item.Quantity</td>
-                            <td>$@item.Price</td>
-                            <td>@subTotal.ToString("C")</td>                            
-                        </tr>                        
+                            <td>@item.Price.ToString("#,##0 VNĐ")</td>
+                            <td>@subTotal.ToString("#,##0 VNĐ")</td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -99,7 +101,7 @@
                 <table class="table">
                     <tr>
                         <th style="width:50%">Subtotal:</th>
-                        <td>$250.30</td>
+                        <td>@subTotal.ToString("#,##0 VNĐ")</td>
                     </tr>
                     <tr>
                         <th>Tax (9.3%)</th>
@@ -139,7 +141,7 @@
     </div>
 </div>
 <!-- /.invoice -->
-@section Css{
+@section Css {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select/dist/css/bootstrap-select.min.css">
 }
 @section Js {
