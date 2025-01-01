@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Web.Models;
+using Web.Models.ViewModels;
 using Web.Repository;
 
 namespace Web.Controllers
@@ -30,7 +31,7 @@ namespace Web.Controllers
             ViewBag.BannersGroup2 = bannersGroup2;
 
             //ViewBag.Banners = banners;
-            
+
             return View(products);
         }
 
