@@ -2,16 +2,15 @@
 @model CartItemViewModel
 @if (Model.CartItems.Count() > 0)
 {
-    @foreach (var item in Model.CartItems)
-    {
-        <div class="dropdown cart-dropdown">
-            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                <i class="icon-shopping-cart"></i>
-                <span class="cart-count">@Model.CartItems.Count()</span>
-            </a>
-
-            <div class="dropdown-menu dropdown-menu-right">
-                <div class="dropdown-cart-products">
+    <div class="dropdown cart-dropdown">
+        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+            <i class="icon-shopping-cart"></i>
+            <span class="cart-count">@Model.CartItems.Count()</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-cart-products">
+                @foreach (var item in Model.CartItems)
+                {
                     <div class="product">
                         <div class="product-cart-details">
                             <h4 class="product-title">
@@ -30,22 +29,26 @@
                             </a>
                         </figure>
                         <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                    </div><!-- End .product -->
-                </div><!-- End .cart-product -->
+                    </div>
 
-                <div class="dropdown-cart-total">
-                    <span>Total</span>
+                    <!-- End .product -->
+                }
+            </div><!-- End .cart-product -->
 
-                    <span class="cart-total-price">@Model.CartItems.Where(i => i.ProductId == @item.ProductId).Sum(x => x.Quantity * x.Price).ToString("#,##0 VNĐ")</span>
-                </div><!-- End .dropdown-cart-total -->
+            <div class="dropdown-cart-total">
+                <span>Total</span>
 
-                <div class="dropdown-cart-action">
-                    <a asp-action="Index" asp-controller="Cart" class="btn btn-primary">View Cart</a>
-                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
-                </div><!-- End .dropdown-cart-total -->
-            </div><!-- End .dropdown-menu -->
+                <span class="cart-total-price">@Model.GrandTotal.ToString("#,##0 VNĐ")</span>
+            </div><!-- End .dropdown-cart-total -->
+
+            <div class="dropdown-cart-action">
+                <a asp-action="Index" asp-controller="Cart" class="btn btn-primary">View Cart</a>
+                <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+            </div><!-- End .dropdown-cart-total -->
         </div>
 
+        <!-- End .dropdown-menu -->
         <!-- End .cart-dropdown -->
-    }
+
+    </div>
 }
