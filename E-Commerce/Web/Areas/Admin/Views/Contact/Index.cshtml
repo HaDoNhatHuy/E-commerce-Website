@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ContactModel>
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="card-body">
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Logo</th>
+                <th>Description</th>
+                <th>Map</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Title
+                    </td>
+                    <td><img src="/assets/images/contactImages/@item.LogoImage" alt="@item.Title" width="100" /></td>
+                    <td>@Html.Raw(item.Description)</td> @* sử dụng @Html.Raw() để giữ nguyên định dạng *@
+                    <td>@Html.Raw(item.Map)</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Email</td>
+                    <td>
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Edit" asp-controller="Contact" class="btn btn-sm btn-warning" title="Sửa">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+    </table>
+</div>
+

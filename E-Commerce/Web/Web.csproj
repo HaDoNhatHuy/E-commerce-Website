@@ -25,6 +25,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\assets\images\bannerImages\" />
+    <Folder Include="wwwroot\assets\images\contactImages\" />
     <Folder Include="wwwroot\assets\images\ratingImages\" />
     <Folder Include="wwwroot\backends\css\" />
   </ItemGroup>
