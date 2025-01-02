@@ -24,8 +24,8 @@ namespace Web.Controllers
 
             //var banners = _dataContext.Banners.Where(i => i.Status == 1).ToList();
             // Tách danh sách banner thành hai nhóm
-            var bannersGroup1 =  _dataContext.Banners.Take(1).ToList();
-            var bannersGroup2 =  _dataContext.Banners.Skip(1).Take(1).ToList();
+            var bannersGroup1 = _dataContext.Banners.Take(1).ToList();
+            var bannersGroup2 = _dataContext.Banners.Skip(1).Take(1).ToList();
 
             ViewBag.BannersGroup1 = bannersGroup1;
             ViewBag.BannersGroup2 = bannersGroup2;
@@ -39,9 +39,10 @@ namespace Web.Controllers
         {
             return View();
         }
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
-            return View();
+            var contact = await _dataContext.Contacts.FirstOrDefaultAsync();
+            return View(contact);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

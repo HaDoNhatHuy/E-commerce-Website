@@ -106,6 +106,5 @@ namespace Web.Controllers
             HttpContext.Session.Remove("Cart");
             return RedirectToAction("Index");
         }
-
     }
 }
