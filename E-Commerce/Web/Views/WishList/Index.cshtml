@@ -33,7 +33,7 @@
                                     </h3><!-- End .product-title -->
                                 </div><!-- End .product -->
                             </td>
-                            <td class="price-col">@item.Product.Price</td>
+                            <td class="price-col">@item.Product.Price.ToString("#,##0 VNĐ")</td>
                             <td class="stock-col"><span class="in-stock">In stock</span></td>
                             @* <td class="action-col">
                                 <div class="dropdown">
@@ -48,7 +48,7 @@
                                     </div>
                                 </div>
                             </td> *@
-                            <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                            <td class="remove-col"><a asp-action="Remove" asp-controller="WishList" asp-route-Id="@item.ProductId" class="btn-remove"><i class="icon-close"></i></a></td>
                         </tr>
                     }                   
                 </tbody>
@@ -66,4 +66,22 @@
         </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main>
+@section Js {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Kiểm tra nếu TempData["success"] có giá trị
+        @if (TempData["success"] != null)
+        {
+            <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: 'Đã xóa sản phẩm yêu thích',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+            </text>
+        }
+    </script>
+}
 

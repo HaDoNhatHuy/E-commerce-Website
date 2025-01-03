@@ -650,7 +650,7 @@
         });
     </script>
 
-    <script>
+    @* <script>
         $(document).ready(function(){
             $('.add-btn-wishlist').click(function(){
                 var Id=$(this).data("product_id");
@@ -671,5 +671,48 @@
                 });
             });
         });
+    </script> *@
+    <script>
+                $(document).ready(function () {
+            $('.add-btn-wishlist').click(function () {
+                var Id = $(this).data("product_id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/AddWishList",
+                    data: { Id: Id }, // send data to the server
+                    success: function (result) {
+                        if (result.success) {
+                            // Hiển thị thông báo thành công
+                            Swal.fire({
+                                icon: "success",
+                                title: "Thành công",
+                                text: result.message
+                            });
+                        } else {
+                            // Thông báo lỗi từ server (nếu có)
+                            Swal.fire({
+                                icon: "warning",
+                                title: "Thông báo",
+                                text: result.message
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        // Xử lý lỗi server hoặc mạng
+                        var message = "Đã xảy ra lỗi trong quá trình xử lý.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            message = xhr.responseJSON.message;
+                        }
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi",
+                            text: message
+                        });
+                    }
+                });
+            });
+        });
+
     </script>
 }

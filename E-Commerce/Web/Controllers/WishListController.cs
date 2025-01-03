@@ -25,5 +25,18 @@ namespace Web.Controllers
             var wishList = await _dataContext.WishListProducts.Include(i => i.Product).Where(i => i.UserId == currentUser.Id).ToListAsync();
             return View(wishList);
         }
+        [HttpGet]
+        public async Task<IActionResult> Remove(int Id)
+        {
+            var productWish = _dataContext.WishListProducts.Where(i => i.ProductId == Id).FirstOrDefault();
+            if (productWish != null)
+            {
+                _dataContext.WishListProducts.Remove(productWish);
+                await _dataContext.SaveChangesAsync();
+            }
+            TempData["success"] = "Đã xóa sản phẩm yêu thích";
+            //return Ok(new { success = true, message = "Đã xóa sản phẩm yêu thích " });
+            return RedirectToAction("Index");
+        }
     }
 }

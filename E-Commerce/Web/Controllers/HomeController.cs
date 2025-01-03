@@ -49,6 +49,16 @@ namespace Web.Controllers
         public async Task<IActionResult> AddWishList(int Id, WishListModel wishList)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized(new { success = false, message = "User is not authenticated" });
+            }
+            var existingProductWish = await _dataContext.WishListProducts.FirstOrDefaultAsync(i => i.ProductId == Id && i.UserId == user.Id);
+            if (existingProductWish != null)
+            {
+                TempData["error"] = "Sản phẩm đã có trong danh sách yêu thích";
+                return BadRequest(new { success = false, message = "Sản phẩm đã có trong danh sách yêu thích" });
+            }
             wishList.ProductId = Id;
             wishList.UserId = user.Id;
             // Đảm bảo Id không bị gán giá trị cụ thể
@@ -66,16 +76,16 @@ namespace Web.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-            public IActionResult Error(int statuscode)
+        public IActionResult Error(int statuscode)
+        {
+            if (statuscode == 404)
             {
-                if (statuscode == 404)
-                {
-                    return View("NotFound");
-                }
-                else
-                {
-                    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-                }
+                return View("NotFound");
+            }
+            else
+            {
+                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
         }
     }
+}
