@@ -15,5 +15,7 @@ namespace Web.Repository
         public DbSet<RatingModel> Ratings { get; set; }
         public DbSet<BannerModel> Banners { get; set; }
         public DbSet<ContactModel> Contacts { get; set; }
+        public DbSet<CompareModel> CompareProducts { get; set; }
+        public DbSet<WishListModel> WishListProducts { get; set; }
     }
 }

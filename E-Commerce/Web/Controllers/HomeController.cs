@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Web.Models;
@@ -11,11 +12,12 @@ namespace Web.Controllers
     {
         private readonly DataContext _dataContext;
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger, DataContext context)
+        private readonly UserManager<AppUserModel> _userManager;
+        public HomeController(ILogger<HomeController> logger, DataContext context, UserManager<AppUserModel> userManager)
         {
             _logger = logger;
             _dataContext = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -44,18 +46,36 @@ namespace Web.Controllers
             var contact = await _dataContext.Contacts.FirstOrDefaultAsync();
             return View(contact);
         }
+        public async Task<IActionResult> AddWishList(int Id, WishListModel wishList)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            wishList.ProductId = Id;
+            wishList.UserId = user.Id;
+            // Đảm bảo Id không bị gán giá trị cụ thể
+            wishList.Id = 0;
+            try
+            {
+                _dataContext.WishListProducts.Add(wishList);
+                await _dataContext.SaveChangesAsync();
+                return Ok(new { success = true, message = "Thêm vào yêu thích thành công" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occured while adding to wishlist table");
+            }
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(int statuscode)
-        {
-            if (statuscode == 404)
+            public IActionResult Error(int statuscode)
             {
-                return View("NotFound");
-            }
-            else
-            {
-                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                if (statuscode == 404)
+                {
+                    return View("NotFound");
+                }
+                else
+                {
+                    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                }
             }
         }
     }
-}
