@@ -56,7 +56,7 @@ namespace Web.Controllers
             var existingProductWish = await _dataContext.WishListProducts.FirstOrDefaultAsync(i => i.ProductId == Id && i.UserId == user.Id);
             if (existingProductWish != null)
             {
-                TempData["error"] = "Sản phẩm đã có trong danh sách yêu thích";
+                //TempData["error"] = "Sản phẩm đã có trong danh sách yêu thích";
                 return BadRequest(new { success = false, message = "Sản phẩm đã có trong danh sách yêu thích" });
             }
             wishList.ProductId = Id;
@@ -67,6 +67,11 @@ namespace Web.Controllers
             {
                 _dataContext.WishListProducts.Add(wishList);
                 await _dataContext.SaveChangesAsync();
+                var wishListSession = await _dataContext.WishListProducts
+                    .Where(i => i.UserId == user.Id)
+                    .Include(i => i.Product)
+                    .ToListAsync();
+                HttpContext.Session.SetJson("WishList", wishListSession);
                 return Ok(new { success = true, message = "Thêm vào yêu thích thành công" });
             }
             catch (Exception ex)

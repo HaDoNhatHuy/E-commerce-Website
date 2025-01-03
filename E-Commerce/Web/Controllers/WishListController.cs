@@ -20,7 +20,7 @@ namespace Web.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                return RedirectToAction("Account", "Account");
             }
             var wishList = await _dataContext.WishListProducts.Include(i => i.Product).Where(i => i.UserId == currentUser.Id).ToListAsync();
             return View(wishList);
@@ -33,6 +33,25 @@ namespace Web.Controllers
             {
                 _dataContext.WishListProducts.Remove(productWish);
                 await _dataContext.SaveChangesAsync();
+
+                // Cập nhật lại Session
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    var wishListSession = await _dataContext.WishListProducts
+                        .Where(i => i.UserId == user.Id)
+                        .ToListAsync();
+                    HttpContext.Session.SetJson("WishList", wishListSession);
+                }
+                List<WishListModel> list = HttpContext.Session.GetJson<List<WishListModel>>("WishList");
+                if (list.Count == 0)
+                {
+                    HttpContext.Session.Remove("WishList");
+                }
+                else
+                {
+                    HttpContext.Session.SetJson("WishList", list);
+                }
             }
             TempData["success"] = "Đã xóa sản phẩm yêu thích";
             //return Ok(new { success = true, message = "Đã xóa sản phẩm yêu thích " });

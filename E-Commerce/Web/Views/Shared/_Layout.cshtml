@@ -12,6 +12,16 @@
                 GrandTotal = cartItems.Sum(item => item.Quantity * item.Price)
             };
 }
+@{
+    var user = HttpContextAccessor.HttpContext.User;
+    var wishList = new List<WishListModel>();
+
+    if (user.Identity.IsAuthenticated)
+    {
+        wishList = HttpContextAccessor.HttpContext.Session.GetJson<List<WishListModel>>("WishList") ?? new List<WishListModel>();
+    }
+}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -179,11 +189,7 @@
                                 </div>
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .compare-dropdown -->
-
-                        <a asp-controller="WishList" class="wishlist-link">
-                            <i class="icon-heart-o"></i>
-                            <span class="wishlist-count">2</span>
-                        </a>
+                        @await Html.PartialAsync("_WishListPartial", wishList)
                         @await Html.PartialAsync("_ShoppingCartPartial", cartViewModel)
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
