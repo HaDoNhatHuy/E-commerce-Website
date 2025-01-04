@@ -4,148 +4,134 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
     decimal total = 0;
     decimal subTotal = 0;
-    var firstItem = Model.FirstOrDefault(); // Lấy đối tượng đầu tiên từ danh sách
+    var firstItem = Model.FirstOrDefault();
 }
 
-<!-- Main content -->
-<div class="invoice p-3 mb-3">
-    <!-- title row -->
-    <div class="row">
+<div class="invoice p-4 mb-4 border rounded shadow-sm">
+    <div class="row mb-4">
         <div class="col-12">
-            <h4>
-                <i class="fas fa-globe"></i> AdminLTE, Inc.
-
-            </h4>
+            <h2 class="text-primary mb-3">
+                <i class="fas fa-file-invoice-dollar"></i> Chi tiết đơn hàng
+            </h2>
         </div>
-        <!-- /.col -->
     </div>
-    <!-- info row -->
+
     <div class="row invoice-info">
-        <!-- /.col -->
-        <div class="col-sm-6 invoice-col">
-            To
+        <div class="col-md-6">
+            <h5>Thông tin khách hàng</h5>
             <address>
                 <strong>@firstItem.UserName</strong><br>
-                Address: @firstItem.Address<br>
-                @* San Francisco, CA 94107<br> *@
-                Phone: @firstItem.Phone<br>
+                Địa chỉ: @firstItem.Address<br>
+                Điện thoại: @firstItem.Phone<br>
                 Email: @firstItem.Email
             </address>
-
         </div>
-        <!-- /.col -->
-        <div class="col-sm-6 invoice-col">
-            @* <b>Invoice #@firstItem.OrderCode</b><br> *@
-            <br>
-            @* <b>Order ID:</b> @Model.Order.Id<br> *@
-            @* <b>Payment Date:</b> @firstItem.Order.CreatedDate.ToString("dddd/MM/yyyy HH:mm:ss")<br> *@
-            @* <b>Account:</b> 968-34567 *@
-        </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
-    <!-- Table row -->
-    <div class="row">
-        <div class="col-12 table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        @* <th>#</th> *@
-                        <th>Product</th>
-                        <th>Quantity #</th>
-                        <th>Price</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        subTotal = item.Quantity * item.Price;
-                        total += subTotal;                        
-                        <tr>
-                            <input type="hidden" asp-for="@item.OrderCode" class="getId" />
-                            @* <td>@Model.ProductId</td> *@
-                            <td>@item.Product.Name</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Price.ToString("#,##0 VNĐ")</td>
-                            <td>@subTotal.ToString("#,##0 VNĐ")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
-
-    <div class="row">
-        <!-- accepted payments column -->
-        <div class="col-6">
-            <p class="lead">Payment Methods:</p>
-            <img src="/assets/dist/img/credit/visa.png" alt="Visa">
-            <img src="/assets/dist/img/credit/mastercard.png" alt="Mastercard">
-            <img src="/assets/dist/img/credit/american-express.png" alt="American Express">
-            <img src="/assets/dist/img/credit/paypal2.png" alt="Paypal">
-
-            <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-                Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
-                plugg
-                dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+        <div class="col-md-6 text-md-right">
+            <h5>Thông tin đơn hàng</h5>
+            <p>
+                <b>Mã đơn hàng:</b> @firstItem.OrderCode<br>
+                @* <b>Ngày tạo:</b> @firstItem.Order.CreatedDate.ToString("dd/MM/yyyy HH:mm") *@
             </p>
         </div>
-        <!-- /.col -->
-        <div class="col-6">
-            <p class="lead">Amount Due 2/22/2014</p>
+    </div>
 
-            <div class="table-responsive">
-                <table class="table">
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    subTotal = item.Quantity * item.Price;
+                    total += subTotal;
                     <tr>
-                        <th style="width:50%">Subtotal:</th>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price.ToString("#,##0 VNĐ")</td>
                         <td>@subTotal.ToString("#,##0 VNĐ")</td>
                     </tr>
-                    <tr>
-                        <th>Tax (9.3%)</th>
-                        <td>$10.34</td>
-                    </tr>
-                    <tr>
-                        <th>Shipping:</th>
-                        <td>$5.80</td>
-                    </tr>
-                    <tr>
-                        <th>Total:</th>
-                        <td>@total.ToString("C")</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <!-- /.col -->
+                }
+            </tbody>
+        </table>
     </div>
-    <!-- /.row -->
-    <!-- this row will not appear when printing -->
-    <div class="row no-print">
-        <div class="col-12">
-            <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-            <button type="button" class="btn btn-success float-right">
-                <i class="far fa-credit-card"></i> Submit
-                Payment
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h5>Phương thức thanh toán</h5>
+            <p>
+                <img src="/assets/dist/img/credit/visa.png" alt="Visa" class="mr-2">
+                <img src="/assets/dist/img/credit/mastercard.png" alt="Mastercard" class="mr-2">
+                <img src="/assets/dist/img/credit/american-express.png" alt="American Express" class="mr-2">
+                <img src="/assets/dist/img/credit/paypal2.png" alt="Paypal">
+            </p>
+            <p class="text-muted">
+                Các phương thức thanh toán đa dạng và bảo mật tuyệt đối.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <h5>Tổng thanh toán</h5>
+            <table class="table">
+                <tr>
+                    <th>Tạm tính:</th>
+                    <td>@total.ToString("#,##0 VNĐ")</td>
+                </tr>
+                <tr>
+                    <th>Thuế (9.3%):</th>
+                    <td>@((total * 0.093M).ToString("#,##0 VNĐ"))</td>
+                </tr>
+                <tr>
+                    <th>Phí vận chuyển:</th>
+                    <td>50,000 VNĐ</td>
+                </tr>
+                <tr class="font-weight-bold">
+                    <th>Tổng cộng:</th>
+                    <td>@((total + (total * 0.093M) + 50000).ToString("#,##0 VNĐ"))</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4 no-print">
+        <div class="col-md-12 text-right">
+            <button class="btn btn-secondary">
+                <i class="fas fa-print"></i> In hóa đơn
             </button>
-            <select class="form-control select-update-order">
+            <button class="btn btn-success">
+                <i class="fas fa-credit-card"></i> Thanh toán
+            </button>
+            <select class="form-control select-update-order d-inline-block w-auto ml-2">
                 <option value="0">Chưa xử lý</option>
                 <option value="1">Đã xử lý</option>
             </select>
-
-            <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                <i class="fas fa-download"></i> Generate PDF
+            <button class="btn btn-primary ml-2">
+                <i class="fas fa-file-pdf"></i> Xuất PDF
             </button>
         </div>
     </div>
 </div>
-<!-- /.invoice -->
+
 @section Css {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select/dist/css/bootstrap-select.min.css">
+    <style>
+        .invoice {
+            background: #fff;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .btn {
+            min-width: 120px;
+        }
+    </style>
 }
 @section Js {
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <script>
         $(document).ready(function(){
             $('.select-update-order').change(function(){
@@ -156,23 +142,18 @@
                     type:'POST',
                     url:"@Url.Action("UpdateOrder")",
                     data: {status:status,orderCode:orderCode},
-
                     success:function(result){
-                        //Handle successful update
                         if (result.success){
                             Swal.fire("Cập nhật thành công");
-                        }else{
-                            //Handle error
-                            Swal.fire("Cập nhật thất bại",result.message);
+                        } else {
+                            Swal.fire("Cập nhật thất bại", result.message);
                         }
                     },
-                    error: function(req,status, error){
-                        console.error("Error updating order",error);
+                    error: function(req, status, error){
+                        console.error("Error updating order", error);
                     }
                 });
             });
-                  // Kích hoạt thư viện dropdown đẹp
-        $('.select-update-order').selectpicker();
         });
     </script>
 }
