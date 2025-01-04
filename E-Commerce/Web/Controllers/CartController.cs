@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Web.Models;
 using Web.Models.ViewModels;
 using Web.Repository;
@@ -80,15 +81,17 @@ namespace Web.Controllers
         }
         public async Task<IActionResult> Increase(int Id)
         {
+            var product = await _dataContext.Products.Where(i => i.Id == Id).FirstOrDefaultAsync();
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
             CartItemModel cartItem = cart.Where(i => i.ProductId == Id).FirstOrDefault();
-            if (cartItem.Quantity >= 1)
+            if (cartItem.Quantity >= 1 && product.Quantity > cartItem.Quantity)
             {
                 ++cartItem.Quantity;
             }
             else
             {
-                cart.RemoveAll(i => i.ProductId == Id);
+                cartItem.Quantity = product.Quantity;
+                TempData["error"] = "Số lượng sản phẩm trong giỏ hàng đã tối đa ";
             }
             if (cart.Count == 0)
             {

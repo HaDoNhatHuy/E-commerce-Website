@@ -236,7 +236,14 @@
 
                     <div class="product-action">
                         @* <a asp-action="Add" asp-controller="Cart" asp-route-Id="@item.Id" class="btn-product btn-cart" title="Add to cart"><span>Add to cart</span></a> *@
-                        <button class="btn-product btn-cart add-to-cart" data-product_id="@item.Id" title="Add to cart"><span>Add to cart</span></button>
+                        @if (item.Quantity > 0)
+                        {
+                            <button class="btn-product btn-cart add-to-cart" data-product_id="@item.Id" title="Add to cart"><span>Add to cart</span></button>
+                        }
+                        else
+                        {
+                            <button class="btn-product btn-cart" title="Add to cart"><span>Sold Out</span></button>
+                        }
                     </div><!-- End .product-action -->
                 </figure><!-- End .product-media -->
                 <div class="product-body">

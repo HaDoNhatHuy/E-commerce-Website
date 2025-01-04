@@ -22,11 +22,13 @@ namespace Web.Models
         [Required, Range(1, int.MaxValue, ErrorMessage = "Chọn một danh mục")]
         //[Required(ErrorMessage = "Vui lòng chọn một danh mục")]
         public int CategoryId { get; set; }
+        public CategoryModel Category { get; set; }
         [Required, Range(1, int.MaxValue, ErrorMessage = "Chọn một thương hiệu")]
         //[Required(ErrorMessage = "Vui lòng chọn một thương hiệu")]
-        public int BrandId { get; set; }
-        public CategoryModel Category { get; set; }
+        public int BrandId { get; set; }        
         public BrandModel Brand { get; set; }
+        public int Quantity { get; set; }
+        public int Sold { get; set; }
         public string Picture { get; set; } = "noimage.jpg";
         [ForeignKey("RatingId")]
         public int RatingId { get; set; }

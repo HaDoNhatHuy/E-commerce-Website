@@ -19,6 +19,8 @@
                 <th>Description</th>
                 <th>Price</th>
                 <th>Slug</th>
+                <th>Quantity</th>
+                <th>Sold</th>
                 <th>Category</th>
                 <th>Brand</th>
                 <th>Options</th>
@@ -32,17 +34,22 @@
                     <td>
                         @item.Name
                     </td>
-                    <td><img src="/assets/images/productImages/@item.Picture" alt="@item.Name" width="100" /></td>
+                    <td><img src="/assets/images/productImages/@item.Picture" alt="@item.Name" width="100" /></td>                    
                     <td>@Html.Raw(item.Description)</td> @* sử dụng @Html.Raw() để giữ nguyên định dạng *@                    
                     <td>@item.Price.ToString("#,##0 VNĐ")</td>
                     @* <td>@Html.Raw(item.Price)</td> *@
                     <td>@item.Slug</td>
+                    <td><b>@item.Quantity</b></td>
+                    <td><b>@item.Sold</b></td>
                     <td>@item.Category.Name</td>
                     <td>@item.Brand.Name</td>
                     <td>
                         <div class="d-flex justify-content-between">
                             <a asp-action="Edit" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-warning" title="Sửa">
                                 <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            <a asp-action="AddQuantity" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-info ml-2" title="Thêm số lượng">
+                                <i class="fas fa-calculator"></i> Thêm số lượng
                             </a>
                             <a asp-action="Delete" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-danger ml-2 confirmDeletion" title="Xóa">
                                 <i class="fas fa-trash"></i> Xóa

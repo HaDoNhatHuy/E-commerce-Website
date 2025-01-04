@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Web.Areas.Admin.Repository;
 using Web.Models;
@@ -58,6 +59,11 @@ namespace Web.Controllers
                     orderDetails.ProductId = item.ProductId;
                     orderDetails.Price = item.Price;
                     orderDetails.Quantity = item.Quantity;
+                    //update product quantity
+                    var product = await _dataContext.Products.Where(p => p.Id == item.ProductId).FirstOrDefaultAsync();
+                    product.Quantity -= item.Quantity;
+                    product.Sold += item.Quantity;
+                    _dataContext.Products.Update(product);
                     _dataContext.Add(orderDetails);
                     await _dataContext.SaveChangesAsync();
                 }
@@ -67,7 +73,7 @@ namespace Web.Controllers
                 var receiver = userEmail;
                 var subject = "Đặt hàng thành công";
                 var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
-                await _emailSender.SendEmailAsync(receiver, subject, message);                
+                await _emailSender.SendEmailAsync(receiver, subject, message);
                 return RedirectToAction("Index", "Cart");
             }
         }

@@ -1,0 +1,19 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Web.Repository;
+
+namespace Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class ShippingController : Controller
+    {
+        private readonly DataContext _dataContext;
+        public ShippingController(DataContext context)
+        {
+            _dataContext = context;
+        }
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+}

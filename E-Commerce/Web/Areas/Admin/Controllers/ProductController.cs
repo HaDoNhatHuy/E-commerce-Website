@@ -159,5 +159,34 @@ namespace Web.Areas.Admin.Controllers
             TempData["success"] = "Đã xóa sản phẩm";
             return RedirectToAction("Index");
         }
+        //Add Product Quantity
+        [Route("AddQuantity")]
+        [HttpGet]
+        public async Task<IActionResult> AddQuantity(int Id)
+        {
+            var productByQuantity = await _dataContext.ProductQuantities.Where(pq => pq.ProductId == Id).ToListAsync();
+            ViewBag.ProductByQuantity = productByQuantity;
+            ViewBag.Id = Id;
+            return View();
+        }
+        [Route("StoreProductQuantity")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StoreProductQuantity(ProductQuantityModel productQuantityModel)
+        {
+            var product = _dataContext.Products.Find(productQuantityModel.ProductId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            product.Quantity += productQuantityModel.Quantity;
+            productQuantityModel.Quantity = productQuantityModel.Quantity;
+            productQuantityModel.ProductId = productQuantityModel.ProductId;
+            productQuantityModel.CreatedDate = DateTime.Now;
+            _dataContext.Add(productQuantityModel);
+            await _dataContext.SaveChangesAsync();
+            TempData["success"] = "Thêm số lượng sản phẩm thành công";
+            return RedirectToAction("AddQuantity", "Product", new { Id = productQuantityModel.ProductId });
+        }
     }
 }

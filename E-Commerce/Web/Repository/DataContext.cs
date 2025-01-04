@@ -17,5 +17,7 @@ namespace Web.Repository
         public DbSet<ContactModel> Contacts { get; set; }
         public DbSet<CompareModel> CompareProducts { get; set; }
         public DbSet<WishListModel> WishListProducts { get; set; }
+        public DbSet<ProductQuantityModel> ProductQuantities { get; set; }
+        public DbSet<ShippingModel> Shippings { get; set; }
     }
 }

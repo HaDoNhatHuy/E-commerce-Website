@@ -35,10 +35,10 @@
         </div>
         <!-- /.col -->
         <div class="col-sm-6 invoice-col">
-            @* <b>Invoice #@Model.OrderCode</b><br> *@
+            @* <b>Invoice #@firstItem.OrderCode</b><br> *@
             <br>
             @* <b>Order ID:</b> @Model.Order.Id<br> *@
-            @* <b>Payment Date:</b> 2/22/2014<br> *@
+            @* <b>Payment Date:</b> @firstItem.Order.CreatedDate.ToString("dddd/MM/yyyy HH:mm:ss")<br> *@
             @* <b>Account:</b> 968-34567 *@
         </div>
         <!-- /.col -->
