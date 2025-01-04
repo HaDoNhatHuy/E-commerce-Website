@@ -1,4 +1,5 @@
-﻿@using Web.Models.ViewModels
+﻿@using System.Web
+@using Web.Models.ViewModels
 @using Web.Repository
 @inject IHttpContextAccessor HttpContextAccessor
 @{
@@ -1097,7 +1098,20 @@
                             icon: 'success',
                             title: 'Thành công!',
                             /* text:'@TempData["success"]', *///sử dụng cái này bị lỗi font nên đổi lại Html.Raw
-                            text: '@Html.Raw((TempData["success"]))',
+                            // text: '@Html.Raw((TempData["success"]))',
+                            text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["success"]?.ToString() ?? ""))',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+            </text>
+        }
+        else if (TempData["error"] != null)
+        {
+            <text>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Thất bại!',                           
+                            text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["error"]?.ToString() ?? ""))',
                             timer: 2000,
                             showConfirmButton: false
                         });

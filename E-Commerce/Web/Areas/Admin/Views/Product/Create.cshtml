@@ -21,11 +21,12 @@
                 <label>Picture</label>
                 <input type="file" class="form-control" asp-for="PictureUpload">
                 <span asp-validation-for="PictureUpload" class="text-danger"></span>
-                <img id="imgpreview" class="pt-2"/>
+                <img id="imgpreview" class="pt-2" />
             </div>
             <div class="form-group">
                 <label>Price</label>
-                <input type="text" class="form-control" asp-for="Price" placeholder="Enter price">
+                <input type="text" class="form-control typing-price" pattern="[0-9.,]+" asp-for="Price" placeholder="Enter price">
+                <span id="price-convert"></span>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -46,7 +47,7 @@
                     <option value="value">---- Choose a Brand ----</option>
                 </select>
                 <span asp-validation-for="BrandId" class="text-danger"></span>
-            </div>            
+            </div>
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
@@ -61,7 +62,7 @@
         </a>
     </div>
 </div>
-@section Js{
+@section Js {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
@@ -73,5 +74,12 @@
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
         CKEDITOR.replace( 'Description' );
+    </script>
+
+    <script>
+        $(".typing-price").on("keyup",function(){
+            var currency_input=$(this).val();
+            $("#price-convert").html(new Intl.NumberFormat('vn-VN',{style:'currency', currency:'VND'}).format(currency_input));
+        });
     </script>
 }
