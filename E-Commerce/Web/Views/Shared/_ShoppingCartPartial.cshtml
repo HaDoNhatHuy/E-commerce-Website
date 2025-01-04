@@ -1,12 +1,13 @@
 ﻿@using Web.Models.ViewModels
 @model CartItemViewModel
-@if (Model.CartItems.Count() > 0)
-{
-    <div class="dropdown cart-dropdown">
-        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-            <i class="icon-shopping-cart"></i>
-            <span class="cart-count">@Model.CartItems.Count()</span>
-        </a>
+
+<div class="dropdown cart-dropdown">
+    <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+        <i class="icon-shopping-cart"></i>
+        <span class="cart-count">@Model.CartItems.Count()</span>
+    </a>
+    @if (Model.CartItems.Count() > 0)
+    {
         <div class="dropdown-menu dropdown-menu-right">
             <div class="dropdown-cart-products">
                 @foreach (var item in Model.CartItems)
@@ -46,9 +47,8 @@
                 <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
             </div><!-- End .dropdown-cart-total -->
         </div>
+    }
+    <!-- End .dropdown-menu -->
+    <!-- End .cart-dropdown -->
 
-        <!-- End .dropdown-menu -->
-        <!-- End .cart-dropdown -->
-
-    </div>
-}
+</div>

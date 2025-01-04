@@ -25,6 +25,16 @@ namespace Web.Controllers
             var wishList = await _dataContext.WishListProducts.Include(i => i.Product).Where(i => i.UserId == currentUser.Id).ToListAsync();
             return View(wishList);
         }
+        //---CÁCH LẤY THỨ HAI---
+        //public async Task<IActionResult> Index()
+        //{
+        //    var wishlist_product = await (from w in _dataContext.WishListProducts
+        //                                  join p in _dataContext.Products on w.ProductId equals p.Id
+        //                                  join u in _dataContext.Users on w.UserId equals u.Id
+        //                                  select new { User = u, Product = p, WishLists = w })
+        //                                  .ToListAsync();
+        //    return View(wishlist_product);
+        //}
         [HttpGet]
         public async Task<IActionResult> Remove(int Id)
         {

@@ -228,7 +228,7 @@
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
                             <button class="btn-product-icon btn-wishlist btn-expandable add-btn-wishlist" data-product_id="@item.Id"><span>Add to wishlist</span></button>
-                            <button class="btn-product-icon btn-compare add-btn-wishlist" data-product_id="@item.Id" title="Compare"><span>Compare</span></button>
+                            <button class="btn-product-icon btn-compare add-btn-compare" data-product_id="@item.Id" title="Compare"><span>Compare</span></button>
                         }
 
                         <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
@@ -642,7 +642,8 @@
                         //Handle success update
                         if(result){
                             Swal.fire("Thêm giỏ hàng thành công");
-                            location.reload();
+                            // location.reload();
+                            setTimeout(function(){location.reload()}, 1000); //reload with delay
                         }
                     }
                 });
@@ -689,7 +690,52 @@
                                 title: "Thành công",
                                 text: result.message
                             });
-                            location.reload();
+                            setTimeout(function(){location.reload()}, 1000);
+                        } else {
+                            // Thông báo lỗi từ server (nếu có)
+                            Swal.fire({
+                                icon: "warning",
+                                title: "Thông báo",
+                                text: result.message
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        // Xử lý lỗi server hoặc mạng
+                        var message = "Đã xảy ra lỗi trong quá trình xử lý.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            message = xhr.responseJSON.message;
+                        }
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi",
+                            text: message
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    <script>
+            $(document).ready(function () {
+            $('.add-btn-compare').click(function () {
+                var Id = $(this).data("product_id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/AddCompare",
+                    data: { Id: Id }, // send data to the server
+                    success: function (result) {
+                        if (result.success) {
+                            // Hiển thị thông báo thành công
+                            Swal.fire({
+                                icon: "success",
+                                title: "Thành công",
+                                text: result.message
+                            });
+                            setTimeout(function(){location.reload()}, 1000);
                         } else {
                             // Thông báo lỗi từ server (nếu có)
                             Swal.fire({

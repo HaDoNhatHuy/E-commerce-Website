@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Web.Models;
 using Web.Models.ViewModels;
 using Web.Repository;
@@ -8,12 +9,19 @@ namespace Web.Controllers
     public class CartController : Controller
     {
         private readonly DataContext _dataContext;
-        public CartController(DataContext context)
+        private readonly UserManager<AppUserModel> _userManager;
+        public CartController(DataContext context, UserManager<AppUserModel> userManager)
         {
             _dataContext = context;
+            _userManager = userManager;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Account", "Account");
+            }
             List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
             CartItemViewModel cartVM = new()
             {
@@ -22,8 +30,13 @@ namespace Web.Controllers
             };
             return View(cartVM);
         }
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Account", "Account");
+            }
             return View("~/Views/Checkout/Index.cshtml");
         }
         public async Task<IActionResult> Add(int Id)

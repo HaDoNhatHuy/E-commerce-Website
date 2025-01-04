@@ -21,6 +21,15 @@
         wishList = HttpContextAccessor.HttpContext.Session.GetJson<List<WishListModel>>("WishList") ?? new List<WishListModel>();
     }
 }
+@{    
+    // var user1 = HttpContextAccessor.HttpContext.User;
+    var compare = new List<CompareModel>();
+
+    if (user.Identity.IsAuthenticated)
+    {
+        compare = HttpContextAccessor.HttpContext.Session.GetJson<List<CompareModel>>("Compare") ?? new List<CompareModel>();
+    }
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -165,32 +174,37 @@
                                 </div><!-- End .header-search-wrapper -->
                             </form>
                         </div><!-- End .header-search -->
-
-                        <div class="dropdown compare-dropdown">
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" title="Compare Products" aria-label="Compare Products">
-                                <i class="icon-random"></i>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <ul class="compare-products">
-                                    <li class="compare-product">
-                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                        <h4 class="compare-product-title"><a href="product.html">Blue Night Dress</a></h4>
-                                    </li>
-                                    <li class="compare-product">
-                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                                        <h4 class="compare-product-title"><a href="product.html">White Long Skirt</a></h4>
-                                    </li>
-                                </ul>
-
-                                <div class="compare-actions">
-                                    <a href="#" class="action-link">Clear All</a>
-                                    <a href="#" class="btn btn-outline-primary-2"><span>Compare</span><i class="icon-long-arrow-right"></i></a>
-                                </div>
-                            </div><!-- End .dropdown-menu -->
-                        </div><!-- End .compare-dropdown -->
+                        @await Html.PartialAsync("_ComparePartial", compare)
                         @await Html.PartialAsync("_WishListPartial", wishList)
-                        @await Html.PartialAsync("_ShoppingCartPartial", cartViewModel)
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @await Html.PartialAsync("_ShoppingCartPartial", cartViewModel)
+                        }
+                        else
+                        {
+                            <div class="dropdown cart-dropdown">
+                                <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                    <i class="icon-shopping-cart"></i>
+                                    <span class="cart-count">0</span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-cart-products">                                        
+                                    </div><!-- End .cart-product -->
+
+                                    <div class="dropdown-cart-total">
+                                        <span>Total</span>
+
+                                        <span class="cart-total-price">0 VNĐ</span>
+                                    </div><!-- End .dropdown-cart-total -->
+
+                                    <div class="dropdown-cart-action">
+                                        <a asp-controller="Cart" class="btn btn-primary">View Cart</a>
+                                        <a asp-controller="Cart" asp-action="Checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    </div><!-- End .dropdown-cart-total -->
+                                </div><!-- End .dropdown-menu -->
+                            </div>
+                        }
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
@@ -1073,6 +1087,23 @@
     <script src="/backends/js/site.js"></script>
     <!-- Main JS File -->
     <script src="/assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Kiểm tra nếu TempData["success"] có giá trị
+        @if (TempData["success"] != null)
+        {
+            <text>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            /* text:'@TempData["success"]', *///sử dụng cái này bị lỗi font nên đổi lại Html.Raw
+                            text: '@Html.Raw((TempData["success"]))',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+            </text>
+        }
+    </script>
     @await RenderSectionAsync("Js", required: false)
 </body>
 <!-- molla/category-market.html  22 Nov 2019 10:03:00 GMT -->

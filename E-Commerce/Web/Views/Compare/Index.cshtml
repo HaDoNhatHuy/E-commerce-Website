@@ -1,12 +1,12 @@
-﻿@model IEnumerable<WishListModel>
+﻿@model IEnumerable<CompareModel>
 @{
-    ViewData["Title"] = "WishList";
+    ViewData["Title"] = "Compare";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         <div class="container">
-            <h1 class="page-title">WishList<span>Shop</span></h1>
+            <h1 class="page-title">Compare<span>Shop</span></h1>
         </div>
     </div>
     <div class="page-content">
@@ -53,9 +53,9 @@
                                     </div>
                                 </div>
                             </td> *@
-                            <td class="remove-col"><a asp-action="Remove" asp-controller="WishList" asp-route-Id="@item.ProductId" class="btn-remove"><i class="icon-close"></i></a></td>
+                            <td class="remove-col"><a asp-action="Remove" asp-controller="Compare" asp-route-Id="@item.ProductId" class="btn-remove"><i class="icon-close"></i></a></td>
                         </tr>
-                    }                   
+                    }
                 </tbody>
             </table><!-- End .table table-wishlist -->
             <div class="wishlist-share">
@@ -78,13 +78,13 @@
         @if (TempData["success"] != null)
         {
             <text>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công!',
-                        text: 'Đã xóa sản phẩm yêu thích',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: 'Đã xóa sản phẩm so sánh',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
             </text>
         }
     </script>

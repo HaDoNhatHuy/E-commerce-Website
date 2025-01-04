@@ -46,7 +46,7 @@ namespace Web.Controllers
             var contact = await _dataContext.Contacts.FirstOrDefaultAsync();
             return View(contact);
         }
-        public async Task<IActionResult> AddWishList(int Id, WishListModel wishList)
+        public async Task<IActionResult> AddWishList(int Id)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -59,13 +59,12 @@ namespace Web.Controllers
                 //TempData["error"] = "Sản phẩm đã có trong danh sách yêu thích";
                 return BadRequest(new { success = false, message = "Sản phẩm đã có trong danh sách yêu thích" });
             }
-            wishList.ProductId = Id;
-            wishList.UserId = user.Id;
-            // Đảm bảo Id không bị gán giá trị cụ thể
-            wishList.Id = 0;
+            var wishListProduct = new WishListModel();
+            wishListProduct.ProductId = Id;
+            wishListProduct.UserId = user.Id;
             try
             {
-                _dataContext.WishListProducts.Add(wishList);
+                _dataContext.WishListProducts.Add(wishListProduct);
                 await _dataContext.SaveChangesAsync();
                 var wishListSession = await _dataContext.WishListProducts
                     .Where(i => i.UserId == user.Id)
@@ -77,6 +76,38 @@ namespace Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "An error occured while adding to wishlist table");
+            }
+        }
+        public async Task<IActionResult> AddCompare(int Id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized(new { success = false, message = "User is not authenticated" });
+            }
+            var existingProductCompare = await _dataContext.CompareProducts.FirstOrDefaultAsync(i => i.ProductId == Id && i.UserId == user.Id);
+            if (existingProductCompare != null)
+            {
+                //TempData["error"] = "Sản phẩm đã có trong danh sách yêu thích";
+                return BadRequest(new { success = false, message = "Sản phẩm đã có trong danh sách so sánh" });
+            }
+            var compareProduct = new CompareModel();
+            compareProduct.ProductId = Id;
+            compareProduct.UserId = user.Id;
+            try
+            {
+                _dataContext.CompareProducts.Add(compareProduct);
+                await _dataContext.SaveChangesAsync();
+                var compareSession = await _dataContext.CompareProducts
+                    .Where(i => i.UserId == user.Id)
+                    .Include(i => i.Product)
+                    .ToListAsync();
+                HttpContext.Session.SetJson("Compare", compareSession);
+                return Ok(new { success = true, message = "Thêm sản phẩm vào so sánh thành công" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occured while adding to compare table");
             }
         }
 
