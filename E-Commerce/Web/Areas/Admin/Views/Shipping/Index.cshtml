@@ -1,95 +1,201 @@
 ﻿@model ShippingModel
 @{
-    ViewData["Title"] = "Create ShippingFee";
+    ViewData["Title"] = "ShippingFee";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var key = 1;
 }
-<div class="card card-success">
-    <div class="card-header">
+
+<div class="card shadow-lg border-0">
+    <div class="card-header bg-success text-white">
         <h3 class="card-title">Thêm phí vận chuyển</h3>
     </div>
-    <!-- /.card-header -->
-    <!-- form start -->
-    <form asp-action="Create">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="card-body">
-            <div class="form-group">
-                <label>Tỉnh Thành</label>
-                <select class="form-control" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
-                    <option value="0">Tỉnh Thành</option>
-                </select>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="tinh">Tỉnh Thành</label>
+                    <select class="form-control custom-select" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
+                        <option value="0">--- Chọn Tỉnh Thành ---</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Quận Huyện</label>
-                <select class="form-control" id="quan" name="quan" title="Chọn Quận Huyện">
-                    <option value="0">Quận Huyện</option>
-                </select>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="quan">Quận Huyện</label>
+                    <select class="form-control custom-select" id="quan" name="quan" title="Chọn Quận Huyện">
+                        <option value="0">--- Chọn Quận Huyện ---</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Phường Xã</label>
-                <select class="form-control" id="phuong" name="phuong" title="Chọn Phường Xã">
-                    <option value="0">Phường Xã</option>
-                </select>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="phuong">Phường Xã</label>
+                    <select class="form-control custom-select" id="phuong" name="phuong" title="Chọn Phường Xã">
+                        <option value="0">--- Chọn Phường Xã ---</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-            <button type="submit" class="btn btn-success">
-                Create
-            </button>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="price-shipping">Giá</label>
+                    <input type="text" asp-for="Price" id="price-shipping" class="form-control typing-price" pattern="[0-9.,]+" placeholder="Nhập giá vận chuyển" />
+                    <span id="price-convert"></span>
+                </div>
+            </div>
         </div>
-    </form>
-    <div class="mt-3 d-flex justify-content-end">
+    </div>
+    <div class="card-footer text-right">
+        <button type="button" class="btn btn-success btn-add-shipping">
+            <i class="fas fa-plus-circle"></i> Thêm phí vận chuyển
+        </button>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header bg-secondary text-white">
+        <h3 class="card-title">Danh sách phí vận chuyển</h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Tỉnh | Thành</th>
+                    <th>Quận | Huyện</th>
+                    <th>Phường | Xã</th>
+                    <th>Giá vận chuyển</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var shippingList in ViewBag.ShippingList)
+                {
+                    <tr>
+                        <td>@key</td>
+                        <td>@shippingList.City</td>
+                        <td>@shippingList.District</td>
+                        <td>@shippingList.Ward</td>
+                        <td>@shippingList.Price.ToString("#,##0 VNĐ")</td>
+                        <td>
+                            <a asp-action="Delete" asp-controller="Shipping" asp-route-Id="@shippingList.Id" class="btn btn-sm btn-danger confirmDeletion" title="Xóa">
+                                <i class="fas fa-trash"></i> Xóa
+                            </a>
+                        </td>
+                    </tr>
+                    key++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer text-right">
         <a asp-action="Index" asp-controller="Shipping" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to Shipping List
+            <i class="fas fa-arrow-left"></i> Trở lại danh sách
         </a>
     </div>
 </div>
-@section Js {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-    <script>
-        CKEDITOR.replace( 'Description' );
-    </script>
-    <script>
-        $(document).ready(function() {
-            //Lấy tỉnh thành
-            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm',function(data_tinh){
-                if(data_tinh.error==0){
-                   $.each(data_tinh.data, function (key_tinh,val_tinh) {
-                      $("#tinh").append('<option value="'+val_tinh.id+'">'+val_tinh.full_name+'</option>');
-                   });
-                   $("#tinh").change(function(e){
-                        var idtinh=$(this).val();
-                        //Lấy quận huyện
-                        $.getJSON('https://esgoo.net/api-tinhthanh/2/'+idtinh+'.htm',function(data_quan){
-                            if(data_quan.error==0){
-                               $("#quan").html('<option value="0">Quận Huyện</option>');
-                               $("#phuong").html('<option value="0">Phường Xã</option>');
-                               $.each(data_quan.data, function (key_quan,val_quan) {
-                                  $("#quan").append('<option value="'+val_quan.id+'">'+val_quan.full_name+'</option>');
-                               });
-                               //Lấy phường xã
-                               $("#quan").change(function(e){
-                                    var idquan=$(this).val();
-                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/'+idquan+'.htm',function(data_phuong){
-                                        if(data_phuong.error==0){
-                                           $("#phuong").html('<option value="0">Phường Xã</option>');
-                                           $.each(data_phuong.data, function (key_phuong,val_phuong) {
-                                              $("#phuong").append('<option value="'+val_phuong.id+'">'+val_phuong.full_name+'</option>');
-                                           });
-                                        }
-                                    });
-                               });
 
-                            }
-                        });
-                   });
-
-                }
-            });
-         });
-    </script>
+@section Css {
+    <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        .custom-select {
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+        }
+    </style>
 }
 
+@section Js {
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/jszip/jszip.min.js"></script>
+    <script src="/assets/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/assets/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+    <script>
+        $(".btn-add-shipping").click(function(){
+            var tinh=$("#tinh").find('option:selected').text();
+            var quan=$("#quan").find('option:selected').text();
+            var phuong=$("#phuong").find('option:selected').text();
+            var price=$("#price-shipping").val();
+            //alert(tinh);
+            //alert(quan);
+            //alert(phuong);
+            //alert(price);
+            if(tinh==''||quan==''||phuong==''||price==''){
+                Swal.fire("Vui lòng không bỏ trống thông tin !");
+            }
+            else{
+                $.ajax({
+                    type:"POST",
+                    url: "@Url.Action("StoreShipping", "Shipping")",
+                    data:{tinh:tinh,quan:quan,phuong:phuong,price:price},
+                    success:function(result){
+                        if(result.success){
+                            Swal.fire("Thêm giá vận chuyển thành công. Load lại trang để thấy dữ liệu !");
+                            // location.reload();
+                        }
+                        else if(result.duplicate){
+                            Swal.fire("Dữ liệu bị trùng lặp !");
+                        }
+                    }
+                });
+            }
+        })
+        $(document).ready(function() {
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+                if (data_tinh.error == 0) {
+                    $.each(data_tinh.data, function(key_tinh, val_tinh) {
+                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                    });
+                    $("#tinh").change(function() {
+                        var idtinh = $(this).val();
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
+                            if (data_quan.error == 0) {
+                                $("#quan").html('<option value="0">--- Chọn Quận Huyện ---</option>');
+                                $("#phuong").html('<option value="0">--- Chọn Phường Xã ---</option>');
+                                $.each(data_quan.data, function(key_quan, val_quan) {
+                                    $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                                });
+                                $("#quan").change(function() {
+                                    var idquan = $(this).val();
+                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
+                                        if (data_phuong.error == 0) {
+                                            $("#phuong").html('<option value="0">--- Chọn Phường Xã ---</option>');
+                                            $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        $(".typing-price").on("keyup",function(){
+            var currency_input=$(this).val();
+            $("#price-convert").html(new Intl.NumberFormat('vn-VN',{style:'currency', currency:'VND'}).format(currency_input));
+        });
+    </script>
+}

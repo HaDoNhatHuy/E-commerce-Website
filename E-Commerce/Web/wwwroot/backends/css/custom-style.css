@@ -1,0 +1,16 @@
+﻿/* Thu nhỏ kích thước hình ảnh và cỡ chữ trên màn hình nhỏ */
+@media (max-width: 768px) {
+    table td img {
+        width: 50px;
+        height: 50px;
+    }
+
+    table td {
+        font-size: 12px;
+    }
+
+    .btn-group .btn {
+        padding: 5px;
+        font-size: 12px;
+    }
+}

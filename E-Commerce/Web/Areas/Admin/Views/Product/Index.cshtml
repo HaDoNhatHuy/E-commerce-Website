@@ -1,71 +1,74 @@
-﻿ @model IEnumerable<ProductModel>
+﻿@model IEnumerable<ProductModel>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Product";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<div class="card-body">
-    <!-- Button thêm sản phẩm -->
-    <div class="d-flex justify-content-end mb-3">
-        <a asp-action="Create" asp-controller="Product" class="btn btn-success">
-            <i class="nav-icon fas fa-plus"></i> Thêm sản phẩm
-        </a>
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h3 class="card-title">Danh sách sản phẩm</h3>
+        <div class="d-flex justify-content-end">
+            <a asp-action="Create" asp-controller="Product" class="btn btn-light">
+                <i class="fas fa-plus"></i> Thêm sản phẩm
+            </a>
+        </div>
     </div>
-    <table id="example1" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>ProductName</th>
-                <th>Product Image</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Slug</th>
-                <th>Quantity</th>
-                <th>Sold</th>
-                <th>Category</th>
-                <th>Brand</th>
-                <th>Options</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="card-body">
+        <table id="productTable" class="table table-bordered table-hover table-striped align-middle">
+            <thead class="table-hover">
                 <tr>
-                    <td>@item.Id</td>
-                    <td>
-                        @item.Name
-                    </td>
-                    <td><img src="/assets/images/productImages/@item.Picture" alt="@item.Name" width="100" /></td>                    
-                    <td>@Html.Raw(item.Description)</td> @* sử dụng @Html.Raw() để giữ nguyên định dạng *@                    
-                    <td>@item.Price.ToString("#,##0 VNĐ")</td>
-                    @* <td>@Html.Raw(item.Price)</td> *@
-                    <td>@item.Slug</td>
-                    <td><b>@item.Quantity</b></td>
-                    <td><b>@item.Sold</b></td>
-                    <td>@item.Category.Name</td>
-                    <td>@item.Brand.Name</td>
-                    <td>
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="Edit" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-warning" title="Sửa">
-                                <i class="fas fa-edit"></i> Sửa
-                            </a>
-                            <a asp-action="AddQuantity" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-info ml-2" title="Thêm số lượng">
-                                <i class="fas fa-calculator"></i> Thêm số lượng
-                            </a>
-                            <a asp-action="Delete" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-sm btn-danger ml-2 confirmDeletion" title="Xóa">
-                                <i class="fas fa-trash"></i> Xóa
-                            </a>
-                        </div>
-                    </td>
+                    <th>#</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Ảnh</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Đã bán</th>
+                    <th>Danh mục</th>
+                    <th>Thương hiệu</th>
+                    <th>Tùy chọn</th>
                 </tr>
-            }
-
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <img src="/assets/images/productImages/@item.Picture" alt="@item.Name" class="img-thumbnail" style="width: 70px; height: 70px; object-fit: cover;">
+                        </td>
+                        <td>@item.Price.ToString("#,##0 VNĐ")</td>
+                        <td><b>@item.Quantity</b></td>
+                        <td><b>@item.Sold</b></td>
+                        <td>@item.Category.Name</td>
+                        <td>@item.Brand.Name</td>
+                        <td>
+                            <div class="btn-group">
+                                <a asp-action="Edit" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-warning btn-sm" title="Sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="AddQuantity" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-info btn-sm" title="Thêm số lượng">
+                                    <i class="fas fa-plus"></i>
+                                </a>
+                                <a asp-action="Delete" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-danger btn-sm confirmDeletion" title="Xóa">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+
 @section Css {
+    <link href="/backends/css/custom-style.css" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 }
+
 @section Js {
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -80,21 +83,16 @@
     <script src="/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script>
-        $(function () {
-          $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-          }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-          $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-          });
+        $(document).ready(function () {
+            $('#productTable').DataTable({
+                responsive: true,
+                autoWidth: false,
+                lengthChange: false,
+                buttons: ["copy", "csv", "excel", "pdf", "print"],
+                columnDefs: [
+                    { orderable: false, targets: [2, 8] } // Disable sorting for Image and Options columns
+                ]
+            }).buttons().container().appendTo('#productTable_wrapper .col-md-6:eq(0)');
         });
     </script>
 }
-
