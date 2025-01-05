@@ -21,6 +21,8 @@ namespace Web.Areas.Admin.Controllers
         }
         public async Task<IActionResult> ViewOrder(string orderCode)
         {
+            var orderInfo = await _dataContext.Orders.Where(i => i.OrderCode == orderCode).ToListAsync();
+            ViewBag.OrderInfo = orderInfo;
             var orderDetails = await _dataContext.OrderDetails.Include(i => i.Product).Where(i => i.OrderCode == orderCode).ToListAsync();
             return View(orderDetails);
         }

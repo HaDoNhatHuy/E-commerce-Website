@@ -19,19 +19,27 @@
     <div class="row invoice-info">
         <div class="col-md-6">
             <h5>Thông tin khách hàng</h5>
+
+            @*  @foreach (var item in ViewBag.OrderInfo)
+            { *@
             <address>
                 <strong>@firstItem.UserName</strong><br>
                 Địa chỉ: @firstItem.Address<br>
                 Điện thoại: @firstItem.Phone<br>
                 Email: @firstItem.Email
             </address>
+            @* } *@
+
         </div>
         <div class="col-md-6 text-md-right">
             <h5>Thông tin đơn hàng</h5>
-            <p>
-                <b>Mã đơn hàng:</b> @firstItem.OrderCode<br>
-                @* <b>Ngày tạo:</b> @firstItem.Order.CreatedDate.ToString("dd/MM/yyyy HH:mm") *@
-            </p>
+            @foreach (var item in ViewBag.OrderInfo)
+            {
+                <p>
+                    <b>Mã đơn hàng:</b> @item.OrderCode<br>
+                    <b>Ngày tạo:</b> @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")
+                </p>
+            }
         </div>
     </div>
 
@@ -87,7 +95,11 @@
                 </tr>
                 <tr>
                     <th>Phí vận chuyển:</th>
-                    <td>50,000 VNĐ</td>
+                    @foreach (var item in ViewBag.OrderInfo)
+                    {
+                        <td>@item.ShippingFee.ToString("#,##0 VNĐ")</td>
+                    }
+
                 </tr>
                 <tr class="font-weight-bold">
                     <th>Tổng cộng:</th>

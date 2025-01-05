@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using Web.Areas.Admin.Repository;
 using Web.Models;
@@ -21,10 +22,19 @@ namespace Web.Controllers
         public IActionResult Index()
         {
             List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            //Nhận phí shipping từ Cookie
+            var shippingPriceCookie = Request.Cookies["ShippingPrice"];
+            decimal shippingPrice = 0;
+            if (shippingPriceCookie != null)
+            {
+                var shippingPriceJson = shippingPriceCookie;
+                shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);
+            }
             CartItemViewModel cartVM = new()
             {
                 CartItems = cartItems,
-                GrandTotal = cartItems.Sum(i => i.Quantity * i.Price)
+                GrandTotal = cartItems.Sum(i => i.Quantity * i.Price),
+                ShippingFee = shippingPrice,
             };
             return View(cartVM);
         }
@@ -41,6 +51,17 @@ namespace Web.Controllers
                 var orderCode = Guid.NewGuid().ToString();
                 var orderItem = new OrderModel();
                 orderItem.OrderCode = orderCode;
+
+                //Nhận phí shipping từ Cookie
+                var shippingPriceCookie = Request.Cookies["ShippingPrice"];
+                decimal shippingPrice = 0;
+                if (shippingPriceCookie != null)
+                {
+                    var shippingPriceJson = shippingPriceCookie;
+                    shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);
+                }
+                orderItem.ShippingFee = shippingPrice;
+
                 orderItem.UserName = userEmail;
                 orderItem.Status = 1;
                 orderItem.CreatedDate = DateTime.Now;

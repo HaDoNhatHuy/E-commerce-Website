@@ -9,5 +9,6 @@
         public string Email { get; set; }
         public string Note { get; set; }
         public decimal GrandTotal { get; set; }
+        public decimal ShippingFee { get; set; }
     }
 }

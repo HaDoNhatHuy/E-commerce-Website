@@ -39,18 +39,20 @@
                                         <td class="quantity-col">
                                             <div class="cart-product-quantity">
                                                 @* <input type="number" class="form-control" value="@item.Quantity" min="1" max="10" step="1" data-decimals="0" required> *@
-                                                
+
                                                 <div class="input-group  input-spinner">
                                                     <div class="input-group-prepend">
-                                                        <a asp-action="Decrease" asp-controller="Cart" asp-route-Id="@item.ProductId"><button style="min-width: 26px" class="btn btn-decrement btn-spinner" type="button">
-                                                            <i class="icon-minus"></i>
+                                                        <a asp-action="Decrease" asp-controller="Cart" asp-route-Id="@item.ProductId">
+                                                            <button style="min-width: 26px" class="btn btn-decrement btn-spinner" type="button">
+                                                                <i class="icon-minus"></i>
                                                             </button>
                                                         </a>
                                                     </div>
                                                     <input type="text" style="text-align: center" class="form-control " required="" placeholder="@item.Quantity">
                                                     <div class="input-group-append">
-                                                        <a asp-action="Increase" asp-controller="Cart" asp-route-Id="@item.ProductId"><button style="min-width: 26px" class="btn btn-increment btn-spinner" type="button">
-                                                            <i class="icon-plus"></i>
+                                                        <a asp-action="Increase" asp-controller="Cart" asp-route-Id="@item.ProductId">
+                                                            <button style="min-width: 26px" class="btn btn-increment btn-spinner" type="button">
+                                                                <i class="icon-plus"></i>
                                                             </button>
                                                         </a>
                                                     </div>
@@ -79,7 +81,6 @@
 
                         </tbody>
                     </table><!-- End .table table-wishlist -->
-
                     <div class="cart-bottom">
                         <div class="cart-discount">
                             <form action="#">
@@ -93,6 +94,10 @@
                         </div><!-- End .cart-discount -->
 
                         <a asp-action="Clear" asp-controller="Cart" class="btn btn-outline-dark-2"><span>CLEAR CART</span><i class="icon-refresh"></i></a>
+
+
+
+
                     </div><!-- End .cart-bottom -->
                 </div><!-- End .col-lg-9 -->
                 <aside class="col-lg-3">
@@ -107,54 +112,59 @@
                                 </tr><!-- End .summary-subtotal -->
                                 <tr class="summary-shipping">
                                     <td>Shipping:</td>
-                                    <td>&nbsp;</td>
+                                    <td>@Model.ShippingFee.ToString("#,##0 VNĐ")</td>
                                 </tr>
 
                                 <tr class="summary-shipping-row">
-                                    <td>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-                                            <label class="custom-control-label" for="free-shipping">Free Shipping</label>
-                                        </div><!-- End .custom-control -->
+                                    <td colspan="2">
+                                        <div class="shipping-address">
+                                            <div class="form-group">
+                                                <select class="form-control custom-select" id="tinh" name="tinh" title="Chọn Tỉnh Thành" required>
+                                                    <option value="0">--- Chọn Tỉnh/Thành ---</option>
+                                                    <!-- Thêm danh sách tỉnh/thành -->
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <select class="form-control custom-select" id="quan" name="quan" title="Chọn Quận/Huyện" required>
+                                                    <option value="0">--- Chọn Quận/Huyện ---</option>
+                                                    <!-- Thêm danh sách quận/huyện -->
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <select class="form-control custom-select" id="phuong" name="phuong" title="Chọn Phường/Xã" required>
+                                                    <option value="0">--- Chọn Phường/Xã ---</option>
+                                                    <!-- Thêm danh sách phường/xã -->
+                                                </select>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-block mt-4 btn-add-shipping">
+                                                <i class="fas fa-calculator"></i> Tính phí vận chuyển
+                                            </button>
+                                            <a asp-action="DeleteShipping" asp-controller="Cart">
+                                                <button type="button" class="btn custom-delete-shipping btn-block mt-4">
+                                                    <i class="fas fa-trash-alt"></i> Xóa phí vận chuyển
+                                                </button>
+                                            </a>
+                                        </div>
                                     </td>
-                                    <td>$0.00</td>
-                                </tr><!-- End .summary-shipping-row -->
-
-                                <tr class="summary-shipping-row">
-                                    <td>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-                                            <label class="custom-control-label" for="standart-shipping">Standart:</label>
-                                        </div><!-- End .custom-control -->
-                                    </td>
-                                    <td>$10.00</td>
-                                </tr><!-- End .summary-shipping-row -->
-
-                                <tr class="summary-shipping-row">
-                                    <td>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-                                            <label class="custom-control-label" for="express-shipping">Express:</label>
-                                        </div><!-- End .custom-control -->
-                                    </td>
-                                    <td>$20.00</td>
-                                </tr><!-- End .summary-shipping-row -->
-
-                                <tr class="summary-shipping-estimate">
-                                    <td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
-                                    <td>&nbsp;</td>
-                                </tr><!-- End .summary-shipping-estimate -->
+                                </tr>
+                                <!-- End .summary-shipping-row -->
 
                                 <tr class="summary-total">
                                     <td>Total:</td>
-                                    <td>$160.00</td>
+                                    <td>@((Model.GrandTotal + Model.ShippingFee).ToString("#,##0 VNĐ"))</td>
                                 </tr><!-- End .summary-total -->
                             </tbody>
                         </table><!-- End .table table-summary -->
+                        @if (@Model.ShippingFee <= 0)
+                        {
+                            @* <a asp-action="Index" asp-controller="Checkout" class="btn btn-outline-primary-2 btn-order btn-block" disable>PROCEED TO CHECKOUT</a> *@
+                            <a id="btnCheckout" href="javascript:void(0)" class="btn btn-outline-primary-2 btn-order btn-block" disabled>PROCEED TO CHECKOUT</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Index" asp-controller="Checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+                        }
 
-                        @* <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a> *@
-                        @* <a asp-action="Checkout" asp-controller="Checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a> *@
-                        <a asp-action="Index" asp-controller="Checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
                     </div><!-- End .summary -->
 
                     <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
@@ -163,3 +173,154 @@
         </div><!-- End .container -->
     </div><!-- End .cart -->
 </div><!-- End .page-content -->
+@section Css {
+    <style>
+        .custom-delete-shipping {
+            background-color: #ff4d4d; /* Màu đỏ khác biệt */
+            color: white; /* Chữ trắng */
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: normal;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease-in-out;
+        }
+
+            .custom-delete-shipping:hover {
+                background-color: #e60000; /* Đỏ đậm hơn khi hover */
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                transform: scale(1.05);
+            }
+
+        .shipping-address {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+            .shipping-address .form-group {
+                margin-bottom: 15px;
+            }
+
+                .shipping-address .form-group select {
+                    border-radius: 5px;
+                }
+
+            .shipping-address .btn-add-shipping {
+                background-color: #007bff;
+                color: white;
+                border-radius: 5px;
+            }
+
+            .shipping-address .btn-add-shipping:hover {
+                    background-color: #0056b3;
+                }
+
+            .shipping-address .icon-location {
+                margin-right: 5px;
+                color: #555;
+            }
+
+    </style>
+    <style>
+        /* Custom button for removing shipping fee */
+        .custom-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .custom-button:hover {
+                background-color: #ff1a1a;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+    </style>
+}
+@section Js {
+    <script>
+        $(document).ready(function(){
+            $(".btn-add-shipping").click(function(){
+            var tinh=$("#tinh").find('option:selected').text();
+            var quan=$("#quan").find('option:selected').text();
+            var phuong=$("#phuong").find('option:selected').text();
+            if(tinh==''||quan==''||phuong==''){
+                Swal.fire("Vui lòng không bỏ trống thông tin !");
+            }
+            else{
+                $.ajax({
+                    type:"POST",
+                    url: "@Url.Action("GetShipping", "Cart")",
+                    data:{tinh:tinh,quan:quan,phuong:phuong},
+                    success:function(result){
+                        if(result.success){
+                            location.reload();
+                        }
+                    }
+                });
+            }
+            });
+        })
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+                if (data_tinh.error == 0) {
+                    $.each(data_tinh.data, function(key_tinh, val_tinh) {
+                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                    });
+                    $("#tinh").change(function() {
+                        var idtinh = $(this).val();
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
+                            if (data_quan.error == 0) {
+                                $("#quan").html('<option value="0">--- Chọn Quận Huyện ---</option>');
+                                $("#phuong").html('<option value="0">--- Chọn Phường Xã ---</option>');
+                                $.each(data_quan.data, function(key_quan, val_quan) {
+                                    $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                                });
+                                $("#quan").change(function() {
+                                    var idquan = $(this).val();
+                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
+                                        if (data_phuong.error == 0) {
+                                            $("#phuong").html('<option value="0">--- Chọn Phường Xã ---</option>');
+                                            $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+            const btnCheckout = document.getElementById("btnCheckout");
+
+            if (btnCheckout) {
+                btnCheckout.addEventListener("click", function (e) {
+                    Swal.fire({
+                        title: "Thông báo",
+                        text: "Vui lòng tính phí vận chuyển trước khi đặt hàng!",
+                        icon: "warning",
+                        confirmButtonText: "OK",
+                    });
+                });
+            }
+        });
+
+    </script>
+}
