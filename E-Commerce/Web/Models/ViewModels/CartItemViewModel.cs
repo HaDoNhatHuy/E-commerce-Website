@@ -10,5 +10,7 @@
         public string Note { get; set; }
         public decimal GrandTotal { get; set; }
         public decimal ShippingFee { get; set; }
+        public string CouponCode { get; set; }
+        //public decimal Discount { get; set; } 
     }
 }

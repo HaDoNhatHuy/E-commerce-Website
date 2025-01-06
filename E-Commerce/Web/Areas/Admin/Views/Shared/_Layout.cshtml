@@ -284,6 +284,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a asp-controller="Coupon" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Coupon
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
@@ -956,6 +964,9 @@
             var message='@TempData["success"]'
             if(message!=''){
                 Swal.fire(message);
+            }
+            else{
+                Swal.fire(@TempData["error"]);
             }
         });
     </script>

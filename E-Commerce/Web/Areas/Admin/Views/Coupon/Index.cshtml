@@ -1,0 +1,171 @@
+﻿@model CouponModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int key = 1;
+}
+<div class="card shadow-lg border-0">
+    <div class="card-header bg-success text-white">
+        <h3 class="card-title">Thêm khuyến mãi</h3>
+    </div>
+    <form asp-action="Create" asp-controller="Coupon" autocomplete="off">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" asp-for="Description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" min="1" class="form-control" asp-for="Quantity" placeholder="Enter quantity">
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Date Start</label>
+                <input type="date" class="form-control" asp-for="DateStart">
+                <span asp-validation-for="DateStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Date Expired</label>
+                <input type="date" class="form-control" asp-for="DateExpired">
+                <span asp-validation-for="DateExpired" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select asp-for="Status" class="form-control">
+                    <option value="0">---- Choose a Status ----</option>
+                    <option value="1">Hiển thị</option>
+                    <option value="2">Ẩn</option>
+                </select>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button type="submit" class="btn btn-success btn-add-shipping">
+                <i class="fas fa-plus-circle"></i> Thêm khuyến mãi
+            </button>
+        </div>
+    </form>
+</div>
+<div class="card mt-4">
+    <div class="card-header bg-secondary text-white">
+        <h3 class="card-title">Danh sách mã khuyến mãi</h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Tên khuyến mãi</th>
+                    <th>Mô tả</th>
+                    <th>Số lượng</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Trạng thái</th>
+                    <th>Thời gian còn lại</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var coupon in ViewBag.CouponList)
+                {
+                    <tr>
+                        <td>@key</td>
+                        <td>@coupon.Name</td>
+                        <td>@Html.Raw(@coupon.Description)</td>
+                        <td>@coupon.Quantity</td>
+                        <td>@coupon.DateStart.ToString("dd-MM-yyyy")</td>
+                        <td>@coupon.DateExpired.ToString("dd-MM-yyyy")</td>
+                        <td>
+                            @if (@coupon.Status == 1)
+                            {
+                                <span class="badge badge-status badge-success">Hiển thị</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-status badge-danger">Ẩn</span>
+                            }
+                        </td>
+                        <td>
+                            @if (coupon.DateExpired < DateTime.Now)
+                            {
+                                <span class="text text-danger">
+                                    Expired
+                                </span>
+                            }
+                            else
+                            {
+                                TimeSpan remainingTime = coupon.DateExpired - DateTime.Now;
+                                int daysRemaining = remainingTime.Days;
+                                @if (daysRemaining == 0)
+                                {
+                                    <span class="text text-danger">
+                                        Today
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text text-success">
+                                        @daysRemaining days left
+                                    </span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-controller="Coupon" asp-route-Id="@coupon.Id" class="btn btn-sm btn-danger confirmDeletion" title="Xóa">
+                                <i class="fas fa-trash"></i> Xóa
+                            </a>
+                        </td>
+                    </tr>
+                    key++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Css {
+    <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        .custom-select {
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+        }
+    </style>
+}
+@section Js {
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/jszip/jszip.min.js"></script>
+    <script src="/assets/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/assets/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace( 'Description' );
+    </script>
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+}
+

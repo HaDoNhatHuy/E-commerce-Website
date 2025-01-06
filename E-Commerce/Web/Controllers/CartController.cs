@@ -19,6 +19,7 @@ namespace Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            Response.Cookies.Delete("CouponTitle");
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -28,17 +29,36 @@ namespace Web.Controllers
             //Nhận phí shipping từ Cookie
             var shippingPriceCookie = Request.Cookies["ShippingPrice"];
             decimal shippingPrice = 0;
+            //Nhận Coupon từ Cookie
+
+            var couponCode = Request.Cookies["CouponTitle"];
+            if (couponCode == null)
+            {
+                ViewBag.CouponCode = 0;
+            }
+            else
+            {
+                var couponCodeInDB = await _dataContext.Coupons.Where(i => i.Name.Equals(couponCode)).FirstOrDefaultAsync();
+                ViewBag.CouponCode = couponCodeInDB.Discount; // Gán giá trị giảm giá hoặc 0 nếu không tìm thấy
+            }
+
+
             if (shippingPriceCookie != null)
             {
                 var shippingPriceJson = shippingPriceCookie;
                 shippingPrice = JsonConvert.DeserializeObject<decimal>(shippingPriceJson);
             }
+
+            //discountValue = couponCodeInDB != null ? couponCodeInDB.Discount : 0;
             CartItemViewModel cartVM = new()
             {
                 CartItems = cartItems,
                 GrandTotal = cartItems.Sum(i => i.Quantity * i.Price),
-                ShippingFee = shippingPrice
+                ShippingFee = shippingPrice,
+                CouponCode = couponCode
+                //Discount = discountValue,
             };
+
             return View(cartVM);
         }
         public async Task<IActionResult> Checkout()
@@ -172,5 +192,51 @@ namespace Web.Controllers
             //return Json(new { success = true });
             return RedirectToAction("Index", "Cart");
         }
+        [HttpPost]
+        public async Task<IActionResult> GetCoupon(CouponModel coupon, string coupon_value)
+        {
+            var validCoupon = await _dataContext.Coupons
+                .FirstOrDefaultAsync(i => i.Name == coupon_value);
+            string couponTitle = validCoupon?.Name/* + " | " + validCoupon.Description*/;
+            if (couponTitle != null)
+            {
+                TimeSpan remainingTime = validCoupon.DateExpired - DateTime.Now;
+                int remainingDays = remainingTime.Days;
+                if (remainingDays >= 0)
+                {
+                    try
+                    {
+                        var cookieOptions = new CookieOptions
+                        {
+                            HttpOnly = true,
+                            Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                            Secure = true,
+                            SameSite = SameSiteMode.Strict // Kiểm tra tính tương thích trình duyệt
+                        };
+                        //TempData["success"] = $"Mã giảm giá '{coupon_value}' đã được áp dụng. Giảm giá {coupon.Discount * 100}%!";
+                        Response.Cookies.Append("CouponTitle", couponTitle, cookieOptions);
+                        //TempData["success"] = "Đã áp dụng mã giảm giá";
+                        return Ok(new { success = true, message = "Đã áp dụng mã giảm giá" });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error adding apply coupon cookie:{ex.Message}");
+                        //TempData["error"] = "Áp dụng mã giảm giá thất bại";
+                        return Ok(new { success = false, message = "Áp dụng mã giảm giá thất bại" });
+                    }
+                }
+                else
+                {
+                    //TempData["error"] = $"Mã giảm giá '{coupon_value}' đã hết hạn!";
+                    return Ok(new { success = false, message = "Mã giảm giá hết hạn !" });
+                }
+            }
+            else
+            {
+                //TempData["error"] = $"Mã giảm giá '{coupon_value}' không tồn tại!";
+                return Ok(new { success = false, message = "Mã giảm giá không tồn tại !" });
+            }
+        }
     }
 }
+

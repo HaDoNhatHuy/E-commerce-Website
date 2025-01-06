@@ -1,4 +1,7 @@
 ﻿@using Web.Models.ViewModels
+@{
+    decimal DiscountValue = 0;    
+}
 @model CartItemViewModel
 <div class="page-content">
     <div class="cart">
@@ -83,15 +86,20 @@
                     </table><!-- End .table table-wishlist -->
                     <div class="cart-bottom">
                         <div class="cart-discount">
-                            <form action="#">
+                            <form>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" required placeholder="coupon code">
+                                    <input type="text" class="form-control coupon-value" required placeholder="coupon code">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
+                                        <button class="btn btn-outline-primary-2 btn-apply-coupon" type="button"><i class="icon-long-arrow-right"></i></button>
                                     </div><!-- .End .input-group-append -->
+                                    @* <span class="text text-success">@Html.Raw(@Model.CouponCode)</span> *@
                                 </div><!-- End .input-group -->
                             </form>
                         </div><!-- End .cart-discount -->
+                        @* <div id="promoNotification" style="display: none; margin-top: 10px; border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9;">
+                            <p><strong id="promoName"></strong></p>
+                            <p id="promoDescription"></p>
+                        </div> *@
 
                         <a asp-action="Clear" asp-controller="Cart" class="btn btn-outline-dark-2"><span>CLEAR CART</span><i class="icon-refresh"></i></a>
 
@@ -109,6 +117,18 @@
                                 <tr class="summary-subtotal">
                                     <td>Subtotal:</td>
                                     <td>@Model.GrandTotal.ToString("#,##0 VNĐ")</td>
+                                </tr><!-- End .summary-subtotal -->
+                                <tr class="summary-subtotal">
+                                    <td>Discount :</td>
+                                    @if (ViewBag.CouponCode != null && ViewBag.CouponCode != 0)
+                                    {
+                                        <td>@((@ViewBag.CouponCode * @Model.GrandTotal).ToString("#,##0 VNĐ"))</td>
+                                        DiscountValue += @ViewBag.CouponCode * Model.GrandTotal;
+                                    }
+                                    else
+                                    {
+                                        <td>0 VNĐ</td>
+                                    }
                                 </tr><!-- End .summary-subtotal -->
                                 <tr class="summary-shipping">
                                     <td>Shipping:</td>
@@ -151,7 +171,7 @@
 
                                 <tr class="summary-total">
                                     <td>Total:</td>
-                                    <td>@((Model.GrandTotal + Model.ShippingFee).ToString("#,##0 VNĐ"))</td>
+                                    <td>@((Model.GrandTotal + Model.ShippingFee - DiscountValue).ToString("#,##0 VNĐ"))</td>
                                 </tr><!-- End .summary-total -->
                             </tbody>
                         </table><!-- End .table table-summary -->
@@ -216,7 +236,7 @@
                 border-radius: 5px;
             }
 
-            .shipping-address .btn-add-shipping:hover {
+                .shipping-address .btn-add-shipping:hover {
                     background-color: #0056b3;
                 }
 
@@ -247,6 +267,41 @@
     </style>
 }
 @section Js {
+    <script>
+        $(".btn-apply-coupon").click(function () {
+            var coupon_value = $(".coupon-value").val();
+            $.ajax({
+                type: "POST",
+                url: "Cart/GetCoupon",
+                data: { coupon_value: coupon_value },
+                success: function (result) {
+                    if(result.success){
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: result.message,
+                        timer: 2000,
+                        showConfirmButton: true
+                        });
+                        location.reload();
+                    }
+                    else{
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Thất bại!',
+                        text: result.message,
+                        timer: 2000,
+                        showConfirmButton: true
+                        });
+                        location.reload();
+                    }
+                }
+                
+            });
+        });
+    </script>
+
+
     <script>
         $(document).ready(function(){
             $(".btn-add-shipping").click(function(){

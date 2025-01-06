@@ -19,5 +19,6 @@ namespace Web.Repository
         public DbSet<WishListModel> WishListProducts { get; set; }
         public DbSet<ProductQuantityModel> ProductQuantities { get; set; }
         public DbSet<ShippingModel> Shippings { get; set; }
+        public DbSet<CouponModel> Coupons { get;set; }
     }
 }
