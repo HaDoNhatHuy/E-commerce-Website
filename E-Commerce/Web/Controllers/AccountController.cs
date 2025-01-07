@@ -2,25 +2,32 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Web.Areas.Admin.Repository;
 using Web.Models;
 using Web.Models.ViewModels;
 using Web.Repository;
-
 namespace Web.Controllers
 {
     public class AccountController : Controller
     {
         private UserManager<AppUserModel> _userManager;
         private SignInManager<AppUserModel> _signInManager;
+        private readonly IEmailSender _emailSender;
         private readonly DataContext _dataContext;
-        public AccountController(UserManager<AppUserModel> userManager, SignInManager<AppUserModel> signInManager, DataContext dataContext)
+        public AccountController(UserManager<AppUserModel> userManager, SignInManager<AppUserModel> signInManager, DataContext dataContext, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dataContext = dataContext;
+            _emailSender = emailSender;
         }
         public IActionResult Index()
         {
+            if ((bool)!User.Identity?.IsAuthenticated)
+            {
+                //User is not logged in, redirect to login
+                return RedirectToAction("Account");
+            }
             return View();
         }
         public IActionResult Dashboard()
@@ -35,12 +42,83 @@ namespace Web.Controllers
                 RegisterViewModel = new RegisterViewModel()
             });
         }
+        public IActionResult ForgetPassword(string returnUrl)
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> SendMailForgotPass(AppUserModel user)
+        {
+            var checkMail = await _userManager.Users.FirstOrDefaultAsync(i => i.Email == user.Email);
+            if (checkMail == null)
+            {
+                TempData["error"] = "Email không tìm thấy";
+                return RedirectToAction("ForgetPassword", "Account");
+            }
+            else
+            {
+                string Token = Guid.NewGuid().ToString();
+                checkMail.Token = Token;
+                _dataContext.Update(checkMail);
+                await _dataContext.SaveChangesAsync();
+
+                var receiver = checkMail.Email;
+                var subject = "Thay đổi password cho người dùng" + checkMail.Email;
+                var message = "Click vào link để thay đổi mật khẩu" +
+                    "<a href='" + $"{Request.Scheme}://{Request.Host}/Account/NewPassword?email="
+                    + checkMail.Email + "&token=" + Token + "'</a>";
+                await _emailSender.SendEmailAsync(receiver, subject, message);
+            }
+            TempData["success"] = "An email has been sent to your registered email address with password reset instructions.";
+            return RedirectToAction("ForgetPassword", "Account");
+        }
+        public async Task<IActionResult> NewPassword(AppUserModel user, string token)
+        {
+            var checkUser = await _userManager.Users
+                .Where(i => i.Email == user.Email && i.Token == user.Token)
+                .FirstOrDefaultAsync();
+            if (checkUser != null)
+            {
+                ViewBag.Email = checkUser.Email;
+                ViewBag.Token = token;
+            }
+            else
+            {
+                TempData["error"] = "Email not found or Token is not right";
+                return RedirectToAction("ForgetPassword", "Account");
+            }
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateNewPassword(AppUserModel user, string token)
+        {
+            var checkUser = await _userManager.Users
+                .Where(i => i.Email == user.Email && i.Token == user.Token)
+                .FirstOrDefaultAsync();
+            if (checkUser != null)
+            {
+                string newToken = Guid.NewGuid().ToString();
+                var passwordHasher = new PasswordHasher<AppUserModel>();
+                var passwordHash = passwordHasher.HashPassword(checkUser, user.PasswordHash);
+                checkUser.PasswordHash = passwordHash;
+                checkUser.Token = newToken;
+                await _userManager.UpdateAsync(checkUser);
+                TempData["success"] = "Password Update Successfully";
+                return RedirectToAction("Account");
+            }
+            else
+            {
+                TempData["error"] = "Email not found or Token is not right";
+                return RedirectToAction("ForgetPassword", "Account");
+            }
+        }
         public async Task<IActionResult> History()
         {
             if ((bool)!User.Identity?.IsAuthenticated)
             {
                 //User is not logged in, redirect to login
-                RedirectToAction("Login", "Acount");
+                return RedirectToAction("Account");
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
@@ -76,7 +154,7 @@ namespace Web.Controllers
             if ((bool)!User.Identity?.IsAuthenticated)
             {
                 //User is not logged in, redirect to login
-                RedirectToAction("Login", "Acount");
+                return RedirectToAction("Account");
             }
             try
             {

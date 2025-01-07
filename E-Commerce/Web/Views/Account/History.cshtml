@@ -70,7 +70,7 @@
                                                     </button> *@
                                                     @if (item.Status != 3)
                                                     {
-                                                        <a asp-action="CancelOrder" asp-controller="Account" asp-route-OrderCode="@item.OrderCode" class="btn btn-sm btn-outline-danger">
+                                                        <a asp-action="CancelOrder" asp-controller="Account" asp-route-OrderCode="@item.OrderCode" onclick="return confirm('Xác nhận hủy đơn hàng ?')" class="btn btn-sm btn-outline-danger">
                                                             Cancel
                                                         </a>
                                                     }
