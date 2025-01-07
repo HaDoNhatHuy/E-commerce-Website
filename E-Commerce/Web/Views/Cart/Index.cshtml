@@ -275,31 +275,46 @@
                 url: "Cart/GetCoupon",
                 data: { coupon_value: coupon_value },
                 success: function (result) {
-                    if(result.success){
+                    if (result.success) {
                         Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công!',
-                        text: result.message,
-                        timer: 2000,
-                        showConfirmButton: true
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: result.message,
+                            showConfirmButton: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(); // Tải lại trang sau khi nhấn nút "OK"
+                            }
                         });
-                        location.reload();
-                    }
-                    else{
+                    } else {
                         Swal.fire({
+                            icon: 'error',
+                            title: 'Thất bại!',
+                            text: result.message,
+                            showConfirmButton: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(); // Tải lại trang sau khi nhấn nút "OK"
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
                         icon: 'error',
-                        title: 'Thất bại!',
-                        text: result.message,
-                        timer: 2000,
+                        title: 'Lỗi hệ thống!',
+                        text: 'Không thể áp dụng mã giảm giá. Vui lòng thử lại sau.',
                         showConfirmButton: true
-                        });
-                        location.reload();
-                    }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); // Tải lại trang sau khi nhấn nút "OK"
+                        }
+                    });
                 }
-                
             });
         });
     </script>
+
 
 
     <script>

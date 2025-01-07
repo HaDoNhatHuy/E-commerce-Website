@@ -3,16 +3,17 @@
 @{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal DiscountValue = 0;
 }
 <div class="page-content">
     <div class="checkout">
         <div class="container">
-            <div class="checkout-discount">
+            @* <div class="checkout-discount">
                 <form action="#">
                     <input type="text" class="form-control" required="" id="checkout-discount-input">
                     <label for="checkout-discount-input" class="text-truncate" style="opacity: 1;">Have a coupon? <span>Click here to enter your code</span></label>
                 </form>
-            </div><!-- End .checkout-discount -->
+            </div><!-- End .checkout-discount --> *@
             <form asp-action="CheckoutSuccess" asp-controller="Checkout" method="post">
                 <div class="row">
                     <div class="col-lg-9">
@@ -69,9 +70,21 @@
                                         <td>Shipping:</td>
                                         <td>@Model.ShippingFee.ToString("#,##0 VNĐ")</td>
                                     </tr>
+                                    <tr>
+                                        <td>Discount:</td>
+                                        @if (ViewBag.CouponCode != null && ViewBag.CouponCode != 0)
+                                        {
+                                            <td>@((@ViewBag.CouponCode * @Model.GrandTotal).ToString("#,##0 VNĐ"))</td>
+                                            DiscountValue += @ViewBag.CouponCode * Model.GrandTotal;
+                                        }
+                                        else
+                                        {
+                                            <td>0 VNĐ</td>
+                                        }
+                                    </tr>
                                     <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td>@Model.GrandTotal.ToString("#,##0 VNĐ")</td>
+                                        <td>@((Model.GrandTotal + Model.ShippingFee - DiscountValue).ToString("#,##0 VNĐ"))</td>
                                     </tr><!-- End .summary-total -->
                                 </tbody>
                             </table><!-- End .table table-summary -->

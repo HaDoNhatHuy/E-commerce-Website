@@ -59,6 +59,7 @@
                     subTotal = item.Quantity * item.Price;
                     total += subTotal;
                     <tr>
+                        <input type="hidden" asp-for="@item.OrderCode" class="getId" />
                         <td>@item.Product.Name</td>
                         <td>@item.Quantity</td>
                         <td>@item.Price.ToString("#,##0 VNĐ")</td>
@@ -117,10 +118,15 @@
             <button class="btn btn-success">
                 <i class="fas fa-credit-card"></i> Thanh toán
             </button>
-            <select class="form-control select-update-order d-inline-block w-auto ml-2">
-                <option value="0">Chưa xử lý</option>
-                <option value="1">Đã xử lý</option>
-            </select>
+
+            @if (ViewBag.Status != 3)
+            {
+                <select class="form-control select-update-order d-inline-block w-auto ml-2">
+                    <option value="0">Chưa xử lý</option>
+                    <option value="1">Đã xử lý</option>
+                </select>
+            }
+
             <button class="btn btn-primary ml-2">
                 <i class="fas fa-file-pdf"></i> Xuất PDF
             </button>
@@ -152,7 +158,7 @@
 
                 $.ajax({
                     type:'POST',
-                    url:"@Url.Action("UpdateOrder")",
+                    url:"@Url.Action("UpdateOrder","Order")",
                     data: {status:status,orderCode:orderCode},
                     success:function(result){
                         if (result.success){

@@ -28,9 +28,13 @@
                         {
                             <span class="badge badge-status badge-success">Đã xử lý</span>
                         }
-                        @if (item.Status == 0)
+                        else if (item.Status == 0)
                         {
-                            <span class="badge badge-status badge-danger">Chưa xử lý</span>
+                            <span class="badge badge-status badge-warning">Đơn hàng mới</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-status badge-danger">Đã hủy</span>
                         }
                     </td>
                     <td>

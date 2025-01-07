@@ -18,8 +18,7 @@ namespace Web.Controllers
             _userManager = userManager;
         }
         public async Task<IActionResult> Index()
-        {
-            Response.Cookies.Delete("CouponTitle");
+        {           
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -29,12 +28,11 @@ namespace Web.Controllers
             //Nhận phí shipping từ Cookie
             var shippingPriceCookie = Request.Cookies["ShippingPrice"];
             decimal shippingPrice = 0;
-            //Nhận Coupon từ Cookie
-
+            //Nhận Coupon từ Cookie           
             var couponCode = Request.Cookies["CouponTitle"];
             if (couponCode == null)
             {
-                ViewBag.CouponCode = 0;
+                ViewBag.CouponCode = 0; 
             }
             else
             {
@@ -58,7 +56,7 @@ namespace Web.Controllers
                 CouponCode = couponCode
                 //Discount = discountValue,
             };
-
+            Response.Cookies.Delete("CouponTitle");
             return View(cartVM);
         }
         public async Task<IActionResult> Checkout()

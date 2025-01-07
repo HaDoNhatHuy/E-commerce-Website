@@ -1,0 +1,131 @@
+﻿@model IEnumerable<OrderModel>
+@{
+    ViewData["Title"] = "List History Orders placed by" + " " + @ViewBag.UserEmail;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int key = 1;
+}
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('/assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">My Account<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    @Html.Partial("_AccountPartial")
+
+                    <div class="col-md-8 col-lg-9">
+                        @* <div class="tab-content">							
+
+							<div class="tab-pane fade active show" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+								<p>No order has been made yet.</p>
+								<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+							</div><!-- .End .tab-pane -->
+						</div> *@
+                        <div class="order-history">
+                            @* <h2 class="text-center mb-4">Order History</h2> *@
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th width="60px">#</th>
+                                            <th>Date</th>
+                                            <th width="100px">Status</th>
+                                            <th width="200px">Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Example order history row -->
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@key</td>
+                                                <td>@item.CreatedDate</td>
+                                                @if (item.Status == 1)
+                                                {
+                                                    <td><span class="badge badge-success">Đã xử lý</span></td>
+                                                }
+                                                else if (item.Status == 0)
+                                                {
+                                                    <td><span class="badge badge-warning">Chưa xử lý</span></td>
+
+                                                }
+                                                else
+                                                {
+                                                    <td><span class="badge badge-danger">Đã hủy</span></td>
+                                                }
+                                                <td>@item.ShippingFee.ToString("#,##0 VNĐ")</td>
+                                                <td>
+                                                    <a asp-action="HistoryDetails" asp-controller="Account" class="btn btn-sm btn-outline-primary">
+                                                        View
+                                                    </a>
+                                                    @* <button class="btn btn-sm btn-outline-danger cancel-order" data-order-id="1001">
+                                                        Cancel
+                                                    </button> *@
+                                                    @if (item.Status != 3)
+                                                    {
+                                                        <a asp-action="CancelOrder" asp-controller="Account" asp-route-OrderCode="@item.OrderCode" class="btn btn-sm btn-outline-danger">
+                                                            Cancel
+                                                        </a>
+                                                    }                                                   
+                                                </td>
+                                            </tr>
+                                            key++;
+                                        }
+                                        <!-- Add more rows dynamically using data from the server -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center mt-4">
+                                <a href="category.html" class="btn btn-outline-primary-2">
+                                    <span>CONTINUE SHOPPING</span><i class="icon-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+</main>
+@section Css {
+    <style>
+        .table {
+            width: 100%; /* Bảng chiếm toàn bộ chiều rộng container */
+            text-align: center; /* Căn giữa nội dung */
+            border-collapse: collapse; /* Loại bỏ khoảng cách giữa các đường viền */
+        }
+
+            .table th,
+            .table td {
+                text-align: center; /* Căn giữa nội dung */
+                vertical-align: middle; /* Căn giữa theo chiều dọc */
+                padding: 10px; /* Thêm khoảng cách bên trong */
+            }
+
+            .table th {
+                background-color: #f4f4f4; /* Màu nền cho tiêu đề cột */
+                font-weight: bold; /* Đậm chữ tiêu đề */
+            }
+
+            .table td {
+                white-space: nowrap; /* Giữ nội dung trên một dòng */
+            }
+
+        .table-bordered {
+            border: 1px solid #dee2e6; /* Đường viền ngoài bảng */
+        }
+
+            .table-bordered th,
+            .table-bordered td {
+                border: 1px solid #dee2e6; /* Đường viền giữa các ô */
+            }
+
+    </style>
+}

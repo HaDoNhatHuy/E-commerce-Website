@@ -19,11 +19,21 @@ namespace Web.Controllers
             _emailSender = emailSender;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
             //Nhận phí shipping từ Cookie
             var shippingPriceCookie = Request.Cookies["ShippingPrice"];
+            var couponCode = Request.Cookies["CouponTitle"];
+            if (couponCode == null)
+            {
+                ViewBag.CouponCode = 0;
+            }
+            else
+            {
+                var couponCodeInDB = await _dataContext.Coupons.Where(i => i.Name.Equals(couponCode)).FirstOrDefaultAsync();
+                ViewBag.CouponCode = couponCodeInDB.Discount; // Gán giá trị giảm giá hoặc 0 nếu không tìm thấy
+            }
             decimal shippingPrice = 0;
             if (shippingPriceCookie != null)
             {
@@ -35,6 +45,7 @@ namespace Web.Controllers
                 CartItems = cartItems,
                 GrandTotal = cartItems.Sum(i => i.Quantity * i.Price),
                 ShippingFee = shippingPrice,
+                CouponCode = couponCode
             };
             return View(cartVM);
         }
@@ -63,7 +74,7 @@ namespace Web.Controllers
                 orderItem.ShippingFee = shippingPrice;
 
                 orderItem.UserName = userEmail;
-                orderItem.Status = 1;
+                orderItem.Status = 0;
                 orderItem.CreatedDate = DateTime.Now;
                 _dataContext.Add(orderItem);
                 await _dataContext.SaveChangesAsync();
@@ -89,13 +100,14 @@ namespace Web.Controllers
                     await _dataContext.SaveChangesAsync();
                 }
                 TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
+                Response.Cookies.Delete("CouponTitle");
                 HttpContext.Session.Remove("Cart");
                 //Send Email when order success
                 var receiver = userEmail;
                 var subject = "Đặt hàng thành công";
                 var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
                 await _emailSender.SendEmailAsync(receiver, subject, message);
-                return RedirectToAction("Index", "Cart");
+                return RedirectToAction("History", "Account");
             }
         }
     }

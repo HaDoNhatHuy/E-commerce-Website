@@ -1,0 +1,27 @@
+﻿<aside class="col-md-4 col-lg-3">
+	<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+		<li class="nav-item">
+			@* <a class="nav-link" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="false">Dashboard</a> *@
+			<a class="nav-link" asp-action="Dashboard" asp-controller="Account">Dashboard</a>
+		</li>
+		<li class="nav-item">
+			@* <a class="nav-link active" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="true">Orders</a> *@
+			<a class="nav-link" asp-action="History" asp-controller="Account">Orders</a>
+		</li>
+		<li class="nav-item">
+			@* <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a> *@
+			<a class="nav-link" asp-action="Download" asp-controller="Account">Downloads</a>
+		</li>
+		<li class="nav-item">
+			@* <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a> *@
+			<a class="nav-link" asp-action="Download" asp-controller="Account">Downloads</a>
+		</li>
+		<li class="nav-item">
+			@* <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a> *@
+			<a class="nav-link" asp-action="Details" asp-controller="Account">Account Details</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" asp-action="Logout" asp-controller="Account">Sign Out</a>
+		</li>
+	</ul>
+</aside><!-- End .col-lg-3 -->

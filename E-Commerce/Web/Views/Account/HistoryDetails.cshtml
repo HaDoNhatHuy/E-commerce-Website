@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewData["Title"] = "HistoryDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-content">
+    <div class="order-details">
+        <div class="container">
+            <h2 class="text-center mb-4">Order Details</h2>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Shipping Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4>Shipping Information</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Name:</strong> John Doe</p>
+                                <p><strong>Email:</strong> john.doe@example.com</p>
+                                <p><strong>Phone:</strong> +123 456 789</p>
+                                <p><strong>Address:</strong> 123 Main Street, City, Country</p>
+                            </div>
+                        </div>
+
+                        <!-- Purchased Items -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Purchased Items</h4>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Product 1</td>
+                                            <td>2</td>
+                                            <td>$20.00</td>
+                                            <td>$40.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Product 2</td>
+                                            <td>1</td>
+                                            <td>$15.00</td>
+                                            <td>$15.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Product 3</td>
+                                            <td>3</td>
+                                            <td>$10.00</td>
+                                            <td>$30.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary Sidebar -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Order Summary</h4>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>Subtotal:</span>
+                                        <span>$85.00</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>Shipping:</span>
+                                        <span>$10.00</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>Discount:</span>
+                                        <span>-$5.00</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between font-weight-bold">
+                                        <span>Total:</span>
+                                        <span>$90.00</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Order Status -->
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h4>Order Status</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Status:</strong> Pending</p>
+                                <p><strong>Order Date:</strong> 01/01/2025</p>
+                                <p><strong>Order ID:</strong> #1001</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Orders Button -->
+            <div class="text-center mt-4">
+                <a href="orders.html" class="btn btn-outline-primary-2">
+                    <span>BACK TO ORDERS</span><i class="icon-long-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@section Css{
+    <style>
+        .order-details .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .order-details .card-header {
+            background-color: #f8f9fa;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .order-details .table {
+            margin-bottom: 0;
+        }
+
+        .order-details .btn-outline-primary-2 {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+    </style>
+}
+
