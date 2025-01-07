@@ -1,7 +1,10 @@
-﻿
+﻿@model IEnumerable<OrderDetails>
 @{
     ViewData["Title"] = "HistoryDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal total = 0;
+    decimal subTotal = 0;
+    var firstItem = Model.FirstOrDefault();
 }
 <div class="page-content">
     <div class="order-details">
@@ -18,10 +21,10 @@
                                 <h4>Shipping Information</h4>
                             </div>
                             <div class="card-body">
-                                <p><strong>Name:</strong> John Doe</p>
-                                <p><strong>Email:</strong> john.doe@example.com</p>
-                                <p><strong>Phone:</strong> +123 456 789</p>
-                                <p><strong>Address:</strong> 123 Main Street, City, Country</p>
+                                <p><strong>Name:</strong> @firstItem.UserName</p>
+                                <p><strong>Email:</strong> @firstItem.Email</p>
+                                <p><strong>Phone:</strong> @firstItem.Phone</p>
+                                <p><strong>Address:</strong> @firstItem.Address</p>
                             </div>
                         </div>
 
@@ -41,24 +44,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Product 1</td>
-                                            <td>2</td>
-                                            <td>$20.00</td>
-                                            <td>$40.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Product 2</td>
-                                            <td>1</td>
-                                            <td>$15.00</td>
-                                            <td>$15.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Product 3</td>
-                                            <td>3</td>
-                                            <td>$10.00</td>
-                                            <td>$30.00</td>
-                                        </tr>
+                                        @foreach (var item in Model)
+                                        {
+                                            subTotal = item.Quantity * item.Price;
+                                            total += subTotal;
+                                            <tr>
+                                                <td>@item.Product.Name</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@item.Product.Price</td>
+                                                <td>@subTotal.ToString("#,##0 VNĐ")</td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -75,19 +71,22 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item d-flex justify-content-between">
                                         <span>Subtotal:</span>
-                                        <span>$85.00</span>
+                                        <span>@total.ToString("#,##0 VNĐ")</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <span>Shipping:</span>
-                                        <span>$10.00</span>
+                                        <span>@ViewBag.ShippingFee.ToString("#,##0 VNĐ")</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between">
                                         <span>Discount:</span>
-                                        <span>-$5.00</span>
+                                        <span>-@ViewBag.DiscountValue.ToString("#,##0 VNĐ")</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between font-weight-bold">
                                         <span>Total:</span>
-                                        <span>$90.00</span>
+                                        @{
+                                            var GrandTotal = total + ViewBag.ShippingFee - ViewBag.DiscountValue;
+                                        }
+                                        <span>@GrandTotal.ToString("#,##0 VNĐ")</span>
                                     </li>
                                 </ul>
                             </div>
@@ -99,9 +98,20 @@
                                 <h4>Order Status</h4>
                             </div>
                             <div class="card-body">
-                                <p><strong>Status:</strong> Pending</p>
-                                <p><strong>Order Date:</strong> 01/01/2025</p>
-                                <p><strong>Order ID:</strong> #1001</p>
+                                @if (ViewBag.Status == 0)
+                                {
+                                    <p><strong>Status:</strong> Pending</p>
+                                }
+                                else if (ViewBag.Status == 1)
+                                {
+                                    <p><strong>Status:</strong> Done</p>
+                                }
+                                else
+                                {
+                                    <p><strong>Status:</strong> Canceled</p>
+                                }
+                                <p><strong>Order Date:</strong> @ViewBag.OrderDate.ToString("dd/MM/yyyy")</p>
+                                <p><strong>Order ID:</strong> #@ViewBag.OrderCode</p>
                             </div>
                         </div>
                     </div>
@@ -110,14 +120,14 @@
 
             <!-- Back to Orders Button -->
             <div class="text-center mt-4">
-                <a href="orders.html" class="btn btn-outline-primary-2">
+                <a asp-action="History" asp-controller="Account" class="btn btn-outline-primary-2">
                     <span>BACK TO ORDERS</span><i class="icon-long-arrow-left"></i>
                 </a>
             </div>
         </div>
     </div>
 </div>
-@section Css{
+@section Css {
     <style>
         .order-details .card {
             border: 1px solid #ddd;

@@ -33,10 +33,10 @@
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                         <tr>
-                                            <th width="60px">#</th>
+                                            <th width="100px">#</th>
                                             <th>Date</th>
-                                            <th width="100px">Status</th>
-                                            <th width="200px">Total</th>
+                                            <th width="200px">Status</th>
+                                            @* <th width="200px">Total</th> *@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -60,9 +60,9 @@
                                                 {
                                                     <td><span class="badge badge-danger">Đã hủy</span></td>
                                                 }
-                                                <td>@item.ShippingFee.ToString("#,##0 VNĐ")</td>
+                                                @* <td>@item.ShippingFee.ToString("#,##0 VNĐ")</td> *@
                                                 <td>
-                                                    <a asp-action="HistoryDetails" asp-controller="Account" class="btn btn-sm btn-outline-primary">
+                                                    <a asp-action="HistoryDetails" asp-controller="Account" asp-route-OrderCode="@item.OrderCode" class="btn btn-sm btn-outline-primary">
                                                         View
                                                     </a>
                                                     @* <button class="btn btn-sm btn-outline-danger cancel-order" data-order-id="1001">
@@ -73,7 +73,7 @@
                                                         <a asp-action="CancelOrder" asp-controller="Account" asp-route-OrderCode="@item.OrderCode" class="btn btn-sm btn-outline-danger">
                                                             Cancel
                                                         </a>
-                                                    }                                                   
+                                                    }
                                                 </td>
                                             </tr>
                                             key++;

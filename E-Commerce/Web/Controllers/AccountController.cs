@@ -51,9 +51,25 @@ namespace Web.Controllers
             ViewBag.Email = userEmail;
             return View(Orders);
         }
-        public async Task<IActionResult> HistoryDetails()
+        public async Task<IActionResult> HistoryDetails(string OrderCode)
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var orderDetails = await _dataContext.OrderDetails.Include(i => i.Product).Where(i => i.OrderCode == OrderCode).ToListAsync();
+            var orderInfo = await _dataContext.Orders.Where(i => i.OrderCode == OrderCode && i.UserName == userEmail).FirstAsync();
+            ViewBag.OrderInfo = orderInfo;
+            ViewBag.ShippingFee = orderInfo.ShippingFee;
+            ViewBag.OrderDate = orderInfo.CreatedDate;
+            ViewBag.OrderCode = orderInfo.OrderCode;
+            decimal discountValue = 0;
+            var couponCookie = Request.Cookies["CouponTitle"];
+            if (couponCookie != null)
+            {
+                var coupon = await _dataContext.Coupons.Where(i => i.Equals(couponCookie)).FirstOrDefaultAsync();
+                discountValue = coupon.Discount;
+            }
+            ViewBag.DiscountValue = discountValue;
+            return View(orderDetails);
         }
         public async Task<IActionResult> CancelOrder(string OrderCode)
         {

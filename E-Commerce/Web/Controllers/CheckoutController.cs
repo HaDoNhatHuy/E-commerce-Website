@@ -100,7 +100,7 @@ namespace Web.Controllers
                     await _dataContext.SaveChangesAsync();
                 }
                 TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
-                Response.Cookies.Delete("CouponTitle");
+                //Response.Cookies.Delete("CouponTitle");
                 HttpContext.Session.Remove("Cart");
                 //Send Email when order success
                 var receiver = userEmail;
