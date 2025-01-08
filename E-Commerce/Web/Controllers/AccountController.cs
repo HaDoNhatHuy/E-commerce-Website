@@ -21,19 +21,6 @@ namespace Web.Controllers
             _dataContext = dataContext;
             _emailSender = emailSender;
         }
-        public IActionResult Index()
-        {
-            if ((bool)!User.Identity?.IsAuthenticated)
-            {
-                //User is not logged in, redirect to login
-                return RedirectToAction("Account");
-            }
-            return View();
-        }
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
         public IActionResult Account(string returnUrl)
         {
             return View(new AccountViewModel
@@ -172,6 +159,141 @@ namespace Web.Controllers
             }
             return RedirectToAction("History", "Account");
         }
+        public async Task<IActionResult> AccountInfo()
+        {
+            if ((bool)!User.Identity?.IsAuthenticated)
+            {
+                //User is not logged in, redirect to login
+                return RedirectToAction("Account");
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var infomations = await _userManager.Users.Where(i => i.Id == userId).FirstOrDefaultAsync();
+            return View(infomations);
+        }
+        public IActionResult UpdateAccount()
+        {
+            return View();
+        }
+        //[HttpPost]
+        //public async Task<IActionResult> UpdateInfoAccount(AppUserModel appUserModel)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var user = _userManager.Users.Where(i => i.Id == userId).FirstOrDefault();
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    else
+        //    {
+
+        //        var userUpdate = await _userManager.FindByIdAsync(user.Id);
+        //        userUpdate.FullName = appUserModel.FullName;
+        //        userUpdate.Email = appUserModel.Email;
+        //        userUpdate.PhoneNumber = appUserModel.PhoneNumber;
+        //        userUpdate.Address = appUserModel.Address;
+        //        // Kiểm tra mật khẩu hiện tại
+        //        if (!string.IsNullOrWhiteSpace(appUserModel.PasswordHash))
+        //        {
+        //            if (appUserModel.PasswordHash != user.PasswordHash)
+        //            {
+        //                TempData["error"] = "Mật khẩu hiện tại không chính xác.";
+        //                return RedirectToAction("UpdateAccount", "Account");
+        //            }
+        //            // Kiểm tra New Password và Confirm Password
+        //            if (!string.IsNullOrWhiteSpace(appUserModel.ConfirmPassword))
+        //            {
+        //                if (appUserModel.ConfirmPassword == user.PasswordHash)
+        //                {
+        //                    TempData["error"] = "Mật khẩu mới không được trùng với mật khẩu hiện tại.";
+        //                    return RedirectToAction("UpdateAccount", "Account");
+        //                }
+
+        //                if (appUserModel.NewPassword != appUserModel.ConfirmPassword)
+        //                {
+        //                    TempData["error"] = "Xác nhận mật khẩu không khớp với mật khẩu mới.";
+        //                    return RedirectToAction("UpdateAccount", "Account");
+        //                }
+        //            }
+        //            else
+        //            {
+        //                var passwordHasher = new PasswordHasher<AppUserModel>();
+        //                var passwordHash = passwordHasher.HashPassword(user, user.NewPassword);
+        //                user.PasswordHash = passwordHash;
+        //            }
+        //        }
+        //        await _userManager.UpdateAsync(userUpdate);
+        //        await _dataContext.SaveChangesAsync();
+        //        TempData["success"] = "Cập nhật tài khoản thành công";
+        //        return RedirectToAction("UpdateAccount", "Account");
+        //    }
+        //}
+        [HttpPost]
+        public async Task<IActionResult> UpdateInfoAccount(AppUserModel appUserModel)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Cập nhật các thông tin không liên quan đến mật khẩu
+            user.FullName = appUserModel.FullName;
+            user.Email = appUserModel.Email;
+            user.PhoneNumber = appUserModel.PhoneNumber;
+            user.Address = appUserModel.Address;
+
+            // Kiểm tra mật khẩu hiện tại nếu cần thay đổi mật khẩu
+            if (!string.IsNullOrWhiteSpace(appUserModel.PasswordHash))
+            {
+                var passwordHasher = new PasswordHasher<IdentityUser>();
+
+                // Kiểm tra mật khẩu hiện tại
+                var passwordVerificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, appUserModel.PasswordHash);
+                if (passwordVerificationResult == PasswordVerificationResult.Failed)
+                {
+                    TempData["error"] = "Mật khẩu hiện tại không chính xác.";
+                    return RedirectToAction("UpdateAccount", "Account");
+                }
+
+                // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+                if (!string.IsNullOrWhiteSpace(appUserModel.NewPassword) && !string.IsNullOrWhiteSpace(appUserModel.ConfirmPassword))
+                {
+                    if (appUserModel.NewPassword == appUserModel.PasswordHash)
+                    {
+                        TempData["error"] = "Mật khẩu mới không được trùng với mật khẩu hiện tại.";
+                        return RedirectToAction("UpdateAccount", "Account");
+                    }
+
+                    if (appUserModel.NewPassword != appUserModel.ConfirmPassword)
+                    {
+                        TempData["error"] = "Xác nhận mật khẩu không khớp với mật khẩu mới.";
+                        return RedirectToAction("UpdateAccount", "Account");
+                    }
+
+                    // Hash mật khẩu mới
+                    user.PasswordHash = passwordHasher.HashPassword(user, appUserModel.NewPassword);
+                }
+                else
+                {
+                    TempData["error"] = "Mật khẩu mới và xác nhận mật khẩu không được để trống.";
+                    return RedirectToAction("UpdateAccount", "Account");
+                }
+            }
+
+            // Cập nhật thông tin người dùng
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                TempData["error"] = "Có lỗi xảy ra khi cập nhật tài khoản.";
+                return RedirectToAction("UpdateAccount", "Account");
+            }
+
+            TempData["success"] = "Cập nhật tài khoản thành công.";
+            return RedirectToAction("UpdateAccount", "Account");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Login(AccountViewModel loginVM)
         {
