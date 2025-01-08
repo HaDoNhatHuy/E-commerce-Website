@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.Areas.Admin.Repository;
@@ -44,7 +46,16 @@ builder.Services.Configure<IdentityOptions>(options =>
     //"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = true;
 });
-
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+});
 var app = builder.Build();
 app.UseStatusCodePagesWithRedirects("/Home/Error?statuscode={0}");
 

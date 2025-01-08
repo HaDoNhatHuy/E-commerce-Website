@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -316,6 +318,60 @@ namespace Web.Controllers
 
             return View("Account", model);
         }
+        public async Task LoginByGoogle()
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme,
+                new AuthenticationProperties
+                {
+                    RedirectUri = Url.Action("GoogleResponse")
+                });
+        }
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            if (!result.Succeeded)
+            {
+                //Nếu xác thực k thành công, quay về Login
+                return RedirectToAction("Account");
+            }
+            var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+            });
+            //return Json(claims);
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var userName = email.Split('@')[0]; //lấy ra tiền tố trước email, tách phần @gmail.com ra
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                //Nếu user k tồn tại trong DB thì tạo user mới với pass mặc định là 1-9
+                var passwordHasher = new PasswordHasher<AppUserModel>();
+                var passwordHash = passwordHasher.HashPassword(null, "123456789");
+                var newUser = new AppUserModel { UserName = userName, Email = email };
+                newUser.PasswordHash = passwordHash;
+                var createUserResult = await _userManager.CreateAsync(newUser);
+                if(!createUserResult.Succeeded)
+                {
+                    TempData["success"] = "Đăng ký tài khoản thất bại. Vui lòng thử lại sau";
+                    return RedirectToAction("Account");
+                }
+                else
+                {
+                    await _signInManager.SignInAsync(newUser, isPersistent: false);
+                    TempData["success"] = "Đăng ký tài khoản thành công";
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                TempData["success"] = "Đăng nhập thành công";
+                await _signInManager.SignInAsync(existingUser, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(AccountViewModel registerVM)
@@ -348,6 +404,7 @@ namespace Web.Controllers
         }
         public async Task<IActionResult> Logout(string returnUrl = "/")
         {
+            await HttpContext.SignOutAsync();
             await _signInManager.SignOutAsync();
             return Redirect(returnUrl);
         }
