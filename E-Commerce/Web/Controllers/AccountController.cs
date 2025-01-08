@@ -349,9 +349,9 @@ namespace Web.Controllers
             {
                 //Nếu user k tồn tại trong DB thì tạo user mới với pass mặc định là 1-9
                 var passwordHasher = new PasswordHasher<AppUserModel>();
-                var passwordHash = passwordHasher.HashPassword(null, "123456789");
+                var hashedPassword = passwordHasher.HashPassword(null, "123456789");
                 var newUser = new AppUserModel { UserName = userName, Email = email };
-                newUser.PasswordHash = passwordHash;
+                newUser.PasswordHash = hashedPassword;
                 var createUserResult = await _userManager.CreateAsync(newUser);
                 if(!createUserResult.Succeeded)
                 {
@@ -371,6 +371,7 @@ namespace Web.Controllers
                 await _signInManager.SignInAsync(existingUser, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }
+            return RedirectToAction("Account");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
