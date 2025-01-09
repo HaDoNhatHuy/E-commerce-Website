@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Web.Repository;
 
 namespace Web.Areas.Admin.Controllers
@@ -24,6 +25,19 @@ namespace Web.Areas.Admin.Controllers
             ViewBag.CountCategory = count_category;
             ViewBag.CountUser = count_user;
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetChartData()
+        {
+            var data = await _dataContext.Statisticals.Select(s => new
+            {
+                date = s.CreatedDate.ToString("dd-MM-yyyy"),
+                quantity = s.Quantity,
+                sold = s.Sold,
+                revenue = s.Revenue,
+                profit = s.Profit,
+            }).ToListAsync();
+            return Json(data);
         }
     }
 }

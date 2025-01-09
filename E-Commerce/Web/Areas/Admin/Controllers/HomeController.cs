@@ -5,6 +5,7 @@ using Web.Repository;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         private readonly DataContext _dataContext;
