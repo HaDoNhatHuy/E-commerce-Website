@@ -64,6 +64,20 @@
             </div>
         </div>
 
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4>Lọc dữ liệu theo:</h4>
+                    <select class="filter-select">
+                        <option value="30">--- Lọc dữ liệu ---</option>
+                        <option value="7">7 ngày trước</option>
+                        <option value="30">tháng qua</option>
+                        <option value="90">3 tháng trước</option>
+                        <option value="365">1 năm</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <!-- Chart Section -->
         <div class="row">
             <div class="col-12">
@@ -72,6 +86,7 @@
             </div>
         </div>
     </div><!-- /.container-fluid -->
+
 </section>
 
 @section Css {
@@ -111,38 +126,82 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script>
         $(document).ready(function(){
+            var ChartMorris= new Morris.Line({
+                element: 'myfirstchart',
+                data: [],
+                xkey: 'date',
+                // xLabelFormat: function(x) {
+                //        return new Date(x).toLocaleDateString();
+                //        // return moment(x).format('DD/MM/YYYY');
+                // },
+                ykeys: ['quantity', 'sold', 'revenue', 'profit'],
+                labels: ['Đơn hàng', 'Số lượng bán ra', 'Doanh thu', 'Lợi nhuận'],
+                lineColors: ['#0b5ed7', '#28a745', '#ffc107', '#dc3545'],
+                parseTime: false
+            });
+
             $.ajax({
-                url:"/Admin/Dashboard/GetChartData",
+                // url:"/Admin/Dashboard/GetChartData",
+                url:"@Url.Action("GetChartData", "Dashboard")",
                 type:"POST",
                 dataType:"json",
                 success:function(data){
-                    var chartData = data.map(function(item){
-                        return {
-                            date: item.date,
-                            sold: item.sold,
-                            quantity: item.quantity,
-                            revenue: item.revenue,
-                            profit: item.profit,
-                        };
-                    });
-
-                    new Morris.Line({
-                        element: 'myfirstchart',
-                        data: chartData,
-                        xkey: 'date',
-                        // xLabelFormat: function(x) {
-                        //     return new Date(x).toLocaleDateString();
-                        //      // return moment(x).format('DD/MM/YYYY');
-                        // },
-                        ykeys: ['quantity', 'sold', 'revenue', 'profit'],
-                        labels: ['Đơn hàng', 'Số lượng bán ra', 'Doanh thu', 'Lợi nhuận'],
-                        lineColors: ['#0b5ed7', '#28a745', '#ffc107', '#dc3545'],
-                        parseTime: false
-                    });
+                    if(data){
+                        ChartMorris.setData(data.map(function(item){
+                            return {
+                                date:item.date,
+                                sold:item.sold,
+                                quantity:item.quantity,
+                                revenue:item.revenue,
+                                profit:item.profit
+                            };
+                        }));
+                    }
+                    else{
+                        console.warn("No data received for Morris chart update");
+                        ChartMorris.setData([]);
+                    }
                 },
                 error:function(error){
                     console.error("Error fetching data:", error);
                 }
+            });
+
+            $(".filter-select").on('change',function(){
+                var days=$(this).val();
+                var endDate=new Date();
+                var startDate= new Date(endDate.getTime()-days*24*60*60*1000);
+                // alert(startDate);
+                // alert(endDate);
+                $.ajax({
+                    // url:"/Admin/Dashboard/GetChartDataBySelect",
+                    url:"@Url.Action("GetChartDataBySelect", "Dashboard")",
+                    type:"POST",
+                    dataType:'json',
+                    data:{
+                        startDate: startDate.toISOString().split('T')[0],
+                        endDate: endDate.toISOString().split('T')[0],
+                    },
+                    success: function(data){
+                        if(data){
+                            ChartMorris.setData(data.map(function(item){
+                                return {
+                                date:item.date,
+                                sold:item.sold,
+                                quantity:item.quantity,
+                                revenue:item.revenue,
+                                profit:item.profit
+                                };
+                            }));
+                        }else{
+                            console.warn("No data received for Morris chart update");
+                            ChartMorris.setData([]);
+                        }
+                    },
+                    error:function(error){
+                    console.error("Error fetching data:", error);
+                }
+                });
             });
         });
     </script>

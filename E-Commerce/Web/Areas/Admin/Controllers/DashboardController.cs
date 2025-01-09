@@ -27,6 +27,7 @@ namespace Web.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
+        [Route("GetChartData")]
         public async Task<IActionResult> GetChartData()
         {
             var data = await _dataContext.Statisticals.Select(s => new
@@ -37,6 +38,22 @@ namespace Web.Areas.Admin.Controllers
                 revenue = s.Revenue,
                 profit = s.Profit,
             }).ToListAsync();
+            return Json(data);
+        }
+        [HttpPost]
+        [Route("GetChartDataBySelect")]
+        public async Task<IActionResult> GetChartDataBySelect(DateTime startDate, DateTime endDate)
+        {
+            var data = await _dataContext.Statisticals
+                .Where(s => s.CreatedDate >= startDate && s.CreatedDate <= endDate)
+                .Select(s => new
+                {
+                    date = s.CreatedDate.ToString("dd-MM-yyyy"),
+                    quantity = s.Quantity,
+                    sold = s.Sold,
+                    revenue = s.Revenue,
+                    profit = s.Profit,
+                }).ToListAsync();
             return Json(data);
         }
     }
