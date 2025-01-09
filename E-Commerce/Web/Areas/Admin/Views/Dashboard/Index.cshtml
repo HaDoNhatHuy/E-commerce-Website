@@ -1,4 +1,5 @@
-﻿@{
+﻿@model StatisticalChartModel
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
@@ -7,7 +8,7 @@
     <div class="container-fluid">
         <!-- Row for Stat boxes -->
         <div class="row">
-            <div class="col-lg-3 col-6 mb-4">
+            <div class="col-lg-3 col-md-6 mb-4">
                 <!-- Order Box -->
                 <div class="small-box bg-info rounded shadow-sm">
                     <div class="inner">
@@ -21,12 +22,12 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-6 mb-4">
+            <div class="col-lg-3 col-md-6 mb-4">
                 <!-- Product Box -->
                 <div class="small-box bg-success rounded shadow-sm">
                     <div class="inner">
                         <h3 class="font-weight-bold text-white">@ViewBag.CountProduct<sup style="font-size: 20px">%</sup></h3>
-                        <p class="text-white">Product</p>
+                        <p class="text-white">Products</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
@@ -35,12 +36,12 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-6 mb-4">
+            <div class="col-lg-3 col-md-6 mb-4">
                 <!-- User Box -->
                 <div class="small-box bg-warning rounded shadow-sm">
                     <div class="inner">
                         <h3 class="font-weight-bold text-white">@ViewBag.CountUser</h3>
-                        <p class="text-white">User</p>
+                        <p class="text-white">Users</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-person-add"></i>
@@ -49,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-6 mb-4">
+            <div class="col-lg-3 col-md-6 mb-4">
                 <!-- Category Box -->
                 <div class="small-box bg-danger rounded shadow-sm">
                     <div class="inner">
@@ -64,29 +65,40 @@
             </div>
         </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
+        <!-- Filter Section -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="filter-box">
                     <h4>Lọc dữ liệu theo:</h4>
-                    <select class="filter-select">
+                    <select class="form-control filter-select">
                         <option value="30">--- Lọc dữ liệu ---</option>
                         <option value="7">7 ngày trước</option>
-                        <option value="30">tháng qua</option>
+                        <option value="30">Tháng qua</option>
                         <option value="90">3 tháng trước</option>
                         <option value="365">1 năm</option>
                     </select>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="filter-box">
+                    <h4>Tùy chọn:</h4>
+                    <label for="date_from">Từ ngày</label>
+                    <input type="date" class="form-control" id="date_from" asp-for="@Model.CreatedDate" />
+                    <label for="date_to">Đến ngày</label>
+                    <input type="date" class="form-control" id="date_to" asp-for="@Model.CreatedDate" />
+                    <button id="filterButton" class="btn btn-primary btn-block mt-3">Lọc</button>
+                </div>
+            </div>
         </div>
+
         <!-- Chart Section -->
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-12">
-                <h5 class="text-center">Biểu đồ thống kê</h5>
+                <h5 class="text-center mb-4">Biểu đồ thống kê</h5>
                 <div id="myfirstchart" style="height: 350px;"></div>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
-
+    </div>
 </section>
 
 @section Css {
@@ -96,10 +108,16 @@
             position: relative;
             display: block;
             background: #fff;
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 15px;
+            padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+            .small-box:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
 
             .small-box .inner {
                 padding: 10px;
@@ -113,9 +131,40 @@
             }
 
         .small-box-footer {
-            background: rgba(0,0,0,0.1);
-            border-radius: 0 0 10px 10px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 15px 15px;
             color: #fff;
+        }
+
+        .filter-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+            .filter-box label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+        .filter-select, .form-control {
+            border-radius: 8px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+            }
+
+        .btn-block {
+            width: 100%;
         }
     </style>
 }
@@ -130,10 +179,6 @@
                 element: 'myfirstchart',
                 data: [],
                 xkey: 'date',
-                // xLabelFormat: function(x) {
-                //        return new Date(x).toLocaleDateString();
-                //        // return moment(x).format('DD/MM/YYYY');
-                // },
                 ykeys: ['quantity', 'sold', 'revenue', 'profit'],
                 labels: ['Đơn hàng', 'Số lượng bán ra', 'Doanh thu', 'Lợi nhuận'],
                 lineColors: ['#0b5ed7', '#28a745', '#ffc107', '#dc3545'],
@@ -141,7 +186,6 @@
             });
 
             $.ajax({
-                // url:"/Admin/Dashboard/GetChartData",
                 url:"@Url.Action("GetChartData", "Dashboard")",
                 type:"POST",
                 dataType:"json",
@@ -171,10 +215,7 @@
                 var days=$(this).val();
                 var endDate=new Date();
                 var startDate= new Date(endDate.getTime()-days*24*60*60*1000);
-                // alert(startDate);
-                // alert(endDate);
                 $.ajax({
-                    // url:"/Admin/Dashboard/GetChartDataBySelect",
                     url:"@Url.Action("GetChartDataBySelect", "Dashboard")",
                     type:"POST",
                     dataType:'json',
@@ -186,11 +227,11 @@
                         if(data){
                             ChartMorris.setData(data.map(function(item){
                                 return {
-                                date:item.date,
-                                sold:item.sold,
-                                quantity:item.quantity,
-                                revenue:item.revenue,
-                                profit:item.profit
+                                    date:item.date,
+                                    sold:item.sold,
+                                    quantity:item.quantity,
+                                    revenue:item.revenue,
+                                    profit:item.profit
                                 };
                             }));
                         }else{
@@ -199,8 +240,38 @@
                         }
                     },
                     error:function(error){
-                    console.error("Error fetching data:", error);
-                }
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            });
+
+            //lọc theo tùy chọn
+            $("#filterButton").click(function(){
+                var fromDate = $("#date_from").val();
+                var toDate = $("#date_to").val();
+                $.ajax({
+                    url:"@Url.Action("FilterData", "Dashboard")",
+                    data:{fromDate:fromDate,toDate:toDate},
+                    type:"POST",
+                    success:function(data){
+                        if(data){
+                            ChartMorris.setData(data.map(function(item){
+                                return {
+                                    date:item.date,
+                                    sold:item.sold,
+                                    quantity:item.quantity,
+                                    revenue:item.revenue,
+                                    profit:item.profit
+                                };
+                            }));
+                        }
+                        else{
+                            console.warn("No data received for Morris chart update");
+                            ChartMorris.setData([]);
+                        }
+                    },error: function(error){
+                        console.error("Error fetching data:", error);
+                    }
                 });
             });
         });

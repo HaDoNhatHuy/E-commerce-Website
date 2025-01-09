@@ -28,23 +28,23 @@ namespace Web.Areas.Admin.Controllers
         }
         [HttpPost]
         [Route("GetChartData")]
-        public async Task<IActionResult> GetChartData()
+        public IActionResult GetChartData()
         {
-            var data = await _dataContext.Statisticals.Select(s => new
+            var data = _dataContext.Statisticals.Select(s => new
             {
                 date = s.CreatedDate.ToString("dd-MM-yyyy"),
                 quantity = s.Quantity,
                 sold = s.Sold,
                 revenue = s.Revenue,
                 profit = s.Profit,
-            }).ToListAsync();
+            }).ToList();
             return Json(data);
         }
         [HttpPost]
         [Route("GetChartDataBySelect")]
-        public async Task<IActionResult> GetChartDataBySelect(DateTime startDate, DateTime endDate)
+        public IActionResult GetChartDataBySelect(DateTime startDate, DateTime endDate)
         {
-            var data = await _dataContext.Statisticals
+            var data = _dataContext.Statisticals
                 .Where(s => s.CreatedDate >= startDate && s.CreatedDate <= endDate)
                 .Select(s => new
                 {
@@ -53,7 +53,31 @@ namespace Web.Areas.Admin.Controllers
                     sold = s.Sold,
                     revenue = s.Revenue,
                     profit = s.Profit,
-                }).ToListAsync();
+                }).ToList();
+            return Json(data);
+        }
+        [HttpPost]
+        [Route("FilterData")]
+        public IActionResult FilterData(DateTime? fromDate, DateTime? toDate)
+        {
+            var query = _dataContext.Statisticals.AsQueryable();
+            if (fromDate.HasValue)
+            {
+                query = query.Where(s => s.CreatedDate >= fromDate);
+            }
+            if (toDate.HasValue)
+            {
+                query = query.Where(s => s.CreatedDate <= toDate);
+            }
+            var data = query
+                .Select(s => new
+                {
+                    date = s.CreatedDate.ToString("dd-MM-yyyy"),
+                    quantity = s.Quantity,
+                    sold = s.Sold,
+                    revenue = s.Revenue,
+                    profit = s.Profit,
+                }).ToList();
             return Json(data);
         }
     }
