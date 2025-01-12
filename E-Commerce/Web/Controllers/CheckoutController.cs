@@ -80,6 +80,7 @@ namespace Web.Controllers
                 orderItem.UserName = userEmail;
                 orderItem.Status = 0;
                 orderItem.CreatedDate = DateTime.Now;
+                orderItem.PaymentMethod = PaymentMethod;
                 _dataContext.Add(orderItem);
                 await _dataContext.SaveChangesAsync();
                 List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
@@ -127,8 +128,34 @@ namespace Web.Controllers
                     var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
                     await _emailSender.SendEmailAsync(receiver, subject, message);
                     return RedirectToAction("History", "Account");
-                }                
+                }
             }
+        }
+        [HttpGet]
+        public async Task<IActionResult> PaymentCallBack(MomoInfoModel momoModel)
+        {
+            var response = _momoService.PaymentExecuteAsync(HttpContext.Request.Query);
+            var requestQuery = HttpContext.Request.Query;
+            if (requestQuery["resultCode"] != 0) //Giao dịch không thành công
+            {
+                var newMomoInfo = new MomoInfoModel
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    OrderId = requestQuery["orderId"],
+                    FullName = User.FindFirstValue(ClaimTypes.Email),
+                    Amount = decimal.Parse(requestQuery["amount"]),
+                    OrderInfo = requestQuery["orderInfo"],
+                    DatePaid = DateTime.Now,
+                };
+                _dataContext.Add(newMomoInfo);
+                await _dataContext.SaveChangesAsync();
+            }
+            else
+            {
+                TempData["error"] = "Giao dịch không thành công";
+                return RedirectToAction("Index", "Cart");
+            }
+            return View(response);
         }
     }
 }

@@ -1,0 +1,117 @@
+﻿@using Web.Models.Momo
+@model MomoExecuteResponseModel
+@{
+    ViewData["Title"] = "Kết quả thông tin giao dịch thanh toán thành công";
+}
+
+<div class="payment-success-container">
+    <div class="success-card">
+        <div class="icon-container">
+            <i class="fa fa-check-circle success-icon"></i>
+        </div>
+        <h2>Thanh toán Momo thành công!</h2>
+        <p class="success-message">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Giao dịch của bạn đã được xử lý thành công.</p>
+        <div class="transaction-info">
+            <p><strong>Mã đơn hàng:</strong> @Model.OrderId</p>
+            <p><strong>Thông tin đơn hàng:</strong> @Model.OrderInfo</p>
+            <p><strong>Tổng tiền thanh toán:</strong> @Model.Amount VNĐ</p>
+        </div>
+        <div class="action-buttons">
+            <a asp-action="History" asp-controller="Account" class="btn btn-primary">Xem lịch sử đơn hàng</a>
+            <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Về trang chủ</a>
+        </div>
+    </div>
+</div>
+
+@section Css {
+    <style>
+        /* Đặt giao diện toàn màn hình với flexbox */
+        .payment-success-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Chiều cao toàn màn hình */
+            width: 100vh;
+            background-color: #f9f9f9;
+            margin: 0; /* Loại bỏ khoảng trống mặc định */
+        }
+
+        /* Card hiển thị thông tin */
+        .success-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 90%; /* Đảm bảo hiển thị đẹp trên các thiết bị nhỏ */
+        }
+
+        /* Biểu tượng thành công */
+        .icon-container {
+            margin-bottom: 20px;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            color: #28a745;
+        }
+
+        /* Tiêu đề và thông báo */
+        .success-card h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Thông tin giao dịch */
+        .transaction-info p {
+            font-size: 15px;
+            margin: 10px 0;
+            color: #555;
+        }
+
+            .transaction-info p strong {
+                color: #333;
+            }
+
+        /* Nút hành động */
+        .action-buttons {
+            margin-top: 30px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: inline-block;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+            .btn-secondary:hover {
+                background-color: #5a6268;
+            }
+    </style>
+}

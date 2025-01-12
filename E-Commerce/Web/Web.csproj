@@ -28,6 +28,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\assets\images\bannerImages\" />
     <Folder Include="wwwroot\assets\images\contactImages\" />
+    <Folder Include="wwwroot\assets\images\paymentMethod\" />
     <Folder Include="wwwroot\assets\images\ratingImages\" />
   </ItemGroup>
 

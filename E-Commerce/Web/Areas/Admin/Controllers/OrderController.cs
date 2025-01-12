@@ -26,6 +26,7 @@ namespace Web.Areas.Admin.Controllers
             var orderDetails = await _dataContext.OrderDetails.Include(i => i.Product).Where(i => i.OrderCode == orderCode).ToListAsync();
             var order = _dataContext.Orders.Where(i => i.OrderCode == orderCode).First();
             ViewBag.Status = order.Status;
+            var paymentDate=_dataContext.MomoInfos.FirstOrDefaultAsync(i=>)
             return View(orderDetails);
         }
         [HttpPost]

@@ -37,7 +37,9 @@
             {
                 <p>
                     <b>Mã đơn hàng:</b> @item.OrderCode<br>
-                    <b>Ngày tạo:</b> @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")
+                    <b>Phương thức thanh toán:</b> @item.PaymentMethod<br>
+                    <b>Ngày tạo:</b> @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")<br>                    
+                    <b>Ngày thanh toán:</b>
                 </p>
             }
         </div>
@@ -74,10 +76,19 @@
         <div class="col-md-6">
             <h5>Phương thức thanh toán</h5>
             <p>
-                <img src="/assets/dist/img/credit/visa.png" alt="Visa" class="mr-2">
-                <img src="/assets/dist/img/credit/mastercard.png" alt="Mastercard" class="mr-2">
-                <img src="/assets/dist/img/credit/american-express.png" alt="American Express" class="mr-2">
-                <img src="/assets/dist/img/credit/paypal2.png" alt="Paypal">
+                @foreach (var item in ViewBag.OrderInfo)
+                {
+                    @if (item.PaymentMethod == "Momo")
+                    {
+                        <img src="/assets/images/paymentMethod/momo.png" width="50" class="mr-2" />
+                    }
+                    else
+                    {
+                        <img src="/assets/images/paymentMethod/COD.png" width="50" class="mr-2" />
+                    }
+                }
+
+
             </p>
             <p class="text-muted">
                 Các phương thức thanh toán đa dạng và bảo mật tuyệt đối.
@@ -115,9 +126,12 @@
             <button class="btn btn-secondary">
                 <i class="fas fa-print"></i> In hóa đơn
             </button>
-            <button class="btn btn-success">
-                <i class="fas fa-credit-card"></i> Thanh toán
+            <button class="btn btn-primary ml-2">
+                <i class="fas fa-file-pdf"></i> Xuất PDF
             </button>
+            @*  <button class="btn btn-success">
+                <i class="fas fa-credit-card"></i> Thanh toán
+            </button> *@
 
             @if (ViewBag.Status != 3)
             {
@@ -135,10 +149,6 @@
 
                 </select>
             }
-
-            <button class="btn btn-primary ml-2">
-                <i class="fas fa-file-pdf"></i> Xuất PDF
-            </button>
         </div>
     </div>
 </div>

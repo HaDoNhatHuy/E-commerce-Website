@@ -90,6 +90,8 @@
                             </table><!-- End .table table-summary -->
 
                             <div class="accordion-summary" id="accordion-payment">
+                                <input type="hidden" id="PaymentMethod" name="PaymentMethod" value="">
+
                                 <div class="card">
                                     <div class="card-header" id="heading-cod">
                                         <h2 class="card-title">
@@ -101,21 +103,16 @@
                                     <div id="collapse-cod" class="collapse" aria-labelledby="heading-cod" data-parent="#accordion-payment">
                                         <div class="card-body">
                                             Bạn có thể thanh toán khi nhận hàng. Hãy chắc chắn bạn có đủ tiền mặt để thanh toán khi hàng được giao đến.
+                                            @* <input type="hidden" name="PaymentMethod" value="COD" /> *@
                                         </div><!-- End .card-body -->
-                                        <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+
+                                        <button type="submit" name="PayUrl" class="btn btn-outline-primary-2 btn-order btn-block" onclick="setPaymentMethod('COD')">
                                             <span class="btn-text">Place Order</span>
                                             <span class="btn-hover-text">Proceed to Checkout</span>
                                         </button>
                                     </div><!-- End .collapse -->
                                 </div><!-- End .card -->
 
-                                @* <form asp-action="CreatePaymentMomo" asp-controller="Payment" method="post">
-                                    <input type="hidden" name="Amount" value="@Model.GrandTotal" />
-                                    <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" />
-                                    <input type="hidden" name="OrderInfo" value="Thanh toán Momo cho đơn hàng tại Ecommerce-Shop" />
-                                    <input type="hidden" name="FullName" value="EcommerceShop" />
-                                    <button class="btn btn-danger" type="submit">Thanh toán bằng Momo</button>
-                                </form> *@
                                 <div class="card">
                                     <div class="card-header" id="heading-momo">
                                         <h2 class="card-title">
@@ -128,14 +125,14 @@
                                         <div class="card-body">
                                             <p>Quét mã QR hoặc sử dụng số điện thoại để thanh toán nhanh chóng qua Momo.</p>
                                             <!-- Hidden inputs for Momo payment -->
-                                            <input type="hidden" name="PaymentMethod" value="Momo" />
+                                            @* <input type="hidden" name="PaymentMethod" value="Momo" /> *@
                                             <input type="hidden" name="FullName" value="Hà Đỗ Nhật Huy" />
                                             <input type="hidden" name="Amount" value="@Model.GrandTotal" />
                                             <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" />
                                             <input type="hidden" name="OrderInfo" value="Thanh toán Momo cho đơn hàng tại Ecommerce-Shop" />
                                         </div><!-- End .card-body -->
                                         @* <button type="submit" name="PayUrl" class="btn btn-danger btn-block">Thanh toán bằng Momo</button> *@
-                                        <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" name="PayUrl">
+                                        <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" name="PayUrl" onclick="setPaymentMethod('Momo')">
                                             <span class="btn-text">Place Order</span>
                                             <span class="btn-hover-text">Proceed to Checkout</span>
                                         </button>
@@ -143,7 +140,7 @@
                                 </div>
 
 
-                               @*  <div class="card">
+                                @*  <div class="card">
                                     <div class="card-header" id="heading-vnpay">
                                         <h2 class="card-title">
                                             <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-vnpay" aria-expanded="false" aria-controls="collapse-vnpay">
@@ -159,26 +156,19 @@
                                 </div> *@
                             </div>
 
-
-                            @* <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-                                <span class="btn-text">Place Order</span>
-                                <span class="btn-hover-text">Proceed to Checkout</span>
-                            </button> *@
                         </div><!-- End .summary -->
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </form>
-            <!-- Form thanh toán bằng MoMo -->
-           @*  <form asp-action="CreatePaymentUrl" asp-controller="Payment" method="post" class="mt-4">
-                <input type="hidden" name="Amount" value="@Model.GrandTotal" />
-                <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" />
-                <input type="hidden" name="OrderInfo" value="Thanh toán MoMo cho đơn hàng tại Ecommerce-Shop" />
-                <input type="hidden" name="FullName" value="EcommerceShop" />
-                <button class="btn btn-danger btn-block" name="PayUrl" type="submit">
-                    Thanh toán bằng MoMo
-                </button>
-            </form> *@
+
         </div><!-- End .container -->
     </div><!-- End .checkout -->
 </div>
-
+@section Js {
+    <script>
+            function setPaymentMethod(method) 
+            {
+                document.getElementById("PaymentMethod").value = method;
+            }
+    </script>
+}
