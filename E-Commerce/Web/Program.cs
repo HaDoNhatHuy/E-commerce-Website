@@ -4,14 +4,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.Areas.Admin.Repository;
 using Web.Models;
+using Web.Models.Momo;
 using Web.Repository;
+using Web.Services.Momo;
 
 var builder = WebApplication.CreateBuilder(args);
+//Connect Momo API
+builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
+builder.Services.AddScoped<IMomoService, MomoService>();
+
 // Connection DB
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:E-CommerceDB"]);
 });
+
 //Add Email Sender
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 // Add services to the container.

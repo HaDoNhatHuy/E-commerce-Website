@@ -23,7 +23,7 @@
 
                         <label>Address *</label>
                         <input type="text" class="form-control" asp-for="Address" required="">
-                        
+
                         <label>Phone Number *</label>
                         <input type="text" class="form-control" asp-for="Phone" required="">
 
@@ -91,90 +91,93 @@
 
                             <div class="accordion-summary" id="accordion-payment">
                                 <div class="card">
-                                    <div class="card-header" id="heading-1">
+                                    <div class="card-header" id="heading-cod">
                                         <h2 class="card-title">
-                                            <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="false" aria-controls="collapse-1" class="collapsed">
-                                                Direct bank transfer
+                                            <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-cod" aria-expanded="false" aria-controls="collapse-cod">
+                                                Thanh toán khi nhận hàng (Cash on Delivery)
                                             </a>
                                         </h2>
                                     </div><!-- End .card-header -->
-                                    <div id="collapse-1" class="collapse" aria-labelledby="heading-1" data-parent="#accordion-payment" style="">
+                                    <div id="collapse-cod" class="collapse" aria-labelledby="heading-cod" data-parent="#accordion-payment">
                                         <div class="card-body">
-                                            Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
+                                            Bạn có thể thanh toán khi nhận hàng. Hãy chắc chắn bạn có đủ tiền mặt để thanh toán khi hàng được giao đến.
                                         </div><!-- End .card-body -->
+                                        <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                            <span class="btn-text">Place Order</span>
+                                            <span class="btn-hover-text">Proceed to Checkout</span>
+                                        </button>
                                     </div><!-- End .collapse -->
                                 </div><!-- End .card -->
 
+                                @* <form asp-action="CreatePaymentMomo" asp-controller="Payment" method="post">
+                                    <input type="hidden" name="Amount" value="@Model.GrandTotal" />
+                                    <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" />
+                                    <input type="hidden" name="OrderInfo" value="Thanh toán Momo cho đơn hàng tại Ecommerce-Shop" />
+                                    <input type="hidden" name="FullName" value="EcommerceShop" />
+                                    <button class="btn btn-danger" type="submit">Thanh toán bằng Momo</button>
+                                </form> *@
                                 <div class="card">
-                                    <div class="card-header" id="heading-2">
+                                    <div class="card-header" id="heading-momo">
                                         <h2 class="card-title">
-                                            <a class="" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="true" aria-controls="collapse-2">
-                                                Check payments
+                                            <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-momo" aria-expanded="false" aria-controls="collapse-momo">
+                                                Thanh toán bằng Momo
                                             </a>
                                         </h2>
                                     </div><!-- End .card-header -->
-                                    <div id="collapse-2" class="collapse show" aria-labelledby="heading-2" data-parent="#accordion-payment" style="">
+                                    <div id="collapse-momo" class="collapse" aria-labelledby="heading-momo" data-parent="#accordion-payment">
                                         <div class="card-body">
-                                            Ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.
+                                            <p>Quét mã QR hoặc sử dụng số điện thoại để thanh toán nhanh chóng qua Momo.</p>
+                                            <!-- Hidden inputs for Momo payment -->
+                                            <input type="hidden" name="PaymentMethod" value="Momo" />
+                                            <input type="hidden" name="FullName" value="Hà Đỗ Nhật Huy" />
+                                            <input type="hidden" name="Amount" value="@Model.GrandTotal" />
+                                            <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" />
+                                            <input type="hidden" name="OrderInfo" value="Thanh toán Momo cho đơn hàng tại Ecommerce-Shop" />
                                         </div><!-- End .card-body -->
+                                        @* <button type="submit" name="PayUrl" class="btn btn-danger btn-block">Thanh toán bằng Momo</button> *@
+                                        <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" name="PayUrl">
+                                            <span class="btn-text">Place Order</span>
+                                            <span class="btn-hover-text">Proceed to Checkout</span>
+                                        </button>
                                     </div><!-- End .collapse -->
-                                </div><!-- End .card -->
+                                </div>
 
-                                <div class="card">
-                                    <div class="card-header" id="heading-3">
+
+                               @*  <div class="card">
+                                    <div class="card-header" id="heading-vnpay">
                                         <h2 class="card-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
-                                                Cash on delivery
+                                            <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-vnpay" aria-expanded="false" aria-controls="collapse-vnpay">
+                                                Thanh toán bằng VNPay
                                             </a>
                                         </h2>
                                     </div><!-- End .card-header -->
-                                    <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
+                                    <div id="collapse-vnpay" class="collapse" aria-labelledby="heading-vnpay" data-parent="#accordion-payment">
                                         <div class="card-body">
-                                            Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros.
+                                            Thanh toán dễ dàng qua VNPay với mã QR hoặc thông tin tài khoản ngân hàng.
                                         </div><!-- End .card-body -->
                                     </div><!-- End .collapse -->
-                                </div><!-- End .card -->
+                                </div> *@
+                            </div>
 
-                                <div class="card">
-                                    <div class="card-header" id="heading-4">
-                                        <h2 class="card-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
-                                                PayPal <small class="float-right paypal-link">What is PayPal?</small>
-                                            </a>
-                                        </h2>
-                                    </div><!-- End .card-header -->
-                                    <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion-payment">
-                                        <div class="card-body">
-                                            Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum.
-                                        </div><!-- End .card-body -->
-                                    </div><!-- End .collapse -->
-                                </div><!-- End .card -->
 
-                                <div class="card">
-                                    <div class="card-header" id="heading-5">
-                                        <h2 class="card-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-                                                Credit Card (Stripe)
-                                                <img src="assets/images/payments-summary.png" alt="payments cards">
-                                            </a>
-                                        </h2>
-                                    </div><!-- End .card-header -->
-                                    <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion-payment">
-                                        <div class="card-body">
-                                            Donec nec justo eget felis facilisis fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
-                                        </div><!-- End .card-body -->
-                                    </div><!-- End .collapse -->
-                                </div><!-- End .card -->
-                            </div><!-- End .accordion -->
-
-                            <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                            @* <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
                                 <span class="btn-text">Place Order</span>
                                 <span class="btn-hover-text">Proceed to Checkout</span>
-                            </button>
+                            </button> *@
                         </div><!-- End .summary -->
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </form>
+            <!-- Form thanh toán bằng MoMo -->
+           @*  <form asp-action="CreatePaymentUrl" asp-controller="Payment" method="post" class="mt-4">
+                <input type="hidden" name="Amount" value="@Model.GrandTotal" />
+                <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" />
+                <input type="hidden" name="OrderInfo" value="Thanh toán MoMo cho đơn hàng tại Ecommerce-Shop" />
+                <input type="hidden" name="FullName" value="EcommerceShop" />
+                <button class="btn btn-danger btn-block" name="PayUrl" type="submit">
+                    Thanh toán bằng MoMo
+                </button>
+            </form> *@
         </div><!-- End .container -->
     </div><!-- End .checkout -->
 </div>

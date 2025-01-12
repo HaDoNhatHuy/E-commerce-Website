@@ -4,8 +4,10 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using Web.Areas.Admin.Repository;
 using Web.Models;
+using Web.Models.Order;
 using Web.Models.ViewModels;
 using Web.Repository;
+using Web.Services.Momo;
 
 namespace Web.Controllers
 {
@@ -13,10 +15,12 @@ namespace Web.Controllers
     {
         private readonly DataContext _dataContext;
         private readonly IEmailSender _emailSender;
-        public CheckoutController(DataContext dataContext, IEmailSender emailSender)
+        private IMomoService _momoService;
+        public CheckoutController(DataContext dataContext, IEmailSender emailSender, IMomoService momoService)
         {
             _dataContext = dataContext;
             _emailSender = emailSender;
+            _momoService = momoService;
         }
 
         public async Task<IActionResult> Index()
@@ -50,7 +54,7 @@ namespace Web.Controllers
             return View(cartVM);
         }
         [HttpPost]
-        public async Task<IActionResult> CheckoutSuccess(CartItemViewModel model)
+        public async Task<IActionResult> CheckoutSuccess(CartItemViewModel model, OrderInfoModel orderInfoModel, string PaymentMethod)
         {
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail == null)
@@ -99,15 +103,31 @@ namespace Web.Controllers
                     _dataContext.Add(orderDetails);
                     await _dataContext.SaveChangesAsync();
                 }
-                TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
-                //Response.Cookies.Delete("CouponTitle");
-                HttpContext.Session.Remove("Cart");
-                //Send Email when order success
-                var receiver = userEmail;
-                var subject = "Đặt hàng thành công";
-                var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
-                await _emailSender.SendEmailAsync(receiver, subject, message);
-                return RedirectToAction("History", "Account");
+                if (PaymentMethod == "Momo")
+                {
+                    var response = await _momoService.CreatePaymentAsync(orderInfoModel);
+                    TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
+                    HttpContext.Session.Remove("Cart");
+                    //Send Email when order success
+                    var receiver = userEmail;
+                    var subject = "Đặt hàng thành công";
+                    var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
+                    await _emailSender.SendEmailAsync(receiver, subject, message);
+
+                    return Redirect(response.PayUrl);
+                }
+                else
+                {
+                    TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
+                    //Response.Cookies.Delete("CouponTitle");
+                    HttpContext.Session.Remove("Cart");
+                    //Send Email when order success
+                    var receiver = userEmail;
+                    var subject = "Đặt hàng thành công";
+                    var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
+                    await _emailSender.SendEmailAsync(receiver, subject, message);
+                    return RedirectToAction("History", "Account");
+                }                
             }
         }
     }
