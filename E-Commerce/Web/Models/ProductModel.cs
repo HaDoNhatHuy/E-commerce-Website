@@ -19,6 +19,8 @@ namespace Web.Models
         [Column(TypeName = "decimal(12,2)")]
         [Required(ErrorMessage = "Vui lòng nhập giá của sản phẩm")]
         public decimal Price { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập giá vốn của sản phẩm")]
+        public decimal CapitalPrice { get; set; }
         [Required, Range(1, int.MaxValue, ErrorMessage = "Chọn một danh mục")]
         //[Required(ErrorMessage = "Vui lòng chọn một danh mục")]
         public int CategoryId { get; set; }

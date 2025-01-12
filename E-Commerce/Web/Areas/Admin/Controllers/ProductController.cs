@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -94,52 +95,55 @@ namespace Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int Id, ProductModel product)
         {
+            var existed_product = _dataContext.Products.Find(product.Id); //tìm sp theo id product
             ViewBag.Categories = new SelectList(_dataContext.Categories, "Id", "Name", product.CategoryId);
             ViewBag.Brands = new SelectList(_dataContext.Brands, "Id", "Name", product.BrandId);
-            if (ModelState.IsValid)
+
+            //if (ModelState.IsValid)
+            //{
+            product.Slug = product.Name.Replace(" ", "-");
+
+            if (product.PictureUpload != null)
             {
-                //code thêm dữ liệu
-                product.Slug = product.Name.Replace(" ", "-");
-                var slug = await _dataContext.Products.FirstOrDefaultAsync(i => i.Slug == product.Slug);
-                if (slug != null)
-                {
-                    ModelState.AddModelError("", "Sản phẩm đã có trong Database");
-                    return View(product);
-                }
+                string uploadsDir = Path.Combine(_environment.WebRootPath, "media/products");
+                string imageName = Guid.NewGuid().ToString() + "_" + product.PictureUpload.FileName;
+                string filePath = Path.Combine(uploadsDir, imageName);
 
-                if (product.PictureUpload != null)
-                {
-                    string fileUpload = Path.Combine(_environment.WebRootPath, "assets/images/productImages/");
-                    string pictureName = Guid.NewGuid().ToString() + "_" + product.PictureUpload.FileName;
-                    string filePath = Path.Combine(fileUpload, pictureName);
-
-                    FileStream fs = new FileStream(filePath, FileMode.Create);
-                    await product.PictureUpload.CopyToAsync(fs);
-                    fs.Close();
-
-                    product.Picture = pictureName;
-
-                }
-
-                _dataContext.Update(product);
-                await _dataContext.SaveChangesAsync();
-                TempData["success"] = "Cập nhật sản phẩm thành công";
-                return RedirectToAction("Index");
+                FileStream fs = new FileStream(filePath, FileMode.Create);
+                await product.PictureUpload.CopyToAsync(fs);
+                fs.Close();
+                existed_product.Picture = imageName;
             }
-            else
-            {
-                TempData["error"] = "Model có một vài thứ đang bị lỗi";
-                List<string> errors = new List<string>();
-                foreach (var value in ModelState.Values)
-                {
-                    foreach (var error in value.Errors)
-                    {
-                        errors.Add(error.ErrorMessage);
-                    }
-                    string errorMessage = string.Join("\n", errors);
-                    return BadRequest(errorMessage);
-                }
-            }
+
+
+            // Update other product properties
+            existed_product.Name = product.Name;
+            existed_product.Description = product.Description;
+            existed_product.Price = product.Price;
+            existed_product.CapitalPrice = product.CapitalPrice;
+            existed_product.CategoryId = product.CategoryId;
+            existed_product.BrandId = product.BrandId;
+            // ... other properties
+            _dataContext.Update(existed_product);
+            await _dataContext.SaveChangesAsync();
+            TempData["success"] = "Cập nhật sản phẩm thành công";
+            return RedirectToAction("Index");
+
+            //}
+            //else
+            //{
+            //    TempData["error"] = "Model có một vài thứ đang lỗi";
+            //    List<string> errors = new List<string>();
+            //    foreach (var value in ModelState.Values)
+            //    {
+            //        foreach (var error in value.Errors)
+            //        {
+            //            errors.Add(error.ErrorMessage);
+            //        }
+            //    }
+            //    string errorMessage = string.Join("\n", errors);
+            //    return BadRequest(errorMessage);
+            //}
             return View(product);
         }
         public async Task<IActionResult> Delete(int Id)

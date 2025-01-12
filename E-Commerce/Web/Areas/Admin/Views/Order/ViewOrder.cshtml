@@ -122,8 +122,17 @@
             @if (ViewBag.Status != 3)
             {
                 <select class="form-control select-update-order d-inline-block w-auto ml-2">
-                    <option value="0">Chưa xử lý</option>
-                    <option value="1">Đã xử lý</option>
+                    @if (ViewBag.Status == 0)
+                    {
+                        <option value="0">Chưa xử lý</option>
+                        <option value="1">Đã xử lý</option>
+                    }
+                    else
+                    {
+                        <option value="0" disabled>Chưa xử lý</option>
+                        <option value="1">Đã xử lý</option>
+                    }
+
                 </select>
             }
 
@@ -158,7 +167,7 @@
 
                 $.ajax({
                     type:'POST',
-                    url:"@Url.Action("UpdateOrder","Order")",
+                    url:"@Url.Action("UpdateOrder", "Order")",
                     data: {status:status,orderCode:orderCode},
                     success:function(result){
                         if (result.success){

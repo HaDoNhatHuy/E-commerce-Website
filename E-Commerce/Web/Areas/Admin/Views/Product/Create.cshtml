@@ -33,6 +33,13 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
                 <div id="price-convert" class="mt-1 text-muted"></div>
             </div>
+            <!-- Giá vốn sản phẩm -->
+            <div class="mb-3">
+                <label for="CapitalPrice" class="form-label"><b>Giá vốn nhập</b></label>
+                <input type="text" class="form-control typing-capital_price" pattern="[0-9.,]+" asp-for="CapitalPrice" id="CapitalPrice" placeholder="Nhập giá vốn sản phẩm" required>
+                <span asp-validation-for="CapitalPrice" class="text-danger"></span>
+                <div id="capital_price-convert" class="mt-1 text-muted"></div>
+            </div>
             <!-- Mô tả sản phẩm -->
             <div class="mb-3">
                 <label for="Description" class="form-label"><b>Mô tả</b></label>
@@ -89,6 +96,10 @@
         $(".typing-price").on("keyup", function () {
             let currencyInput = $(this).val();
             $("#price-convert").html(new Intl.NumberFormat('vn-VN', { style: 'currency', currency: 'VND' }).format(currencyInput));
+        });
+        $(".typing-capital_price").on("keyup", function () {
+            let currencyInput = $(this).val();
+            $("#capital_price-convert").html(new Intl.NumberFormat('vn-VN', { style: 'currency', currency: 'VND' }).format(currencyInput));
         });
     </script>
 }

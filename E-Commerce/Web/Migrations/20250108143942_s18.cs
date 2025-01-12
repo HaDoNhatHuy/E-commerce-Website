@@ -17,8 +17,8 @@ namespace Web.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Sold = table.Column<int>(type: "int", nullable: false),
-                    Revenue = table.Column<int>(type: "int", nullable: false),
-                    Profit = table.Column<int>(type: "int", nullable: false),
+                    Revenue = table.Column<int>(type: "decimal(18,2)", nullable: false),
+                    Profit = table.Column<int>(type: "decimal(18,2)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

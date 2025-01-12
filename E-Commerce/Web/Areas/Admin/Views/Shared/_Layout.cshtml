@@ -973,9 +973,6 @@
             if(message!=''){
                 Swal.fire(message);
             }
-            else{
-                Swal.fire(@TempData["error"]);
-            }
         });
     </script>
     @await RenderSectionAsync("Js", required: false)

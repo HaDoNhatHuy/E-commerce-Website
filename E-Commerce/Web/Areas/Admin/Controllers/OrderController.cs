@@ -38,6 +38,55 @@ namespace Web.Areas.Admin.Controllers
                 return NotFound();
             }
             order.Status = status;
+            _dataContext.Update(order);
+            if (status == 1)
+            {
+                var detailsOrder = await _dataContext.OrderDetails
+                    .Include(i => i.Product)
+                    .Where(i => i.OrderCode == order.OrderCode)
+                    .Select(i => new
+                    {
+                        i.Quantity,
+                        i.Product.Price,
+                        i.Product.CapitalPrice
+                    }).ToListAsync();
+                //lấy data thống kê dựa vào ngày đặt hàng
+                var statisticalModel = await _dataContext.Statisticals
+                    .FirstOrDefaultAsync(i => i.CreatedDate.Date == order.CreatedDate.Date);
+                if (statisticalModel != null)
+                {
+                    foreach (var item in detailsOrder)
+                    {
+                        //tồn tại ngày đó thì cộng dồn
+                        statisticalModel.Quantity += 1;
+                        statisticalModel.Sold += item.Quantity;
+                        statisticalModel.Revenue += item.Quantity * item.Price;
+                        statisticalModel.Profit += item.Price - item.CapitalPrice;
+                    }
+                    _dataContext.Update(statisticalModel);
+                }
+                else
+                {
+                    int new_quantity = 0;
+                    int new_sold = 0;
+                    decimal new_profit = 0;
+                    foreach (var item in detailsOrder)
+                    {
+                        new_quantity += 1;
+                        new_sold += item.Quantity;
+                        new_profit += item.Price - item.CapitalPrice;
+                        statisticalModel = new Models.StatisticalChartModel
+                        {
+                            CreatedDate = order.CreatedDate,
+                            Quantity = new_quantity,
+                            Sold = new_sold,
+                            Profit = new_profit,
+                            Revenue = item.Quantity * item.Price,
+                        };
+                    }
+                    _dataContext.Add(statisticalModel);
+                }
+            }
             try
             {
                 await _dataContext.SaveChangesAsync();
