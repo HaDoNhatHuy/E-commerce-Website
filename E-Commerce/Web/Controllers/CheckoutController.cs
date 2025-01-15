@@ -8,6 +8,7 @@ using Web.Models.Order;
 using Web.Models.ViewModels;
 using Web.Repository;
 using Web.Services.Momo;
+using Web.Services.VnPay;
 
 namespace Web.Controllers
 {
@@ -16,11 +17,13 @@ namespace Web.Controllers
         private readonly DataContext _dataContext;
         private readonly IEmailSender _emailSender;
         private IMomoService _momoService;
-        public CheckoutController(DataContext dataContext, IEmailSender emailSender, IMomoService momoService)
+        private readonly IVnPayService _vnPayService;
+        public CheckoutController(DataContext dataContext, IEmailSender emailSender, IMomoService momoService, IVnPayService vnPayService)
         {
             _dataContext = dataContext;
             _emailSender = emailSender;
             _momoService = momoService;
+            _vnPayService = vnPayService;
         }
 
         public async Task<IActionResult> Index()
@@ -157,6 +160,14 @@ namespace Web.Controllers
             }
             return View(response);
         }
+        [HttpGet]
+        public IActionResult PaymentCallbackVnpay()
+        {
+            var response = _vnPayService.PaymentExecute(Request.Query);
+
+            return Json(response);
+        }
+
     }
 }
 

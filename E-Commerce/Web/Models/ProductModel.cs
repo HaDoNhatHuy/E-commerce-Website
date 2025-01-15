@@ -15,8 +15,8 @@ namespace Web.Models
         [Required(ErrorMessage = "Vui lòng nhập mô tả sản phẩm")]
         public string Description { get; set; }
         public string Slug { get; set; }
-        [Range(0.01, double.MaxValue)]
-        [Column(TypeName = "decimal(12,2)")]
+        //[Range(0.01, double.MaxValue)]
+        //[Column(TypeName = "decimal(12,2)")]
         [Required(ErrorMessage = "Vui lòng nhập giá của sản phẩm")]
         public decimal Price { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập giá vốn của sản phẩm")]

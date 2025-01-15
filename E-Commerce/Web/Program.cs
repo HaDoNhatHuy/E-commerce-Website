@@ -7,6 +7,7 @@ using Web.Models;
 using Web.Models.Momo;
 using Web.Repository;
 using Web.Services.Momo;
+using Web.Services.VnPay;
 
 var builder = WebApplication.CreateBuilder(args);
 //Connect Momo API
@@ -64,6 +65,10 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
     options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
 });
+
+//Connect VnPayAPI
+builder.Services.AddScoped<IVnPayService, VnPayService>();
+
 var app = builder.Build();
 app.UseStatusCodePagesWithRedirects("/Home/Error?statuscode={0}");
 
