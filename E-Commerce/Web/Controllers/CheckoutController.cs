@@ -6,6 +6,7 @@ using Web.Areas.Admin.Repository;
 using Web.Models;
 using Web.Models.Order;
 using Web.Models.ViewModels;
+using Web.Models.VnPay;
 using Web.Repository;
 using Web.Services.Momo;
 using Web.Services.VnPay;
@@ -57,7 +58,7 @@ namespace Web.Controllers
             return View(cartVM);
         }
         [HttpPost]
-        public async Task<IActionResult> CheckoutSuccess(CartItemViewModel model, OrderInfoModel orderInfoModel, string PaymentMethod)
+        public async Task<IActionResult> CheckoutSuccess(CartItemViewModel model, OrderInfoModel orderInfoModel, PaymentInformationModel paymentInformationModel, string PaymentMethod)
         {
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail == null)
@@ -120,6 +121,19 @@ namespace Web.Controllers
 
                     return Redirect(response.PayUrl);
                 }
+                else if (PaymentMethod == "VnPay")
+                {
+                    var url = _vnPayService.CreatePaymentUrl(paymentInformationModel, HttpContext);
+                    TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
+                    HttpContext.Session.Remove("Cart");
+                    //Send Email when order success
+                    var receiver = userEmail;
+                    var subject = "Đặt hàng thành công";
+                    var message = "Đặt hàng thành công, trải nghiệm dịch vụ nhé";
+                    await _emailSender.SendEmailAsync(receiver, subject, message);
+
+                    return Redirect(url);
+                }
                 else
                 {
                     TempData["success"] = "Checkout thành công, vui lòng chờ duyệt đơn hàng";
@@ -152,6 +166,7 @@ namespace Web.Controllers
                 };
                 _dataContext.Add(newMomoInfo);
                 await _dataContext.SaveChangesAsync();
+                var PaymentMomoId = requestQuery["orderId"];
             }
             else
             {
@@ -161,11 +176,30 @@ namespace Web.Controllers
             return View(response);
         }
         [HttpGet]
-        public IActionResult PaymentCallbackVnpay()
+        public async Task<IActionResult> PaymentCallBackVnPay()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
-
-            return Json(response);
+            if (response.VnPayResponseCode == "00") //Giao dịch thành công, lưu database
+            {
+                var newVnPayInsert = new VnPayModel
+                {
+                    OrderId = response.OrderId,
+                    PaymentMethod = response.PaymentMethod,
+                    PaymentId = response.PaymentId,
+                    OrderDescription = response.OrderDescription,
+                    TransactionId = response.TransactionId,
+                    CreatedDate = DateTime.Now,
+                };
+                _dataContext.Add(newVnPayInsert);
+                await _dataContext.SaveChangesAsync();
+            }
+            else
+            {
+                TempData["error"] = "Giao dịch không thành công";
+                return RedirectToAction("Index", "Cart");
+            }
+            //return Json(response);
+            return View(response);
         }
 
     }

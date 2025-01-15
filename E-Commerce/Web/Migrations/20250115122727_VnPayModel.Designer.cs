@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web.Repository;
 
@@ -11,9 +12,10 @@ using Web.Repository;
 namespace Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250115122727_VnPayModel")]
+    partial class VnPayModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,7 +261,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Banners", (string)null);
+                    b.ToTable("Banners");
                 });
 
             modelBuilder.Entity("Web.Models.BrandModel", b =>
@@ -286,7 +288,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("Web.Models.CategoryModel", b =>
@@ -313,7 +315,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Web.Models.CompareModel", b =>
@@ -334,7 +336,7 @@ namespace Web.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CompareProducts", (string)null);
+                    b.ToTable("CompareProducts");
                 });
 
             modelBuilder.Entity("Web.Models.ContactModel", b =>
@@ -363,7 +365,7 @@ namespace Web.Migrations
 
                     b.HasKey("Title");
 
-                    b.ToTable("Contacts", (string)null);
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("Web.Models.CouponModel", b =>
@@ -399,7 +401,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Coupons", (string)null);
+                    b.ToTable("Coupons");
                 });
 
             modelBuilder.Entity("Web.Models.MomoInfoModel", b =>
@@ -424,7 +426,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MomoInfos", (string)null);
+                    b.ToTable("MomoInfos");
                 });
 
             modelBuilder.Entity("Web.Models.OrderDetails", b =>
@@ -471,7 +473,7 @@ namespace Web.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails", (string)null);
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("Web.Models.OrderModel", b =>
@@ -505,7 +507,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Web.Models.ProductModel", b =>
@@ -557,7 +559,7 @@ namespace Web.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Web.Models.ProductQuantityModel", b =>
@@ -579,7 +581,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductQuantities", (string)null);
+                    b.ToTable("ProductQuantities");
                 });
 
             modelBuilder.Entity("Web.Models.RatingModel", b =>
@@ -616,7 +618,7 @@ namespace Web.Migrations
                     b.HasIndex("ProductId")
                         .IsUnique();
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Web.Models.ShippingModel", b =>
@@ -641,7 +643,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shippings", (string)null);
+                    b.ToTable("Shippings");
                 });
 
             modelBuilder.Entity("Web.Models.StatisticalChartModel", b =>
@@ -669,7 +671,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statisticals", (string)null);
+                    b.ToTable("Statisticals");
                 });
 
             modelBuilder.Entity("Web.Models.VnPayModel", b =>
@@ -679,9 +681,6 @@ namespace Web.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("OrderDescription")
                         .HasColumnType("nvarchar(max)");
@@ -700,7 +699,7 @@ namespace Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VnPayInfos", (string)null);
+                    b.ToTable("VnPayInfos");
                 });
 
             modelBuilder.Entity("Web.Models.WishListModel", b =>
@@ -721,7 +720,7 @@ namespace Web.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("WishListProducts", (string)null);
+                    b.ToTable("WishListProducts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

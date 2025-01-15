@@ -24,9 +24,9 @@
             { *@
             <address>
                 <strong>@firstItem.UserName</strong><br>
-                Địa chỉ: @firstItem.Address<br>
-                Điện thoại: @firstItem.Phone<br>
-                Email: @firstItem.Email
+                <strong>Địa chỉ:</strong> @firstItem.Address<br>
+                <strong>Điện thoại:</strong> @firstItem.Phone<br>
+                <strong>Email:</strong> @firstItem.Email
             </address>
             @* } *@
 
@@ -38,7 +38,7 @@
                 <p>
                     <b>Mã đơn hàng:</b> @item.OrderCode<br>
                     <b>Phương thức thanh toán:</b> @item.PaymentMethod<br>
-                    <b>Ngày tạo:</b> @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")<br>                    
+                    <b>Ngày tạo:</b> @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")<br>
                     <b>Ngày thanh toán:</b>
                 </p>
             }
@@ -81,6 +81,10 @@
                     @if (item.PaymentMethod == "Momo")
                     {
                         <img src="/assets/images/paymentMethod/momo.png" width="50" class="mr-2" />
+                    }
+                    else if (item.PaymentMethod == "VnPay")
+                    {
+                        <img src="/assets/images/paymentMethod/vnpay.png" width="50" class="mr-2" />
                     }
                     else
                     {

@@ -22,5 +22,6 @@ namespace Web.Repository
         public DbSet<CouponModel> Coupons { get; set; }
         public DbSet<StatisticalChartModel> Statisticals { get; set; }
         public DbSet<MomoInfoModel> MomoInfos { get; set; }
+        public DbSet<VnPayModel> VnPayInfos { get; set; }
     }
 }

@@ -1,28 +1,10 @@
-﻿@using Web.Models.Momo
-@model MomoExecuteResponseModel
+﻿@using Web.Models.VnPay
+@model PaymentResponseModel
+
 @{
-    ViewData["Title"] = "Kết quả thông tin giao dịch thanh toán thành công";
+    ViewData["Title"] = "Kết quả thanh toán qua VnPay";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@* <div class="payment-success-container">
-    <div class="success-card">
-        <div class="icon-container">
-            <i class="fa fa-check-circle success-icon"></i>
-        </div>
-        <h2>Thanh toán Momo thành công!</h2>
-        <p class="success-message">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Giao dịch của bạn đã được xử lý thành công.</p>
-        <div class="transaction-info">
-            <p><strong>Mã đơn hàng:</strong> @Model.OrderId</p>
-            <p><strong>Thông tin đơn hàng:</strong> @Model.OrderInfo</p>
-            <p><strong>Tổng tiền thanh toán:</strong> @Model.Amount VNĐ</p>
-        </div>
-        <div class="action-buttons">
-            <a asp-action="History" asp-controller="Account" class="btn btn-primary">Xem lịch sử đơn hàng</a>
-            <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Về trang chủ</a>
-        </div>
-    </div>
-</div> *@
 
 <div class="container my-5">
     <div class="payment-result">
@@ -38,13 +20,16 @@
                     <strong>🔖 Order ID:</strong> <span>@Model.OrderId</span>
                 </div>
                 <div class="info-item">
-                    <strong>📝 Mô tả đơn hàng:</strong> <span>@Model.OrderInfo</span>
+                    <strong>📝 Mô tả đơn hàng:</strong> <span>@Model.OrderDescription</span>
                 </div>
                 <div class="info-item">
-                    <strong>💰 Tổng tiền:</strong> <span>@Model.Amount</span>
+                    <strong>💰 Phương thức thanh toán:</strong> <span>@Model.PaymentMethod</span>
                 </div>
                 <div class="info-item">
-                    <strong>🔍 Tên người thanh toán:</strong> <span>@Model.FullName</span>
+                    <strong>🔍 Mã giao dịch:</strong> <span>@Model.TransactionId</span>
+                </div>
+                <div class="info-item">
+                    <strong>📌 Mã thanh toán:</strong> <span>@Model.PaymentId</span>
                 </div>
             </div>
         </div>

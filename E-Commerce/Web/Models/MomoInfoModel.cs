@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Models
 {
@@ -10,6 +11,6 @@ namespace Web.Models
         public string OrderInfo { get; set; }
         public string FullName { get; set; }
         public decimal Amount { get; set; }
-        public DateTime DatePaid { get; set; }
+        public DateTime DatePaid { get; set; }       
     }
 }

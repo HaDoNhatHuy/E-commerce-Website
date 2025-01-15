@@ -140,7 +140,7 @@
                                 </div>
 
 
-                                @* <div class="card">
+                                <div class="card">
                                     <div class="card-header" id="heading-vnpay">
                                         <h2 class="card-title">
                                             <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-vnpay" aria-expanded="false" aria-controls="collapse-vnpay">
@@ -153,31 +153,31 @@
                                             Thanh toán dễ dàng qua VNPay với mã QR hoặc thông tin tài khoản ngân hàng.
                                             <input type="hidden" name="Name" value="@User.Identity.Name" />
                                             <input type="hidden" name="Amount" value="@Model.GrandTotal" />
-                                            @* <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" /> *@
-                                @* <input type="hidden" name="OrderDescription" value="Thanh toán VnPay cho đơn hàng tại Ecommerce-Shop" />
-                                            <input type="hidden" name="OrderType" value="other" /> *@
-                                @* </div> *@
-                                @* <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" name="PayUrl" onclick="setPaymentMethod('VnPay')">
+                                            <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" />
+                                            <input type="hidden" name="OrderDescription" value="Thanh toán VnPay cho đơn hàng tại Ecommerce-Shop" />
+                                            <input type="hidden" name="OrderType" value="other" />
+                                        </div>
+                                        <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" name="PayUrl" onclick="setPaymentMethod('VnPay')">
                                             <span class="btn-text">Place Order</span>
                                             <span class="btn-hover-text">Proceed to Checkout</span>
-                                        </button> *@
-                                @* </div> *@
-                                @* </div> *@ 
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                         </div><!-- End .summary -->
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </form>
-            <form asp-action="CreatePaymentUrlVnpay" asp-controller="Payment" method="post">
-                <input type="hidden" name="Name" value="@User.Identity.Name" />
+           @*  <form asp-action="CreatePaymentUrlVnpay" asp-controller="Payment" method="post">
+                <input type="hidden" name="Name" value="@User.Identity.Name" /> *@
                 @* <input type="hidden" name="Amount" value="@Model.GrandTotal" /> *@
-                <input type="hidden" name="Amount" value="@(Convert.ToInt64(Model.GrandTotal))" />
+                @* <input type="hidden" name="Amount" value="@(Convert.ToInt64(Model.GrandTotal))" /> *@
                 @* <input type="hidden" name="OrderId" value="@Guid.NewGuid().ToString()" /> *@
-                <input type="hidden" name="OrderDescription" value="Thanh toán VnPay cho đơn hàng tại Ecommerce-Shop" />
+                @* <input type="hidden" name="OrderDescription" value="Thanh toán VnPay cho đơn hàng tại Ecommerce-Shop" />
                 <input type="hidden" name="OrderType" value="other" />
                 <button class="btn btn-success" type="submit">Pay with VnPay</button>
-            </form>
+            </form> *@
         </div><!-- End .container -->
     </div><!-- End .checkout -->
 </div>
