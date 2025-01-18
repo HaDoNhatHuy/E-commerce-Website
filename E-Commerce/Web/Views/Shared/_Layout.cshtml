@@ -22,7 +22,7 @@
         wishList = HttpContextAccessor.HttpContext.Session.GetJson<List<WishListModel>>("WishList") ?? new List<WishListModel>();
     }
 }
-@{    
+@{
     // var user1 = HttpContextAccessor.HttpContext.User;
     var compare = new List<CompareModel>();
 
@@ -70,6 +70,54 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
     <!--Jquery UI-->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <style>
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+            .suggestions a {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                text-decoration: none;
+                color: #333;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+                .suggestions a:hover {
+                    background-color: #f9f9f9;
+                }
+
+            .suggestions img {
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+                margin-right: 10px;
+                border-radius: 5px;
+            }
+    </style>
 
     @await RenderSectionAsync("Css", required: false)
 </head>
@@ -146,6 +194,46 @@
                         </a>
                     </div><!-- End .header-left -->
 
+                    <style>
+                        .suggestions {
+                            list-style-type: none;
+                            margin: 0;
+                            padding: 0;
+                            border: 1px solid #ddd;
+                            max-height: 200px;
+                            overflow-y: auto;
+                            background-color: #fff;
+                            display: block;
+                            position: absolute;
+                            width: 105%;
+                            z-index: 10;
+                        }
+
+
+
+
+                            .suggestions li {
+                                padding: 8px 10px;
+                                cursor: pointer;
+                            }
+
+                                .suggestions li:hover {
+                                    background-color: #f2f2f2;
+                                }
+
+                                .suggestions li a:hover {
+                                    text-decoration: none;
+                                }
+
+                                .suggestions li a {
+                                    color: black;
+                                }
+
+                    </style>
+
+
+
+
                     <div class="header-right">
                         <div class="header-search header-search-extended header-search-visible header-search-no-radius d-none d-lg-block">
                             <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
@@ -171,7 +259,10 @@
                                         </select>
                                     </div><!-- End .select-custom -->
                                     <label for="q" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="searchItem" id="searchItem" placeholder="Search product ..." required>
+                                    <input type="search" class="form-control" name="searchInput" id="searchInput" onkeyup="fetchSuggestions(this.value)" placeholder="Search product ..." required>
+                                    <ul id="suggestion-list" class="suggestions" style="font-size: 15px;">
+                                        <!-- Gợi ý sẽ hiển thị ở đây -->
+                                    </ul>
                                     <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                                 </div><!-- End .header-search-wrapper -->
                             </form>
@@ -191,7 +282,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <div class="dropdown-cart-products">                                        
+                                    <div class="dropdown-cart-products">
                                     </div><!-- End .cart-product -->
 
                                     <div class="dropdown-cart-total">
@@ -1095,28 +1186,47 @@
         @if (TempData["success"] != null)
         {
             <text>
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công!',
-                            /* text:'@TempData["success"]', *///sử dụng cái này bị lỗi font nên đổi lại Html.Raw
-                            // text: '@Html.Raw((TempData["success"]))',
-                            text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["success"]?.ToString() ?? ""))',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Thành công!',
+                                        /* text:'@TempData["success"]', *///sử dụng cái này bị lỗi font nên đổi lại Html.Raw
+                                        // text: '@Html.Raw((TempData["success"]))',
+                                        text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["success"]?.ToString() ?? ""))',
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    });
             </text>
         }
         else if (TempData["error"] != null)
         {
             <text>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Thất bại!',                           
-                            text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["error"]?.ToString() ?? ""))',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Thất bại!',
+                                        text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["error"]?.ToString() ?? ""))',
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    });
             </text>
+        }
+    </script>
+    <script>
+            function fetchSuggestions(query) {
+            const suggestionList = document.getElementById("suggestion-list");
+
+            if (!query) {
+                suggestionList.innerHTML = "";
+                return;
+            }
+
+            fetch(`api/suggestions?query=${query}`)
+                .then((rs) => rs.json())
+                .then((data) => {
+                    // const suggestions = data.map(item => `<li><a href="/category/${item.id}">${item.name}</a></li>`).join('');
+                    const suggestions = data.map(item => `<li><a href="/product/details/${item.id}">${item.name}</a></li>`).join('');
+                    document.getElementById('suggestion-list').innerHTML = suggestions;
+                })
+                .catch((er) => console.error("Eror fetching suggestions:", er));
         }
     </script>
     @await RenderSectionAsync("Js", required: false)

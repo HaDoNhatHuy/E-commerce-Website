@@ -7,7 +7,8 @@
     <div class="toolbox">
         <div class="toolbox-left">
             <div class="toolbox-info">
-                Showing <span>9 of 56</span> Products with Key Word: <b>@ViewBag.Keyword</b>
+                @* Showing <span>9 of 56</span> Products with Key Word: <b>@ViewBag.Keyword</b> *@
+                Showing <span>@Model.Count() of @ViewBag.ProductQuantity</span> Products with Key Word: <b>@ViewBag.Keyword</b>
             </div><!-- End .toolbox-info -->
         </div><!-- End .toolbox-left -->
 

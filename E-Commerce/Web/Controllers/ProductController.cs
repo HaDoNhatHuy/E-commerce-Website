@@ -55,10 +55,16 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(string searchItem)
         {
+            int productQuantity = 0;
+            var productList = await _dataContext.Products.ToListAsync();
+            foreach (var item in productList)
+            {
+                productQuantity += 1;
+            }
+            ViewBag.ProductQuantity = productQuantity;
             var products = await _dataContext.Products
                 .Where(i => i.Name.Contains(searchItem) || i.Description.Contains(searchItem))
                 .ToListAsync();
-
             ViewBag.Keyword = searchItem;
             return View(products);
         }
@@ -110,6 +116,5 @@ namespace Web.Controllers
             }
             return Redirect(Request.Headers["Referer"]);
         }
-
     }
 }
