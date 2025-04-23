@@ -1,89 +1,168 @@
 ﻿@model IEnumerable<OrderModel>
 @{
-    ViewData["Title"] = "Đơn đặt hàng";
+    ViewData["Title"] = "Quản lý đơn hàng";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
     int key = 1;
 }
-<div class="card shadow-lg border-0 animate__animated animate__fadeIn">
-    <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
-        <h4 class="mb-0"><i class="fas fa-shopping-cart mr-2"></i>Quản lý đơn hàng</h4>
-    </div>
-    <div class="my-2 d-flex justify-content-end">
-        <select id="orderStatusFilter" class="form-control w-25">
-            <option value="">-- Tất cả trạng thái --</option>
-            <option value="Đơn mới">Đơn mới</option>
-            <option value="Đã xử lý">Đã xử lý</option>
-            <option value="Đã hủy">Đã hủy</option>
-        </select>
-    </div>
-    <div class="card-body p-4 bg-light rounded">
-        <table id="example1" class="table table-hover table-bordered text-center">
-            <thead class="thead-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Mã đơn</th>
-                    <th>Người đặt</th>
-                    <th>Ngày đặt</th>
-                    <th>Trạng thái</th>
-                    <th>Thanh toán</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr class="hover-shadow">
-                        <td>@key</td>
-                        <td><span class="font-weight-bold">@item.OrderCode</span></td>
-                        <td>@item.UserName</td>
-                        <td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>
-                            @if (item.Status == 1)
-                            {
-                                <span class="badge badge-gradient-success">Đã xử lý</span>
-                            }
-                            else if (item.Status == 0)
-                            {
-                                <span class="badge badge-gradient-warning">Đơn mới</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-gradient-danger">Đã hủy</span>
-                            }
-                        </td>
-                        <td>
-                            @if (item.PaymentMethod == "Momo")
-                            {
-                                <img src="/assets/images/paymentMethod/momo.png" width="40" title="Momo" />
-                            }
-                            else if (item.PaymentMethod == "VnPay")
-                            {
-                                <img src="/assets/images/paymentMethod/vnpay.png" width="40" title="VnPay" />
-                            }
-                            else
-                            {
-                                <img src="/assets/images/paymentMethod/COD.png" width="40" title="COD" />
-                            }
-                        </td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode"
-                                   class="btn btn-sm btn-glow btn-primary" title="Xem chi tiết">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a asp-action="Delete" asp-controller="Order" asp-route-Id="@item.Id"
-                                   class="btn btn-sm btn-glow btn-danger confirmDeletion" title="Xóa đơn">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
+    <!-- Header Section -->
+    <div class="header-section mb-4">
+        <div class="card border-0 shadow-lg animate__animated animate__fadeIn">
+            <div class="card-body dashboard-header p-0">
+                <div class="header-content p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="header-left">
+                            <h2 class="mb-1 fw-bold text-gradient">Quản lý đơn hàng</h2>
+                            <br />
+                            <p class="text-muted mb-0">Theo dõi và quản lý tất cả đơn hàng</p>
+                        </div>
+                        <div class="header-right d-flex">
+                            <div class="stat-card me-3">
+                                <div class="stat-label">Đơn mới</div>
+                                <div class="stat-value new-orders">--</div>
                             </div>
-                        </td>
-                    </tr>
-                    key++;
-                }
-            </tbody>
-        </table>
+                            <div class="stat-card me-3">
+                                <div class="stat-label">Đã xử lý</div>
+                                <div class="stat-value processed-orders">--</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Đã hủy</div>
+                                <div class="stat-value cancelled-orders">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <!-- Filter Section -->
+    <div class="card border-0 shadow-lg mb-4 animate__animated animate__fadeIn animate__delay-1s">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex">
+                        <button class="filter-btn active" data-filter="">Tất cả</button>
+                        <button class="filter-btn" data-filter="Đơn mới">Đơn mới</button>
+                        <button class="filter-btn" data-filter="Đã xử lý">Đã xử lý</button>
+                        <button class="filter-btn" data-filter="Đã hủy">Đã hủy</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <select id="orderStatusFilter" class="form-select">
+                            <option value="">-- Tất cả trạng thái --</option>
+                            <option value="Đơn mới">Đơn mới</option>
+                            <option value="Đã xử lý">Đã xử lý</option>
+                            <option value="Đã hủy">Đã hủy</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Table Section -->
+    <div class="card border-0 shadow-lg animate__animated animate__fadeIn animate__delay-2s">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="example1" class="table table-hover custom-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Mã đơn</th>
+                            <th>Người đặt</th>
+                            <th>Ngày đặt</th>
+                            <th>Trạng thái</th>
+                            <th>Thanh toán</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="order-row">
+                                <td>@key</td>
+                                <td>
+                                    <span class="order-code">@item.OrderCode</span>
+                                </td>
+                                <td>
+                                    <div class="user-info">
+                                        <span class="user-avatar">@item.UserName.Substring(0, 1).ToUpper()</span>
+                                        <span class="user-name">@item.UserName</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <div class="date">@item.CreatedDate.ToString("dd/MM/yyyy")</div>
+                                        <div class="time">@item.CreatedDate.ToString("HH:mm")</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (item.Status == 1)
+                                    {
+                                        <span class="status-badge status-processed">
+                                            <i class="fas fa-check-circle me-1"></i>Đã xử lý
+                                        </span>
+                                    }
+                                    else if (item.Status == 0)
+                                    {
+                                        <span class="status-badge status-new">
+                                            <i class="fas fa-clock me-1"></i>Đơn mới
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge status-cancelled">
+                                            <i class="fas fa-ban me-1"></i>Đã hủy
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="payment-method">
+                                        @if (item.PaymentMethod == "Momo")
+                                        {
+                                            <div class="payment-icon momo">
+                                                <img src="/assets/images/paymentMethod/momo.png" alt="Momo" />
+                                            </div>
+                                            <span>Momo</span>
+                                        }
+                                        else if (item.PaymentMethod == "VnPay")
+                                        {
+                                            <div class="payment-icon vnpay">
+                                                <img src="/assets/images/paymentMethod/vnpay.png" alt="VnPay" />
+                                            </div>
+                                            <span>VnPay</span>
+                                        }
+                                        else
+                                        {
+                                            <div class="payment-icon cod">
+                                                <img src="/assets/images/paymentMethod/COD.png" alt="COD" />
+                                            </div>
+                                            <span>COD</span>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode"
+                                           class="btn btn-view" data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-controller="Order" asp-route-Id="@item.Id"
+                                           class="btn btn-delete confirmDeletion" data-bs-toggle="tooltip" data-bs-placement="top" title="Xóa đơn">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            key++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 @section Css {
     <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -91,51 +170,7 @@
     <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <style>
-        .bg-gradient-primary {
-            background: linear-gradient(60deg, #007bff, #6610f2);
-        }
-
-        .badge-gradient-success {
-            background: linear-gradient(to right, #28a745, #85dcb0);
-            color: white;
-            padding: 0.5em 0.8em;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .badge-gradient-warning {
-            background: linear-gradient(to right, #ffc107, #ffe58f);
-            color: #000;
-            padding: 0.5em 0.8em;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .badge-gradient-danger {
-            background: linear-gradient(to right, #dc3545, #f78da7);
-            color: white;
-            padding: 0.5em 0.8em;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .btn-glow {
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-
-            .btn-glow:hover {
-                box-shadow: 0 0 20px rgba(0,0,0,0.3);
-                transform: scale(1.05);
-            }
-
-        .hover-shadow:hover {
-            background-color: #f9f9f9;
-            box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
-        }
-    </style>
+    <link href="~/backends/orderCss/style.css" rel="stylesheet" />
 }
 
 @section Js {
@@ -150,30 +185,54 @@
     <script src="/assets/plugins/pdfmake/vfs_fonts.js"></script>
     <script src="/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.colvis.min.js"></script>
+
     <script>
         $(function () {
-          $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-          }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-          $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-          });
-        });
-    </script>
-    <script>
+            // Initialize DataTable
+            var table = $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+            // Order status filter
             $('#orderStatusFilter').on('change', function () {
-            const selected = $(this).val();
-            const table = $('#example1').DataTable();
-            table.columns(4).search(selected).draw(); // cột Trạng thái
+                const selected = $(this).val();
+                table.columns(4).search(selected).draw(); // cột Trạng thái
+
+                // Update active filter button
+                $('.filter-btn').removeClass('active');
+                $(`.filter-btn[data-filter="${selected}"]`).addClass('active');
+            });
+
+            // Filter buttons
+            $('.filter-btn').on('click', function() {
+                const filter = $(this).data('filter');
+                $('#orderStatusFilter').val(filter);
+                $('#orderStatusFilter').trigger('change');
+            });
+
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+
+            // Count orders by status
+            function updateOrderCounts() {
+                const newOrders = $('span.status-new').length;
+                const processedOrders = $('span.status-processed').length;
+                const cancelledOrders = $('span.status-cancelled').length;
+
+                $('.new-orders').text(newOrders);
+                $('.processed-orders').text(processedOrders);
+                $('.cancelled-orders').text(cancelledOrders);
+            }
+
+            // Call function on page load
+            updateOrderCounts();
         });
     </script>
 }
-

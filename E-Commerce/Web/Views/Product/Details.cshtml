@@ -188,110 +188,142 @@
                                     </p>
                                 </div><!-- End .product-desc-content -->
                             </div><!-- .End .tab-pane -->
+                            <!-- Tab heading remains the same -->
                             <div class="tab-pane fade show active" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
                                 <div class="reviews">
                                     <h3>Reviews (2)</h3>
-                                    @* @foreach (var ratingModel in ViewBag.ListComments as IEnumerable<RatingModel>) *@
-                                    @foreach (var ratingModel in Model.ListComments)
-                                    {
-                                        <div class="review">
-                                            <div class="row no-gutters">
-                                                <div class="col-auto">
-                                                    <h4><a href="#">@ratingModel.Name</a></h4>
-                                                    <div class="ratings-container">
-                                                        <div class="ratings">
-                                                            @if (ratingModel.Rating == 0)
-                                                            {
-                                                                <div class="ratings-val" style="width: 0%;"></div>
-                                                            }
-                                                            @if (ratingModel.Rating == 1)
-                                                            {
-                                                                <div class="ratings-val" style="width: 20%;"></div>
-                                                            }
-                                                            @if (ratingModel.Rating == 2)
-                                                            {
-                                                                <div class="ratings-val" style="width: 40%;"></div>
-                                                            }
-                                                            @if (ratingModel.Rating == 3)
-                                                            {
-                                                                <div class="ratings-val" style="width: 60%;"></div>
-                                                            }
-                                                            @if (ratingModel.Rating == 4)
-                                                            {
-                                                                <div class="ratings-val" style="width: 80%;"></div>
-                                                            }
-                                                            @if (ratingModel.Rating == 5)
-                                                            {
-                                                                <div class="ratings-val" style="width: 100%;"></div>
-                                                            }
-                                                        </div><!-- End .ratings -->
-                                                    </div><!-- End .rating-container -->
-                                                    <span class="review-date">6 days ago</span>
-                                                </div><!-- End .col -->
-                                                <div class="col">
-                                                    <h4>Good, perfect size</h4>
 
-                                                    <div class="review-content">
-                                                        <p>@ratingModel.Comment</p>
-                                                    </div><!-- End .review-content -->
+                                    <!-- Review list with improved layout -->
+                                    <div class="review-list">
+                                        @foreach (var ratingModel in Model.ListComments)
+                                        {
+                                            <div class="review">
+                                                <div class="row no-gutters align-items-start">
+                                                    <div class="col-lg-3 col-md-4">
+                                                        <div class="review-author">
+                                                            <h4><a href="#">@ratingModel.Name</a></h4>
+                                                            <div class="ratings-container">
+                                                                <div class="ratings">
+                                                                    @if (ratingModel.Rating == 0)
+                                                                    {
+                                                                        <div class="ratings-val" style="width: 0%;"></div>
+                                                                    }
+                                                                    @if (ratingModel.Rating == 1)
+                                                                    {
+                                                                        <div class="ratings-val" style="width: 20%;"></div>
+                                                                    }
+                                                                    @if (ratingModel.Rating == 2)
+                                                                    {
+                                                                        <div class="ratings-val" style="width: 40%;"></div>
+                                                                    }
+                                                                    @if (ratingModel.Rating == 3)
+                                                                    {
+                                                                        <div class="ratings-val" style="width: 60%;"></div>
+                                                                    }
+                                                                    @if (ratingModel.Rating == 4)
+                                                                    {
+                                                                        <div class="ratings-val" style="width: 80%;"></div>
+                                                                    }
+                                                                    @if (ratingModel.Rating == 5)
+                                                                    {
+                                                                        <div class="ratings-val" style="width: 100%;"></div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <span class="review-date">6 days ago</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9 col-md-8">
+                                                        <div class="review-content-wrapper">
+                                                            <h4 class="review-title">Good, perfect size</h4>
 
-                                                    <div class="review-action">
-                                                        <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                    </div><!-- End .review-action -->
-                                                </div><!-- End .col-auto -->
-                                            </div><!-- End .row -->
-                                        </div>
+                                                            <div class="review-content">
+                                                                <p>@ratingModel.Comment</p>
+                                                            </div>
 
-                                        <!-- End .review -->
-                                    }
-                                </div><!-- End .reviews -->
+                                                            <!-- Review image would go here if available -->
+                                                            @if (!string.IsNullOrEmpty(ratingModel.Image)) //chỗ này tạm để là ảnh sp. Chỗ này để ảnh đánh giá mới đúng
+                                                            {
+                                                                <div class="review-image">
+                                                                    <img src="@ratingModel.Image" alt="Review image" class="img-fluid">
+                                                                </div>
+                                                            }
+
+                                                            <div class="review-action">
+                                                                <a href="#" class="helpful-btn"><i class="icon-thumbs-up"></i>Helpful (2)</a>
+                                                                <a href="#" class="unhelpful-btn"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Improved review form -->
                                 <div class="review-form-container">
-                                    <h2>Đánh giá sản phẩm</h2>
-                                    <form asp-action="Rating" asp-controller="Product" method="post" enctype="multipart/form-data">
+                                    <h3 class="review-form-title">Đánh giá sản phẩm</h3>
+                                    <form asp-action="Rating" asp-controller="Product" method="post" enctype="multipart/form-data" class="review-form">
                                         <input type="hidden" asp-for="@Model.ProductDetails.Id" name="ProductId" />
-                                        @* <input type="hidden" name="Rating" value="4" /> *@
-                                        <div class="form-group">
-                                            <label>Tên của bạn:</label>
-                                            <input type="text" asp-for="@Model.Name" class="form-control" required placeholder="Nhập tên của bạn">
-                                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Email:</label>
-                                            <input type="email" asp-for="@Model.Email" class="form-control" required placeholder="Nhập email của bạn">
-                                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Nội dung đánh giá:</label>
-                                            <textarea asp-for="@Model.Comment" class="form-control" rows="4" required placeholder="Nhập nội dung đánh giá"></textarea>
-                                            <span asp-validation-for="@Model.Comment" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Đánh giá:</label>
-                                            <div class="star-rating">
-                                                <input type="radio" id="star5" name="rating" value="5" required>
-                                                <label for="star5" title="5 sao">☆</label>
-                                                <input type="radio" id="star4" name="rating" value="4">
-                                                <label for="star4" title="4 sao">☆</label>
-                                                <input type="radio" id="star3" name="rating" value="3">
-                                                <label for="star3" title="3 sao">☆</label>
-                                                <input type="radio" id="star2" name="rating" value="2">
-                                                <label for="star2" title="2 sao">☆</label>
-                                                <input type="radio" id="star1" name="rating" value="1">
-                                                <label for="star1" title="1 sao">☆</label>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Tên của bạn:</label>
+                                                    <input type="text" asp-for="@Model.Name" class="form-control" required placeholder="Nhập tên của bạn">
+                                                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Email:</label>
+                                                    <input type="email" asp-for="@Model.Email" class="form-control" required placeholder="Nhập email của bạn">
+                                                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Tải hình ảnh:</label>
-                                            <input type="file" name="ImageUpload" class="form-control" accept="image/*">
-                                            <img id="imgpreview" class="pt-2" />
+
+                                        <div class="form-group rating-group">
+                                            <label>Đánh giá:</label>
+                                            <div class="rating-stars">
+                                                <input type="radio" id="star5" name="rating" value="5" required>
+                                                <label for="star5" title="5 sao">★</label>
+                                                <input type="radio" id="star4" name="rating" value="4">
+                                                <label for="star4" title="4 sao">★</label>
+                                                <input type="radio" id="star3" name="rating" value="3">
+                                                <label for="star3" title="3 sao">★</label>
+                                                <input type="radio" id="star2" name="rating" value="2">
+                                                <label for="star2" title="2 sao">★</label>
+                                                <input type="radio" id="star1" name="rating" value="1">
+                                                <label for="star1" title="1 sao">★</label>
+                                            </div>
                                         </div>
+
                                         <div class="form-group">
-                                            <button type="submit" class="btn-submit">Gửi đánh giá</button>
+                                            <label>Nội dung đánh giá:</label>
+                                            <textarea asp-for="@Model.Comment" class="form-control" rows="4" required placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này"></textarea>
+                                            <span asp-validation-for="@Model.Comment" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group upload-group">
+                                            <label>Tải hình ảnh:</label>
+                                            <div class="custom-file-upload">
+                                                <input type="file" name="ImageUpload" id="ImageUpload" class="form-control" accept="image/*">
+                                                <label for="ImageUpload" class="file-upload-btn"><i class="icon-camera"></i> Chọn hình ảnh</label>
+                                            </div>
+                                            <div class="image-preview-container">
+                                                <img id="imgpreview" class="image-preview" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group submit-group">
+                                            <button type="submit" class="btn btn-primary btn-submit">Gửi đánh giá</button>
                                         </div>
                                     </form>
                                 </div>
-                            </div><!-- .End .tab-pane -->
+                            </div>
+
                         </div><!-- End .tab-content -->
                     </div><!-- End .product-details-tab -->
 
@@ -524,7 +556,7 @@
     </div><!-- End .page-content -->
 </main><!-- End .main -->
 @section Css {
-    <style>
+    @* <style>
         .review-form-container {
             max-width: 600px;
             margin: 20px auto;
@@ -594,12 +626,43 @@
                 background-color: #0056b3;
             }
 
-    </style>
+    </style> *@
+    <link href="/backends/reviewProductCss/style.css" rel="stylesheet" />
 }
 @section Js {
     <script>
         $("#ImageUpload").change(function(){
             readURL(this);
         })
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Image preview functionality
+            $("#ImageUpload").change(function() {
+                readURL(this);
+            });
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        $('#imgpreview').attr('src', e.target.result).show();
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            // Star rating hover effect enhancement
+            $(".rating-stars label").hover(
+                function() {
+                    $(this).css("transform", "scale(1.2)");
+                },
+                function() {
+                    $(this).css("transform", "scale(1)");
+                }
+            );
+        });
     </script>
 }

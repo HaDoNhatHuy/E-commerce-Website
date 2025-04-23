@@ -1,131 +1,199 @@
 ﻿@model CouponModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản Lý Khuyến Mãi";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
     int key = 1;
 }
-<div class="card shadow-lg border-0">
-    <div class="card-header bg-success text-white">
-        <h3 class="card-title">Thêm khuyến mãi</h3>
+<!-- Page Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 bg-gradient-light">
+            <div class="card-body">
+                <h2 class="text-dark mb-0"><i class="fas fa-tags mr-2"></i>Quản Lý Khuyến Mãi</h2>
+                <br />
+                <p class="text-muted mb-0">Tạo và quản lý các chương trình khuyến mãi cho hệ thống</p>
+            </div>
+        </div>
     </div>
-    <form asp-action="Create" asp-controller="Coupon" autocomplete="off">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="card-body">
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control" asp-for="Description"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Quantity</label>
-                <input type="number" min="1" class="form-control" asp-for="Quantity" placeholder="Enter quantity">
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Date Start</label>
-                <input type="date" class="form-control" asp-for="DateStart">
-                <span asp-validation-for="DateStart" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Date Expired</label>
-                <input type="date" class="form-control" asp-for="DateExpired">
-                <span asp-validation-for="DateExpired" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Status</label>
-                <select asp-for="Status" class="form-control">
-                    <option value="0">---- Choose a Status ----</option>
-                    <option value="1">Hiển thị</option>
-                    <option value="2">Ẩn</option>
-                </select>
-            </div>
-        </div>
-        <div class="card-footer text-right">
-            <button type="submit" class="btn btn-success btn-add-shipping">
-                <i class="fas fa-plus-circle"></i> Thêm khuyến mãi
-            </button>
-        </div>
-    </form>
 </div>
-<div class="card mt-4">
-    <div class="card-header bg-secondary text-white">
-        <h3 class="card-title">Danh sách mã khuyến mãi</h3>
+
+<div class="row">
+    <!-- Add New Coupon Card -->
+    <div class="col-lg-5 mb-4">
+        <div class="card shadow-lg border-0 h-100">
+            <div class="card-header bg-gradient-success text-white py-3">
+                <h4 class="card-title mb-0"><i class="fas fa-plus-circle mr-2"></i>Thêm Mã Khuyến Mãi</h4>
+            </div>
+            <form asp-action="Create" asp-controller="Coupon" autocomplete="off">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="font-weight-bold text-dark">Tên khuyến mãi</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light"><i class="fas fa-tag"></i></span>
+                            </div>
+                            <input type="text" class="form-control" asp-for="Name" placeholder="Nhập tên khuyến mãi">
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold text-dark">Mô tả</label>
+                        <textarea class="form-control" asp-for="Description" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-bold text-dark">Số lượng</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light"><i class="fas fa-cubes"></i></span>
+                                </div>
+                                <input type="number" min="1" class="form-control" asp-for="Quantity" placeholder="Nhập số lượng">
+                            </div>
+                            <span asp-validation-for="Quantity" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-bold text-dark">Trạng thái</label>
+                            <select asp-for="Status" class="form-control custom-select">
+                                <option value="0">-- Chọn trạng thái --</option>
+                                <option value="1">Hiển thị</option>
+                                <option value="2">Ẩn</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-bold text-dark">Ngày bắt đầu</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="date" class="form-control" asp-for="DateStart">
+                            </div>
+                            <span asp-validation-for="DateStart" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-bold text-dark">Ngày kết thúc</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light"><i class="far fa-calendar-check"></i></span>
+                                </div>
+                                <input type="date" class="form-control" asp-for="DateExpired">
+                            </div>
+                            <span asp-validation-for="DateExpired" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light">
+                    <button type="submit" class="btn btn-success btn-lg btn-block shadow-sm">
+                        <i class="fas fa-save mr-2"></i> Lưu Khuyến Mãi
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="card-body">
-        <table id="example1" class="table table-bordered table-hover">
-            <thead class="thead-light">
-                <tr>
-                    <th>#</th>
-                    <th>Tên khuyến mãi</th>
-                    <th>Mô tả</th>
-                    <th>Số lượng</th>
-                    <th>Ngày bắt đầu</th>
-                    <th>Ngày kết thúc</th>
-                    <th>Trạng thái</th>
-                    <th>Thời gian còn lại</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var coupon in ViewBag.CouponList)
-                {
-                    <tr>
-                        <td>@key</td>
-                        <td>@coupon.Name</td>
-                        <td>@Html.Raw(@coupon.Description)</td>
-                        <td>@coupon.Quantity</td>
-                        <td>@coupon.DateStart.ToString("dd-MM-yyyy")</td>
-                        <td>@coupon.DateExpired.ToString("dd-MM-yyyy")</td>
-                        <td>
-                            @if (@coupon.Status == 1)
+
+    <!-- Coupon List Card -->
+    <div class="col-lg-7 mb-4">
+        <div class="card shadow-lg border-0 h-100">
+            <div class="card-header bg-gradient-primary text-white py-3">
+                <h4 class="card-title mb-0"><i class="fas fa-list-alt mr-2"></i>Danh Sách Mã Khuyến Mãi</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="couponTable" class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center" width="40">#</th>
+                                <th>Tên khuyến mãi</th>
+                                <th>Số lượng</th>
+                                <th>Thời gian</th>
+                                <th>Trạng thái</th>
+                                <th class="text-center" width="100">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var coupon in ViewBag.CouponList)
                             {
-                                <span class="badge badge-status badge-success">Hiển thị</span>
+                                <tr>
+                                    <td class="text-center">@key</td>
+                                    <td>
+                                        <div class="font-weight-bold">@coupon.Name</div>
+                                        <small class="text-muted">@Html.Raw(@coupon.Description)</small>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge badge-pill badge-light">@coupon.Quantity</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <small><i class="far fa-calendar-alt mr-1"></i> @coupon.DateStart.ToString("dd/MM/yyyy")</small>
+                                            <small><i class="far fa-calendar-check mr-1"></i> @coupon.DateExpired.ToString("dd/MM/yyyy")</small>
+
+                                            @if (coupon.DateExpired < DateTime.Now)
+                                            {
+                                                <span class="badge badge-pill badge-danger mt-1">
+                                                    <i class="fas fa-exclamation-circle mr-1"></i> Hết hạn
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                TimeSpan remainingTime = coupon.DateExpired - DateTime.Now;
+                                                int daysRemaining = remainingTime.Days;
+                                                @if (daysRemaining == 0)
+                                                {
+                                                    <span class="badge badge-pill badge-warning mt-1">
+                                                        <i class="fas fa-clock mr-1"></i> Hết hạn hôm nay
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-pill badge-success mt-1">
+                                                        <i class="fas fa-clock mr-1"></i> Còn @daysRemaining ngày
+                                                    </span>
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        @if (@coupon.Status == 1)
+                                        {
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-eye mr-1"></i> Hiển thị
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger">
+                                                <i class="fas fa-eye-slash mr-1"></i> Ẩn
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <a asp-action="Delete" asp-controller="Coupon" asp-route-Id="@coupon.Id" class="btn btn-sm btn-outline-danger confirmDeletion" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                key++;
                             }
-                            else
-                            {
-                                <span class="badge badge-status badge-danger">Ẩn</span>
-                            }
-                        </td>
-                        <td>
-                            @if (coupon.DateExpired < DateTime.Now)
-                            {
-                                <span class="text text-danger">
-                                    Expired
-                                </span>
-                            }
-                            else
-                            {
-                                TimeSpan remainingTime = coupon.DateExpired - DateTime.Now;
-                                int daysRemaining = remainingTime.Days;
-                                @if (daysRemaining == 0)
-                                {
-                                    <span class="text text-danger">
-                                        Today
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="text text-success">
-                                        @daysRemaining days left
-                                    </span>
-                                }
-                            }
-                        </td>
-                        <td>
-                            <a asp-action="Delete" asp-controller="Coupon" asp-route-Id="@coupon.Id" class="btn btn-sm btn-danger confirmDeletion" title="Xóa">
-                                <i class="fas fa-trash"></i> Xóa
-                            </a>
-                        </td>
-                    </tr>
-                    key++;
-                }
-            </tbody>
-        </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @section Css {
@@ -133,12 +201,58 @@
     <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <style>
-        .custom-select {
-            height: calc(2.25rem + 2px);
-            padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            border-bottom: 0;
+        }
+
+        .bg-gradient-success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(45deg, #007bff, #3f51b5);
+        }
+
+        .bg-gradient-light {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        }
+
+        .badge-status {
+            padding: 5px 10px;
+        }
+
+        .form-control, .input-group-text, .custom-select {
+            border-radius: 5px;
+        }
+
+        .input-group .form-control {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .btn {
+            border-radius: 5px;
+        }
+
+        .table thead th {
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+        .badge-pill {
+            padding: 0.4em 0.8em;
         }
     </style>
 }
+
 @section Js {
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -157,15 +271,85 @@
     }
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace( 'Description' );
-    </script>
-    <script>
+        CKEDITOR.replace('Description', {
+            height: 150,
+            toolbar: [
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList', 'Blockquote'] },
+                { name: 'insert', items: ['Link'] },
+                { name: 'tools', items: ['Maximize'] }
+            ]
+        });
+
         $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            // Initialize DataTable with custom options
+            $("#couponTable").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "language": {
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "<i class='fas fa-chevron-right'></i>",
+                        "previous": "<i class='fas fa-chevron-left'></i>"
+                    },
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                    "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+                    "zeroRecords": "Không tìm thấy kết quả phù hợp"
+                },
+                "buttons": [
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                        className: 'btn-sm btn-outline-success'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                        className: 'btn-sm btn-outline-danger'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print mr-1"></i> In',
+                        className: 'btn-sm btn-outline-info'
+                    }
+                ]
+            }).buttons().container().appendTo('#couponTable_wrapper .col-md-6:eq(0)');
+
+            // Confirm deletion
+            $('.confirmDeletion').on('click', function(e) {
+                e.preventDefault();
+                const url = $(this).attr('href');
+
+                Swal.fire({
+                    title: 'Xác nhận xóa?',
+                    text: "Bạn không thể hoàn tác hành động này!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+
+            // Date validation
+            $('#DateStart').on('change', function() {
+                const startDate = new Date($(this).val());
+                const endDate = new Date($('#DateExpired').val());
+
+                if(endDate < startDate) {
+                    $('#DateExpired').val($(this).val());
+                }
+
+                $('#DateExpired').attr('min', $(this).val());
+            });
         });
     </script>
 }
-

@@ -58,15 +58,15 @@
                         <span class="ml-2">Alexander Pierce</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
+                        <a asp-action="Profile" asp-controller="Account" asp-area="Admin" class="dropdown-item">
                             <i class="fas fa-user mr-2"></i> Hồ sơ
                         </a>
-                        <div class="dropdown-divider"></div>
+                        @* <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
                             <i class="fas fa-cog mr-2"></i> Cài đặt
-                        </a>
+                        </a> *@
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
+                        <a asp-action="Logout" asp-controller="Account" asp-area="" class="dropdown-item">
                             <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
                         </a>
                     </div>
@@ -180,6 +180,12 @@
 
                         <!-- System -->
                         <li class="nav-header">HỆ THỐNG</li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="Coupon" asp-area="Admin" class="nav-link">
+                                <i class="nav-icon fas fa-tags"></i>
+                                <p>Khuyến mãi</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a asp-action="Index" asp-controller="Shipping" asp-area="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-truck"></i>
