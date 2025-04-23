@@ -1,55 +1,234 @@
 ﻿@model CategoryModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Thêm danh mục";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<div class="card card-success">
-    <div class="card-header">
-        <h3 class="card-title">Thêm danh mục sản phẩm</h3>
-    </div>
-    <!-- /.card-header -->
-    <!-- form start -->
-    <form asp-action="Create">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="card-body">
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="row">
+    <div class="col-md-12 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-gradient-success">
+                <h3 class="card-title">
+                    <i class="fas fa-folder-plus mr-2"></i>Thêm danh mục sản phẩm
+                </h3>
             </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control" asp-for="Description"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Status</label>
-                <select asp-for="Status" class="form-control">
-                    <option value="0">---- Choose a Status ----</option>
-                    <option value="1">Hiển thị</option>
-                    <option value="2">Ẩn</option>
-                </select>
-            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="Name"><i class="fas fa-tag mr-1"></i>Tên danh mục</label>
+                        <input type="text" class="form-control form-control-lg" asp-for="Name" placeholder="Nhập tên danh mục">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <small class="form-text text-muted">Tên danh mục sẽ hiển thị trên website</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Description"><i class="fas fa-align-left mr-1"></i>Mô tả</label>
+                        <textarea class="form-control" asp-for="Description" rows="5"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                        <small class="form-text text-muted">Mô tả ngắn gọn về danh mục này</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Status"><i class="fas fa-toggle-on mr-1"></i>Trạng thái</label>
+                        <select asp-for="Status" class="form-control select2">
+                            <option value="0">-- Chọn trạng thái --</option>
+                            <option value="1">Hiển thị</option>
+                            <option value="2">Ẩn</option>
+                        </select>
+                        <small class="form-text text-muted">Trạng thái hiển thị của danh mục trên website</small>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-1"></i> Quay lại danh sách
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save mr-1"></i> Lưu danh mục
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-            <button type="submit" class="btn btn-success">
-                Create
-            </button>
-        </div>
-    </form>
-    <div class="mt-3 d-flex justify-content-end">
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to Category List
-        </a>
     </div>
 </div>
+
+@section Css {
+    <link rel="stylesheet" href="/assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <style>
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            padding: 1rem 1.25rem;
+            color: white;
+        }
+
+        .bg-gradient-success {
+            background: linear-gradient(to right, #28a745, #20c997);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            padding: 0.5rem 0.75rem;
+        }
+
+            .form-control:focus {
+                border-color: #28a745;
+                box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+            }
+
+        .form-control-lg {
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+            .btn-success:hover {
+                background-color: #218838;
+                border-color: #1e7e34;
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+            }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+            .btn-secondary:hover {
+                background-color: #5a6268;
+                border-color: #545b62;
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+            }
+
+        .card-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .select2-container--bootstrap4 .select2-selection--single {
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 0.75rem;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+
+        .text-danger {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .form-text {
+            margin-top: 0.25rem;
+        }
+
+        .content-header {
+            padding: 15px 0.5rem;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0.25rem 0;
+            margin-bottom: 0;
+        }
+
+        .breadcrumb-item a {
+            color: #007bff;
+        }
+
+        .validation-summary-errors ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+            .validation-summary-errors ul li {
+                color: #dc3545;
+            }
+
+        .cke_chrome {
+            border-radius: 5px;
+            overflow: hidden;
+            border-color: #ced4da !important;
+        }
+    </style>
+}
+
 @section Js {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="/assets/plugins/select2/js/select2.full.min.js"></script>
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace( 'Description' );
+        $(function () {
+            // Initialize Select2
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                placeholder: "-- Chọn trạng thái --"
+            });
+
+            // Initialize CKEditor with custom configuration
+            CKEDITOR.replace('Description', {
+                height: 250,
+                toolbarGroups: [
+                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                    { name: 'forms', groups: [ 'forms' ] },
+                    '/',
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                    { name: 'links', groups: [ 'links' ] },
+                    { name: 'insert', groups: [ 'insert' ] },
+                    '/',
+                    { name: 'styles', groups: [ 'styles' ] },
+                    { name: 'colors', groups: [ 'colors' ] },
+                    { name: 'tools', groups: [ 'tools' ] },
+                    { name: 'others', groups: [ 'others' ] },
+                    { name: 'about', groups: [ 'about' ] }
+                ],
+                removeButtons: 'Save,NewPage,ExportPdf,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CopyFormatting,RemoveFormat,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Flash,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,ShowBlocks,About',
+                removePlugins: 'elementspath',
+                resize_enabled: false
+            });
+
+            // Form validation
+            $('form').on('submit', function (e) {
+                if ($('#Status').val() == '0') {
+                    e.preventDefault();
+                    alert('Vui lòng chọn trạng thái cho danh mục');
+                    return false;
+                }
+            });
+        });
     </script>
 }

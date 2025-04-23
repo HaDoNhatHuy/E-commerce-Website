@@ -1,11 +1,90 @@
 ﻿@model CategoryModel
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Cập nhật";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<div class="card card-success">
-    <div class="card-header">
-        <h3 class="card-title">Cập nhật danh mục sản phẩm</h3>
+<style>
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 0;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .form-control, .custom-select {
+        border-radius: 6px;
+        padding: 0.6rem 1rem;
+        border: 1px solid #ddd;
+        transition: all 0.3s;
+    }
+
+        .form-control:focus, .custom-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+    .input-group-text {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    .btn {
+        padding: 0.5rem 1.5rem;
+        border-radius: 6px;
+        transition: all 0.3s;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    label {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .border-success {
+        border: 2px solid #28a745 !important;
+    }
+
+    .border-danger {
+        border: 2px solid #dc3545 !important;
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(to right, #28a745, #20c997);
+    }
+</style>
+<div class="card shadow">
+    <div class="card-header bg-gradient-success text-white">
+        <h3 class="card-title font-weight-bold"><i class="fas fa-edit mr-2"></i> Cập nhật danh mục sản phẩm</h3>
     </div>
     <!-- /.card-header -->
     <!-- form start -->
@@ -13,44 +92,74 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="card-body">
             <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
+                <label class="font-weight-bold text-dark">Tên danh mục</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-success text-white"><i class="fas fa-tag"></i></span>
+                    </div>
+                    <input type="text" class="form-control rounded-right" asp-for="Name" placeholder="Nhập tên danh mục">
+                </div>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control" asp-for="Description"></textarea>
+                <label class="font-weight-bold text-dark">Mô tả</label>
+                <textarea class="form-control" asp-for="Description" rows="5"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label>Status</label>
-                <select asp-for="Status" class="form-control">
-                    <option value="0">---- Choose a Status ----</option>
+                <label class="font-weight-bold text-dark">Trạng thái</label>
+                <select asp-for="Status" class="form-control custom-select">
+                    <option value="0">---- Chọn trạng thái ----</option>
                     <option value="1">Hiển thị</option>
                     <option value="2">Ẩn</option>
                 </select>
             </div>
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-            <button type="submit" class="btn btn-success">
-                Create
-            </button>
+        <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save mr-1"></i> Lưu thay đổi
+                </button>
+            </div>
         </div>
     </form>
-    <div class="mt-3 d-flex justify-content-end">
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to Category List
-        </a>
-    </div>
 </div>
+
 @section Js {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace( 'Description' );
+        $(document).ready(function() {
+            CKEDITOR.replace('Description', {
+                height: 250,
+                toolbarGroups: [
+                    { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                    { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align'] },
+                    { name: 'styles' },
+                    { name: 'colors' },
+                    { name: 'insert' }
+                ],
+                removeButtons: 'Subscript,Superscript,Flash,PageBreak,Iframe,Styles,Font'
+            });
+
+            // Highlight select khi thay đổi giá trị
+            $("#Status").change(function() {
+                if($(this).val() == 1) {
+                    $(this).addClass("border-success");
+                    $(this).removeClass("border-danger");
+                } else if($(this).val() == 2) {
+                    $(this).addClass("border-danger");
+                    $(this).removeClass("border-success");
+                } else {
+                    $(this).removeClass("border-success border-danger");
+                }
+            });
+        });
     </script>
 }
-

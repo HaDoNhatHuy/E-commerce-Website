@@ -1,84 +1,181 @@
 ﻿@model IEnumerable<BrandModel>
 @{
-    ViewData["Title"] = "Danh mục";
+    ViewData["Title"] = "Danh sách thương hiệu";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int key = 1;
 }
-<div class="card-body">
-    <!-- Button thêm sản phẩm -->
-    <div class="d-flex justify-content-end mb-3">
-        <a asp-action="Create" asp-controller="Brand" class="btn btn-success">
-            <i class="nav-icon fas fa-plus"></i> Thêm thương hiệu
-        </a>
+<div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+    <div class="card-header bg-gradient-primary p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="text-white mb-0 font-weight-bold">
+                    ™Quản lý thương hiệu
+                </h4>
+                <p class="text-white-50 mb-0">Xem và quản lý các thương hiệu trong hệ thống</p>
+            </div>
+            <a asp-action="Create" asp-controller="Brand" class="btn btn-light text-primary fw-bold">
+                <i class="fas fa-plus-circle me-1"></i> Thêm thương hiệu mới
+            </a>
+        </div>
     </div>
-    <table id="example1" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>BrandName</th>
-                <th>Description</th>
-                <th>Slug</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Name</td>
-                    <td>@Html.Raw(item.Description)</td> @* sử dụng @Html.Raw() để giữ nguyên định dạng *@
-                    <td>@item.Slug</td>
-                    <td>
-                        @if (item.Status == 1)
-                        {
-                            <span class="badge badge-status badge-success">Hiển thị</span>
-                        }
-                        else
-                        {
-                            <span class="badge badge-status badge-danger">Ẩn</span>
-                        }
-                    </td>
-                    <td>
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="Edit" asp-controller="Brand" asp-route-Id="@item.Id" class="btn btn-sm btn-warning" title="Sửa">
-                                <i class="fas fa-edit"></i> Sửa
-                            </a>
-                            <a asp-action="Delete" asp-controller="Brand" asp-route-Id="@item.Id" class="btn btn-sm btn-danger ml-2 confirmDeletion" title="Xóa">
-                                <i class="fas fa-trash"></i> Xóa
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            }
-    </table>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table id="brandTable" class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">#</th>
+                        <th>Tên thương hiệu</th>
+                        <th>Mô tả</th>
+                        <th>Đường dẫn</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">@key</td>
+                            <td class="fw-bold">@item.Name</td>
+                            <td class="text-truncate" style="max-width: 250px;">@Html.Raw(item.Description)</td>
+                            <td><code class="bg-light text-dark px-2 py-1 rounded">@item.Slug</code></td>
+                            <td>
+                                @if (item.Status == 1)
+                                {
+                                    <span class="badge rounded-pill bg-success px-3 py-2">
+                                        <i class="fas fa-eye me-1"></i> Hiển thị
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill bg-danger px-3 py-2">
+                                        <i class="fas fa-eye-slash me-1"></i> Ẩn
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a asp-action="Edit" asp-controller="Brand" asp-route-Id="@item.Id"
+                                       class="btn btn-sm btn-outline-primary" title="Chỉnh sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-controller="Brand" asp-route-Id="@item.Id"
+                                       class="btn btn-sm btn-outline-danger confirmDeletion" title="Xóa">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        key++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-footer bg-white py-3">
+        <div id="tableInfo" class="text-muted small"></div>
+    </div>
 </div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <p class="mb-0">Bạn có chắc chắn muốn xóa thương hiệu này không? Hành động này không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <a href="#" id="confirmDeleteButton" class="btn btn-danger">Xác nhận xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Css {
     <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <style>
-        .badge-status {
-            display: inline-block;
-            width: 100px; /* Cố định kích thước badge */
-            text-align: center; /* Căn giữa chữ */
-            padding: 0.25em 0; /* Điều chỉnh khoảng cách bên trong */
-            font-size: 0.875rem; /* Kích thước chữ */
-            font-weight: bold; /* Chữ in đậm */
-            border-radius: 0.2rem; /* Bo góc badge */
-            color: #fff; /* Màu chữ */
+        .table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border-top: none;
         }
 
-        .badge-success {
-            background-color: #28a745; /* Màu xanh */
+        .table tbody tr {
+            transition: all 0.2s ease;
         }
 
-        .badge-danger {
-            background-color: #dc3545; /* Màu đỏ */
+            .table tbody tr:hover {
+                background-color: rgba(0, 123, 255, 0.04);
+            }
+
+        .btn-outline-primary:hover, .btn-outline-danger:hover {
+            color: white;
         }
 
+        .bg-gradient-primary {
+            background: linear-gradient(45deg, #4a6bcd, #2d98da);
+        }
+
+        .table-responsive {
+            min-height: 400px;
+        }
+
+        .badge {
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+            .badge.bg-success {
+                background: linear-gradient(45deg, #28a745, #20c997) !important;
+            }
+
+            .badge.bg-danger {
+                background: linear-gradient(45deg, #dc3545, #fd7e14) !important;
+            }
+
+        /* Custom DataTable styling */
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #4a6bcd !important;
+            border-color: #4a6bcd !important;
+            color: white !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #e9ecef !important;
+            border-color: #dee2e6 !important;
+        }
+
+        .dt-buttons .btn {
+            border-radius: 0.25rem !important;
+            margin-right: 0.5rem;
+            box-shadow: none !important;
+        }
+
+        .dataTables_filter input {
+            border-radius: 50px !important;
+            padding: 0.375rem 1rem;
+            border: 1px solid #e9ecef;
+        }
+
+            .dataTables_filter input:focus {
+                border-color: #4a6bcd;
+                box-shadow: 0 0 0 0.2rem rgba(74, 107, 205, 0.25);
+                outline: none;
+            }
     </style>
 }
+
 @section Js {
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -94,20 +191,68 @@
     <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script>
         $(function () {
-          $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-          }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-          $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-          });
+            // Initialize DataTable
+            var table = $("#brandTable").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Tất cả"]],
+                "autoWidth": false,
+                "language": {
+                    "search": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "zeroRecords": "Không tìm thấy dữ liệu",
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                    "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+                    "infoFiltered": "(lọc từ _MAX_ mục)",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                },
+                "buttons": [
+                    {
+                        extend: 'excel',
+                        text: '<i class="far fa-file-excel me-1"></i> Excel',
+                        className: 'btn btn-sm btn-outline-success'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="far fa-file-pdf me-1"></i> PDF',
+                        className: 'btn btn-sm btn-outline-danger'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print me-1"></i> In',
+                        className: 'btn btn-sm btn-outline-primary'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="fas fa-columns me-1"></i> Cột',
+                        className: 'btn btn-sm btn-outline-secondary'
+                    }
+                ]
+            });
+
+            // Move DataTable buttons
+            table.buttons().container().appendTo('#brandTable_wrapper .col-md-6:eq(0)');
+
+            // Update table info in card footer
+            table.on('draw', function() {
+                $('#tableInfo').html('Đang hiển thị ' + table.page.info().recordsDisplay + ' trong tổng số ' + table.page.info().recordsTotal + ' thương hiệu');
+            });
+
+            // Trigger initial draw to update info
+            table.draw();
+
+            // Handle delete confirmation
+            $('.confirmDeletion').on('click', function(e) {
+                e.preventDefault();
+                var deleteUrl = $(this).attr('href');
+                $('#confirmDeleteButton').attr('href', deleteUrl);
+                $('#deleteConfirmModal').modal('show');
+            });
         });
     </script>
 }
-

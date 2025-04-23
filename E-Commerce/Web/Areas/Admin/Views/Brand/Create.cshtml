@@ -1,55 +1,171 @@
 ﻿@model BrandModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Thêm thương hiệu mới";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<div class="card card-success">
-    <div class="card-header">
-        <h3 class="card-title">Thêm thương hiệu</h3>
-    </div>
-    <!-- /.card-header -->
-    <!-- form start -->
-    <form asp-action="Create">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="card-body">
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" asp-for="Name" placeholder="Enter name">
-                <span asp-validation-for="Name" class="text-danger"></span>
+
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+            <div class="card-header bg-gradient-success p-4">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white rounded-circle p-2 me-3 shadow-sm">
+                        <i class="fas fa-trademark text-success fs-4"></i>
+                    </div>
+                    <div>
+                        <h4 class="card-title text-white mb-0">Thêm thương hiệu mới</h4>
+                        <p class="text-white-50 mb-0">Vui lòng điền đầy đủ thông tin bên dưới</p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea class="form-control" asp-for="Description"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Status</label>
-                <select asp-for="Status" class="form-control">
-                    <option value="0">---- Choose a Status ----</option>
-                    <option value="1">Hiển thị</option>
-                    <option value="2">Ẩn</option>
-                </select>
-            </div>
+
+            <form asp-action="Create" class="needs-validation" novalidate>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mx-4 mt-4 mb-0 rounded-3" role="alert"></div>
+
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <!-- Tên thương hiệu -->
+                        <div class="col-md-12">
+                            <div class="form-group mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-signature text-success me-2"></i>Tên thương hiệu
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="fas fa-tag text-muted"></i>
+                                    </span>
+                                    <input type="text"
+                                           class="form-control border-0 bg-light py-2"
+                                           asp-for="Name"
+                                           placeholder="Nhập tên thương hiệu"
+                                           required>
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small mt-2 d-block"></span>
+                                <div class="form-text">Tên thương hiệu sẽ hiển thị trên trang website</div>
+                            </div>
+                        </div>
+
+                        <!-- Mô tả -->
+                        <div class="col-md-12">
+                            <div class="form-group mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-align-left text-success me-2"></i>Mô tả thương hiệu
+                                </label>
+                                <textarea class="form-control"
+                                          asp-for="Description"
+                                          placeholder="Nhập mô tả chi tiết về thương hiệu"
+                                          style="min-height: 150px;">
+                                    </textarea>
+                                <span asp-validation-for="Description" class="text-danger small mt-2 d-block"></span>
+                            </div>
+                        </div>
+
+                        <!-- Trạng thái -->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-toggle-on text-success me-2"></i>Trạng thái hiển thị
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="fas fa-eye text-muted"></i>
+                                    </span>
+                                    <select asp-for="Status" class="form-select border-0 bg-light py-2" required>
+                                        <option value="0" disabled>---- Chọn trạng thái ----</option>
+                                        <option value="1">Hiển thị</option>
+                                        <option value="2">Ẩn</option>
+                                    </select>
+                                </div>
+                                <div class="form-text">Chọn trạng thái hiển thị của thương hiệu trên website</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light d-flex justify-content-between py-3 px-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+                    </a>
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-plus-circle me-2"></i>Tạo thương hiệu
+                    </button>
+                </div>
+            </form>
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-            <button type="submit" class="btn btn-success">
-                Create
-            </button>
-        </div>
-    </form>
-    <div class="mt-3 d-flex justify-content-end">
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to Banner List
-        </a>
     </div>
 </div>
+
 @section Js {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace( 'Description' );
+        // Initialize CKEditor
+        CKEDITOR.replace('Description', {
+            toolbar: [
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+                { name: 'links', items: ['Link', 'Unlink'] },
+                { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+                { name: 'colors', items: ['TextColor', 'BGColor'] },
+                { name: 'tools', items: ['Maximize'] }
+            ],
+            height: 250,
+            removePlugins: 'resize',
+            contentsCss: ['body {font-family: "Segoe UI", Arial, sans-serif; font-size: 14px; margin: 20px; }'],
+            removeDialogTabs: 'image:advanced;link:advanced'
+        });
+
+        // Form validation
+        (function() {
+            'use strict';
+
+            // Fetch all forms we want to apply validation styles to
+            var forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
     </script>
+    <style>
+        .bg-gradient-success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            box-shadow: 0 4px 7px rgba(40, 167, 69, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .btn-success:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 10px rgba(40, 167, 69, 0.2);
+            }
+
+        .input-group-text {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .form-control, .form-select {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    </style>
 }

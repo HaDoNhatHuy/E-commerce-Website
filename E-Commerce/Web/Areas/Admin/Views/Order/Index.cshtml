@@ -2,96 +2,142 @@
 @{
     ViewData["Title"] = "Đơn đặt hàng";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int key = 1;
 }
-<div class="card-body">
-    <table id="example1" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>OrderCode</th>
-                <th>UserName</th>
-                <th>Order Date</th>
-                <th>Order Status</th>
-                <th>Payment Method</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+<div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+    <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0"><i class="fas fa-shopping-cart mr-2"></i>Quản lý đơn hàng</h4>
+    </div>
+    <div class="my-2 d-flex justify-content-end">
+        <select id="orderStatusFilter" class="form-control w-25">
+            <option value="">-- Tất cả trạng thái --</option>
+            <option value="Đơn mới">Đơn mới</option>
+            <option value="Đã xử lý">Đã xử lý</option>
+            <option value="Đã hủy">Đã hủy</option>
+        </select>
+    </div>
+    <div class="card-body p-4 bg-light rounded">
+        <table id="example1" class="table table-hover table-bordered text-center">
+            <thead class="thead-dark">
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.OrderCode</td>
-                    <td>@item.UserName</td>
-                    <td>@item.CreatedDate</td>
-                    <td>
-                        @if (item.Status == 1)
-                        {
-                            <span class="badge badge-status badge-success">Đã xử lý</span>
-                        }
-                        else if (item.Status == 0)
-                        {
-                            <span class="badge badge-status badge-warning">Đơn hàng mới</span>
-                        }
-                        else
-                        {
-                            <span class="badge badge-status badge-danger">Đã hủy</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.PaymentMethod == "Momo")
-                        {
-                            <img src="/assets/images/paymentMethod/momo.png" width="50" />
-                        }
-                        else if (item.PaymentMethod == "VnPay")
-                        {
-                            <img src="/assets/images/paymentMethod/vnpay.png" width="50" />
-                        }
-                        else
-                        {
-                            <img src="/assets/images/paymentMethod/COD.png" width="50" />
-                        }
-                    </td>
-                    <td>
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode" class="btn btn-sm btn-primary" title="Xem">
-                                <i class="fas fa-eye"></i> Xem
-                            </a>
-                            <a asp-action="Delete" asp-controller="Order" asp-route-Id="@item.Id" class="btn btn-sm btn-danger ml-2 confirmDeletion" title="Xóa">
-                                <i class="fas fa-trash"></i> Xóa
-                            </a>
-                        </div>
-                    </td>
+                    <th>#</th>
+                    <th>Mã đơn</th>
+                    <th>Người đặt</th>
+                    <th>Ngày đặt</th>
+                    <th>Trạng thái</th>
+                    <th>Thanh toán</th>
+                    <th>Thao tác</th>
                 </tr>
-            }
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="hover-shadow">
+                        <td>@key</td>
+                        <td><span class="font-weight-bold">@item.OrderCode</span></td>
+                        <td>@item.UserName</td>
+                        <td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @if (item.Status == 1)
+                            {
+                                <span class="badge badge-gradient-success">Đã xử lý</span>
+                            }
+                            else if (item.Status == 0)
+                            {
+                                <span class="badge badge-gradient-warning">Đơn mới</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-gradient-danger">Đã hủy</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.PaymentMethod == "Momo")
+                            {
+                                <img src="/assets/images/paymentMethod/momo.png" width="40" title="Momo" />
+                            }
+                            else if (item.PaymentMethod == "VnPay")
+                            {
+                                <img src="/assets/images/paymentMethod/vnpay.png" width="40" title="VnPay" />
+                            }
+                            else
+                            {
+                                <img src="/assets/images/paymentMethod/COD.png" width="40" title="COD" />
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="ViewOrder" asp-controller="Order" asp-route-ordercode="@item.OrderCode"
+                                   class="btn btn-sm btn-glow btn-primary" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Delete" asp-controller="Order" asp-route-Id="@item.Id"
+                                   class="btn btn-sm btn-glow btn-danger confirmDeletion" title="Xóa đơn">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    key++;
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
 @section Css {
     <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <style>
-        .badge-status {
-            display: inline-block;
-            width: 100px; /* Cố định kích thước badge */
-            text-align: center; /* Căn giữa chữ */
-            padding: 0.25em 0; /* Điều chỉnh khoảng cách bên trong */
-            font-size: 0.875rem; /* Kích thước chữ */
-            font-weight: bold; /* Chữ in đậm */
-            border-radius: 0.2rem; /* Bo góc badge */
-            color: #fff; /* Màu chữ */
+        .bg-gradient-primary {
+            background: linear-gradient(60deg, #007bff, #6610f2);
         }
 
-        .badge-success {
-            background-color: #28a745; /* Màu xanh */
+        .badge-gradient-success {
+            background: linear-gradient(to right, #28a745, #85dcb0);
+            color: white;
+            padding: 0.5em 0.8em;
+            border-radius: 20px;
+            font-weight: 600;
         }
 
-        .badge-danger {
-            background-color: #dc3545; /* Màu đỏ */
+        .badge-gradient-warning {
+            background: linear-gradient(to right, #ffc107, #ffe58f);
+            color: #000;
+            padding: 0.5em 0.8em;
+            border-radius: 20px;
+            font-weight: 600;
         }
 
+        .badge-gradient-danger {
+            background: linear-gradient(to right, #dc3545, #f78da7);
+            color: white;
+            padding: 0.5em 0.8em;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .btn-glow {
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+            .btn-glow:hover {
+                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+                transform: scale(1.05);
+            }
+
+        .hover-shadow:hover {
+            background-color: #f9f9f9;
+            box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
     </style>
 }
+
 @section Js {
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -120,6 +166,13 @@
             "autoWidth": false,
             "responsive": true,
           });
+        });
+    </script>
+    <script>
+            $('#orderStatusFilter').on('change', function () {
+            const selected = $(this).val();
+            const table = $('#example1').DataTable();
+            table.columns(4).search(selected).draw(); // cột Trạng thái
         });
     </script>
 }

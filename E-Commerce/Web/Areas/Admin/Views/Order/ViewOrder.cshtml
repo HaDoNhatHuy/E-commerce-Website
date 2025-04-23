@@ -6,192 +6,213 @@
     decimal subTotal = 0;
     var firstItem = Model.FirstOrDefault();
 }
-
-<div class="invoice p-4 mb-4 border rounded shadow-sm">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="text-primary mb-3">
-                <i class="fas fa-file-invoice-dollar"></i> Chi tiết đơn hàng
-            </h2>
-        </div>
+<div class="card shadow-lg border-0 rounded-4 bg-white">
+    <div class="card-header bg-gradient bg-primary text-white rounded-top-4 p-4">
+        <h3 class="card-title mb-0 fw-bold"><i class="fas fa-file-invoice-dollar me-2"></i>Chi tiết đơn hàng</h3>
     </div>
-
-    <div class="row invoice-info">
-        <div class="col-md-6">
-            <h5>Thông tin khách hàng</h5>
-
-            @*  @foreach (var item in ViewBag.OrderInfo)
-            { *@
-            <address>
-                <strong>@firstItem.UserName</strong><br>
-                <strong>Địa chỉ:</strong> @firstItem.Address<br>
-                <strong>Điện thoại:</strong> @firstItem.Phone<br>
-                <strong>Email:</strong> @firstItem.Email
-            </address>
-            @* } *@
-
-        </div>
-        <div class="col-md-6 text-md-right">
-            <h5>Thông tin đơn hàng</h5>
-            @foreach (var item in ViewBag.OrderInfo)
-            {
-                <p>
-                    <b>Mã đơn hàng:</b> @item.OrderCode<br>
-                    <b>Phương thức thanh toán:</b> @item.PaymentMethod<br>
-                    <b>Ngày tạo:</b> @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")<br>
-                    <b>Ngày thanh toán:</b>
-                </p>
-            }
-        </div>
-    </div>
-
-    <div class="table-responsive mt-4">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-light">
-                <tr>
-                    <th>Sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Đơn giá</th>
-                    <th>Thành tiền</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    subTotal = item.Quantity * item.Price;
-                    total += subTotal;
-                    <tr>
-                        <input type="hidden" asp-for="@item.OrderCode" class="getId" />
-                        <td>@item.Product.Name</td>
-                        <td>@item.Quantity</td>
-                        <td>@item.Price.ToString("#,##0 VNĐ")</td>
-                        <td>@subTotal.ToString("#,##0 VNĐ")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <h5>Phương thức thanh toán</h5>
-            <p>
+    <div class="card-body p-4">
+        <!-- Thông tin khách hàng và đơn hàng -->
+        <div class="row invoice-info mb-4">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <h5 class="fw-semibold text-dark">Thông tin khách hàng</h5>
+                <address class="bg-light p-3 rounded-3 shadow-sm">
+                    <strong>@firstItem.UserName</strong><br>
+                    <strong>Địa chỉ:</strong> @firstItem.Address<br>
+                    <strong>Điện thoại:</strong> @firstItem.Phone<br>
+                    <strong>Email:</strong> @firstItem.Email
+                </address>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <h5 class="fw-semibold text-dark">Thông tin đơn hàng</h5>
                 @foreach (var item in ViewBag.OrderInfo)
                 {
-                    @if (item.PaymentMethod == "Momo")
-                    {
-                        <img src="/assets/images/paymentMethod/momo.png" width="50" class="mr-2" />
-                    }
-                    else if (item.PaymentMethod == "VnPay")
-                    {
-                        <img src="/assets/images/paymentMethod/vnpay.png" width="50" class="mr-2" />
-                    }
-                    else
-                    {
-                        <img src="/assets/images/paymentMethod/COD.png" width="50" class="mr-2" />
-                    }
+                    <div class="bg-light p-3 rounded-3 shadow-sm">
+                        <p class="mb-1"><strong>Mã đơn hàng:</strong> @item.OrderCode</p>
+                        <p class="mb-1"><strong>Phương thức thanh toán:</strong> @item.PaymentMethod</p>
+                        <p class="mb-1"><strong>Ngày tạo:</strong> @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p class="mb-0"><strong>Ngày thanh toán:</strong> -</p>
+                    </div>
                 }
-
-
-            </p>
-            <p class="text-muted">
-                Các phương thức thanh toán đa dạng và bảo mật tuyệt đối.
-            </p>
+            </div>
         </div>
-        <div class="col-md-6">
-            <h5>Tổng thanh toán</h5>
-            <table class="table">
-                <tr>
-                    <th>Tạm tính:</th>
-                    <td>@total.ToString("#,##0 VNĐ")</td>
-                </tr>
-                <tr>
-                    <th>Thuế (9.3%):</th>
-                    <td>@((total * 0.093M).ToString("#,##0 VNĐ"))</td>
-                </tr>
-                <tr>
-                    <th>Phí vận chuyển:</th>
-                    @foreach (var item in ViewBag.OrderInfo)
-                    {
-                        <td>@item.ShippingFee.ToString("#,##0 VNĐ")</td>
-                    }
 
-                </tr>
-                <tr class="font-weight-bold">
-                    <th>Tổng cộng:</th>
-                    <td>@((total + (total * 0.093M) + 50000).ToString("#,##0 VNĐ"))</td>
-                </tr>
+        <!-- Bảng sản phẩm -->
+        <div class="table-responsive mt-4">
+            <table class="table table-hover table-bordered table-striped rounded-3">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th class="text-center">Số lượng</th>
+                        <th class="text-end">Đơn giá</th>
+                        <th class="text-end">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        subTotal = item.Quantity * item.Price;
+                        total += subTotal;
+                        <tr>
+                            <input type="hidden" asp-for="@item.OrderCode" class="getId" />
+                            <td>@item.Product.Name</td>
+                            <td class="text-center">@item.Quantity</td>
+                            <td class="text-end">@item.Price.ToString("#,##0 VNĐ")</td>
+                            <td class="text-end">@subTotal.ToString("#,##0 VNĐ")</td>
+                        </tr>
+                    }
+                </tbody>
             </table>
         </div>
-    </div>
 
-    <div class="row mt-4 no-print">
-        <div class="col-md-12 text-right">
-            <button class="btn btn-secondary">
-                <i class="fas fa-print"></i> In hóa đơn
-            </button>
-            <button class="btn btn-primary ml-2">
-                <i class="fas fa-file-pdf"></i> Xuất PDF
-            </button>
-            @*  <button class="btn btn-success">
-                <i class="fas fa-credit-card"></i> Thanh toán
-            </button> *@
-
-            @if (ViewBag.Status != 3)
-            {
-                <select class="form-control select-update-order d-inline-block w-auto ml-2">
-                    @if (ViewBag.Status == 0)
+        <!-- Phương thức thanh toán và tổng thanh toán -->
+        <div class="row mt-4">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <h5 class="fw-semibold text-dark">Phương thức thanh toán</h5>
+                <div class="bg-light p-3 rounded-3 shadow-sm">
+                    @foreach (var item in ViewBag.OrderInfo)
                     {
-                        <option value="0">Chưa xử lý</option>
-                        <option value="1">Đã xử lý</option>
+                        @if (item.PaymentMethod == "Momo")
+                        {
+                            <img src="/assets/images/paymentMethod/momo.png" width="50" class="me-2" alt="Momo" />
+                        }
+                        else if (item.PaymentMethod == "VnPay")
+                        {
+                            <img src="/assets/images/paymentMethod/vnpay.png" width="50" class="me-2" alt="VnPay" />
+                        }
+                        else
+                        {
+                            <img src="/assets/images/paymentMethod/COD.png" width="50" class="me-2" alt="COD" />
+                        }
                     }
-                    else
-                    {
-                        <option value="0" disabled>Chưa xử lý</option>
-                        <option value="1">Đã xử lý</option>
-                    }
+                    <p class="text-muted mt-2">Các phương thức thanh toán đa dạng và bảo mật tuyệt đối.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5 class="fw-semibold text-dark">Tổng thanh toán</h5>
+                <div class="bg-light p-3 rounded-3 shadow-sm">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th>Tạm tính:</th>
+                            <td class="text-end">@total.ToString("#,##0 VNĐ")</td>
+                        </tr>
+                        <tr>
+                            <th>Thuế (9.3%):</th>
+                            <td class="text-end">@((total * 0.093M).ToString("#,##0 VNĐ"))</td>
+                        </tr>
+                        <tr>
+                            <th>Phí vận chuyển:</th>
+                            @foreach (var item in ViewBag.OrderInfo)
+                            {
+                                <td class="text-end">@item.ShippingFee.ToString("#,##0 VNĐ")</td>
+                            }
+                        </tr>
+                        <tr class="fw-bold">
+                            <th>Tổng cộng:</th>
+                            <td class="text-end">@((total + (total * 0.093M) + 50000).ToString("#,##0 VNĐ"))</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-                </select>
-            }
+        <!-- Nút hành động -->
+        <div class="row mt-4 no-print">
+            <div class="col-12 text-end">
+                <button class="btn btn-outline-secondary btn-lg px-4 me-2">
+                    <i class="fas fa-print me-2"></i> In hóa đơn
+                </button>
+                <button class="btn btn-primary btn-lg px-4 me-2">
+                    <i class="fas fa-file-pdf me-2"></i> Xuất PDF
+                </button>
+                @if (ViewBag.Status != 3)
+                {
+                    <select class="form-select form-select-lg d-inline-block w-auto shadow-sm select-update-order">
+                        @if (ViewBag.Status == 0)
+                        {
+                            <option value="0">Chưa xử lý</option>
+                            <option value="1">Đã xử lý</option>
+                        }
+                        else
+                        {
+                            <option value="0" disabled>Chưa xử lý</option>
+                            <option value="1">Đã xử lý</option>
+                        }
+                    </select>
+                }
+            </div>
         </div>
     </div>
 </div>
 
 @section Css {
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        .invoice {
-            background: #fff;
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+            }
 
         .table th, .table td {
             vertical-align: middle;
         }
 
-        .btn {
-            min-width: 120px;
+        .form-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25) !important;
+            border-color: #28a745 !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #007bff, #00aaff);
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(45deg, #0056b3, #0088cc);
+            }
+
+        .btn-outline-secondary {
+            transition: all 0.3s ease;
+        }
+
+            .btn-outline-secondary:hover {
+                background-color: #6c757d;
+                color: #fff;
+            }
+
+        .bg-light {
+            background-color: #f8f9fa !important;
         }
     </style>
 }
+
 @section Js {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function(){
             $('.select-update-order').change(function(){
-                var status= $(this).val();
-                var orderCode=$('.getId').val();
+                var status = $(this).val();
+                var orderCode = $('.getId').val();
 
                 $.ajax({
-                    type:'POST',
-                    url:"@Url.Action("UpdateOrder", "Order")",
-                    data: {status:status,orderCode:orderCode},
-                    success:function(result){
+                    type: 'POST',
+                    url: "@Url.Action("UpdateOrder", "Order")",
+                    data: { status: status, orderCode: orderCode },
+                    success: function(result){
                         if (result.success){
-                            Swal.fire("Cập nhật thành công");
+                            Swal.fire("Cập nhật thành công", "", "success");
                         } else {
-                            Swal.fire("Cập nhật thất bại", result.message);
+                            Swal.fire("Cập nhật thất bại", result.message, "error");
                         }
                     },
                     error: function(req, status, error){
                         console.error("Error updating order", error);
+                        Swal.fire("Lỗi", "Đã xảy ra lỗi khi cập nhật", "error");
                     }
                 });
             });

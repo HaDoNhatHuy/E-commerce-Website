@@ -4,90 +4,139 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
     var key = 1;
 }
-
-<div class="card shadow-lg border-0">
-    <div class="card-header bg-success text-white">
-        <h3 class="card-title">Thêm phí vận chuyển</h3>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="tinh">Tỉnh Thành</label>
-                    <select class="form-control custom-select" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
-                        <option value="0">--- Chọn Tỉnh Thành ---</option>
-                    </select>
-                </div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-truck mr-2"></i>
+                    Quản lý phí vận chuyển
+                </h3>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="quan">Quận Huyện</label>
-                    <select class="form-control custom-select" id="quan" name="quan" title="Chọn Quận Huyện">
-                        <option value="0">--- Chọn Quận Huyện ---</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="phuong">Phường Xã</label>
-                    <select class="form-control custom-select" id="phuong" name="phuong" title="Chọn Phường Xã">
-                        <option value="0">--- Chọn Phường Xã ---</option>
-                    </select>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card card-success shadow-sm">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-plus-circle mr-1"></i>
+                                    Thêm phí vận chuyển mới
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="tinh" class="font-weight-bold">Tỉnh/Thành phố</label>
+                                        <select class="form-control select2" id="tinh" name="tinh" style="width: 100%;">
+                                            <option value="0">-- Chọn tỉnh/thành --</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="quan" class="font-weight-bold">Quận/Huyện</label>
+                                        <select class="form-control select2" id="quan" name="quan" style="width: 100%;" disabled>
+                                            <option value="0">-- Chọn quận/huyện --</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="phuong" class="font-weight-bold">Phường/Xã</label>
+                                        <select class="form-control select2" id="phuong" name="phuong" style="width: 100%;" disabled>
+                                            <option value="0">-- Chọn phường/xã --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="price-shipping" class="font-weight-bold">Phí vận chuyển</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text bg-white">
+                                                    <i class="fas fa-money-bill-wave text-success"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" asp-for="Price" id="price-shipping"
+                                                   class="form-control typing-price" pattern="[0-9.,]+"
+                                                   placeholder="Nhập giá vận chuyển" />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text bg-white">
+                                                    <span id="price-convert" class="text-success font-weight-bold">0 VNĐ</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer text-right bg-white">
+                                <button type="button" class="btn btn-success btn-add-shipping btn-lg">
+                                    <i class="fas fa-plus-circle mr-1"></i> Thêm phí vận chuyển
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="price-shipping">Giá</label>
-                    <input type="text" asp-for="Price" id="price-shipping" class="form-control typing-price" pattern="[0-9.,]+" placeholder="Nhập giá vận chuyển" />
-                    <span id="price-convert"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card-footer text-right">
-        <button type="button" class="btn btn-success btn-add-shipping">
-            <i class="fas fa-plus-circle"></i> Thêm phí vận chuyển
-        </button>
     </div>
 </div>
 
-<div class="card mt-4">
-    <div class="card-header bg-secondary text-white">
-        <h3 class="card-title">Danh sách phí vận chuyển</h3>
-    </div>
-    <div class="card-body">
-        <table id="example1" class="table table-bordered table-hover">
-            <thead class="thead-light">
-                <tr>
-                    <th>#</th>
-                    <th>Tỉnh | Thành</th>
-                    <th>Quận | Huyện</th>
-                    <th>Phường | Xã</th>
-                    <th>Giá vận chuyển</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var shippingList in ViewBag.ShippingList)
-                {
-                    <tr>
-                        <td>@key</td>
-                        <td>@shippingList.City</td>
-                        <td>@shippingList.District</td>
-                        <td>@shippingList.Ward</td>
-                        <td>@shippingList.Price.ToString("#,##0 VNĐ")</td>
-                        <td>
-                            <a asp-action="Delete" asp-controller="Shipping" asp-route-Id="@shippingList.Id" class="btn btn-sm btn-danger confirmDeletion" title="Xóa">
-                                <i class="fas fa-trash"></i> Xóa
-                            </a>
-                        </td>
-                    </tr>
-                    key++;
-                }
-            </tbody>
-        </table>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list-ol mr-2"></i>
+                    Danh sách phí vận chuyển
+                </h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table id="shippingTable" class="table table-hover text-nowrap">
+                    <thead class="bg-lightblue">
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="25%">Tỉnh/Thành</th>
+                            <th width="25%">Quận/Huyện</th>
+                            <th width="25%">Phường/Xã</th>
+                            <th width="15%">Phí vận chuyển</th>
+                            <th width="5%">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var shippingList in ViewBag.ShippingList)
+                        {
+                            <tr>
+                                <td>@key</td>
+                                <td>@shippingList.City</td>
+                                <td>@shippingList.District</td>
+                                <td>@shippingList.Ward</td>
+                                <td class="font-weight-bold text-success">@shippingList.Price.ToString("#,##0 VNĐ")</td>
+                                <td class="text-center">
+                                    <a asp-action="Delete" asp-controller="Shipping" asp-route-Id="@shippingList.Id"
+                                       class="btn btn-sm btn-danger confirmDeletion" title="Xóa"
+                                       data-toggle="tooltip" data-placement="top">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            key++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="float-right">
+                    <div class="dataTables_info" id="shippingTable_info" role="status" aria-live="polite"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -95,10 +144,32 @@
     <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/select2/css/select2.min.css">
     <style>
-        .custom-select {
+        .card-primary.card-outline {
+            border-top: 3px solid #007bff;
+        }
+
+        .bg-lightblue {
+            background-color: #f8f9fa;
+        }
+
+        .select2-container--default .select2-selection--single {
             height: calc(2.25rem + 2px);
-            padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+            padding: 0.375rem 0.75rem;
+            border: 1px solid #ced4da;
+        }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: calc(2.25rem + 2px);
+            }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        .card-success {
+            border-top: 3px solid #28a745;
         }
     </style>
 }
@@ -108,89 +179,157 @@
     <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="/assets/plugins/jszip/jszip.min.js"></script>
-    <script src="/assets/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="/assets/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="/assets/plugins/select2/js/select2.full.min.js"></script>
     <script>
         $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            // Initialize Select2
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+
+            // Initialize DataTable
+            $('#shippingTable').DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "language": {
+                    "lengthMenu": "Hiển thị _MENU_ bản ghi mỗi trang",
+                    "zeroRecords": "Không tìm thấy bản ghi nào",
+                    "info": "Hiển thị trang _PAGE_ của _PAGES_",
+                    "infoEmpty": "Không có bản ghi nào",
+                    "infoFiltered": "(đã lọc từ _MAX_ bản ghi)",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
+                },
+                "dom": '<"top"<"float-left"l><"float-right"f>>rt<"bottom"<"float-left"i><"float-right"p>><"clear">'
+            });
+
+            // Initialize tooltips
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
     <script>
         $(".btn-add-shipping").click(function(){
-            var tinh=$("#tinh").find('option:selected').text();
-            var quan=$("#quan").find('option:selected').text();
-            var phuong=$("#phuong").find('option:selected').text();
-            var price=$("#price-shipping").val();
-            //alert(tinh);
-            //alert(quan);
-            //alert(phuong);
-            //alert(price);
-            if(tinh==''||quan==''||phuong==''||price==''){
-                Swal.fire("Vui lòng không bỏ trống thông tin !");
+            var tinh = $("#tinh").find('option:selected').text();
+            var quan = $("#quan").find('option:selected').text();
+            var phuong = $("#phuong").find('option:selected').text();
+            var price = $("#price-shipping").val();
+
+            if(tinh == '-- Chọn tỉnh/thành --' || quan == '-- Chọn quận/huyện --' ||
+               phuong == '-- Chọn phường/xã --' || price == ''){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Thiếu thông tin',
+                    text: 'Vui lòng điền đầy đủ thông tin phí vận chuyển!',
+                    confirmButtonColor: '#28a745'
+                });
             }
-            else{
+            else {
                 $.ajax({
-                    type:"POST",
+                    type: "POST",
                     url: "@Url.Action("StoreShipping", "Shipping")",
-                    data:{tinh:tinh,quan:quan,phuong:phuong,price:price},
-                    success:function(result){
-                        if(result.success){
-                            Swal.fire("Thêm giá vận chuyển thành công. Load lại trang để thấy dữ liệu !");
-                            // location.reload();
+                    data: {tinh: tinh, quan: quan, phuong: phuong, price: price},
+                    beforeSend: function() {
+                        $(".btn-add-shipping").prop('disabled', true)
+                            .html('<i class="fas fa-spinner fa-spin mr-1"></i> Đang xử lý...');
+                    },
+                    complete: function() {
+                        $(".btn-add-shipping").prop('disabled', false)
+                            .html('<i class="fas fa-plus-circle mr-1"></i> Thêm phí vận chuyển');
+                    },
+                    success: function(result) {
+                        if(result.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: 'Thêm giá vận chuyển thành công!',
+                                confirmButtonColor: '#28a745',
+                                willClose: () => {
+                                    location.reload();
+                                }
+                            });
                         }
-                        else if(result.duplicate){
-                            Swal.fire("Dữ liệu bị trùng lặp !");
+                        else if(result.duplicate) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: 'Phí vận chuyển cho khu vực này đã tồn tại!',
+                                confirmButtonColor: '#28a745'
+                            });
                         }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Đã xảy ra lỗi khi thêm phí vận chuyển!',
+                            confirmButtonColor: '#28a745'
+                        });
                     }
                 });
             }
-        })
+        });
+    </script>
+    <script>
         $(document).ready(function() {
+            // Load provinces
             $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
                 if (data_tinh.error == 0) {
                     $.each(data_tinh.data, function(key_tinh, val_tinh) {
                         $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
                     });
+
                     $("#tinh").change(function() {
                         var idtinh = $(this).val();
-                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
-                            if (data_quan.error == 0) {
-                                $("#quan").html('<option value="0">--- Chọn Quận Huyện ---</option>');
-                                $("#phuong").html('<option value="0">--- Chọn Phường Xã ---</option>');
-                                $.each(data_quan.data, function(key_quan, val_quan) {
-                                    $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                                });
-                                $("#quan").change(function() {
-                                    var idquan = $(this).val();
-                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
-                                        if (data_phuong.error == 0) {
-                                            $("#phuong").html('<option value="0">--- Chọn Phường Xã ---</option>');
-                                            $.each(data_phuong.data, function(key_phuong, val_phuong) {
-                                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                                            });
-                                        }
+                        if(idtinh != "0") {
+                            $("#quan").prop('disabled', false).html('<option value="0">-- Chọn quận/huyện --</option>');
+                            $("#phuong").prop('disabled', true).html('<option value="0">-- Chọn phường/xã --</option>');
+
+                            $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
+                                if (data_quan.error == 0) {
+                                    $.each(data_quan.data, function(key_quan, val_quan) {
+                                        $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
                                     });
-                                });
-                            }
-                        });
+                                }
+                            });
+                        } else {
+                            $("#quan").prop('disabled', true).html('<option value="0">-- Chọn quận/huyện --</option>');
+                            $("#phuong").prop('disabled', true).html('<option value="0">-- Chọn phường/xã --</option>');
+                        }
+                    });
+
+                    $("#quan").change(function() {
+                        var idquan = $(this).val();
+                        if(idquan != "0") {
+                            $("#phuong").prop('disabled', false).html('<option value="0">-- Chọn phường/xã --</option>');
+
+                            $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
+                                if (data_phuong.error == 0) {
+                                    $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                                        $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                                    });
+                                }
+                            });
+                        } else {
+                            $("#phuong").prop('disabled', true).html('<option value="0">-- Chọn phường/xã --</option>');
+                        }
                     });
                 }
             });
         });
     </script>
     <script>
-        $(".typing-price").on("keyup",function(){
-            var currency_input=$(this).val();
-            $("#price-convert").html(new Intl.NumberFormat('vn-VN',{style:'currency', currency:'VND'}).format(currency_input));
+        $(".typing-price").on("keyup", function() {
+            var currency_input = $(this).val().replace(/[^0-9]/g, '');
+            if(currency_input) {
+                $("#price-convert").html(new Intl.NumberFormat('vn-VN', {style: 'currency', currency: 'VND'}).format(currency_input));
+            } else {
+                $("#price-convert").html("0 VNĐ");
+            }
         });
     </script>
 }

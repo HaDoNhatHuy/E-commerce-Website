@@ -1,5 +1,5 @@
 ﻿/* Thu nhỏ kích thước hình ảnh và cỡ chữ trên màn hình nhỏ */
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
     table td img {
         width: 50px;
         height: 50px;
@@ -12,5 +12,51 @@
     .btn-group .btn {
         padding: 5px;
         font-size: 12px;
+    }
+}*/
+/* Custom styles */
+.brand-link {
+    text-align: center;
+    padding: 0.8125rem 0.5rem;
+}
+
+    .brand-link .brand-text {
+        font-weight: 600;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+.user-panel .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header .navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+}
+
+.nav-header {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    color: #6c757d;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.content-header {
+    padding: 15px 0.5rem;
+}
+
+/* Dark sidebar style */
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: rgba(255,255,255,0.1);
+    border-left: 3px solid #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    .brand-link .brand-text {
+        font-size: 1rem;
     }
 }

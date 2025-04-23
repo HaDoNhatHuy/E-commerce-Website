@@ -1,74 +1,161 @@
 ﻿@model IEnumerable<ProductModel>
 @{
-    ViewData["Title"] = "Product";
+    ViewData["Title"] = "Quản lý sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var key = 1;
 }
-<div class="card shadow-sm">
-    <div class="card-header bg-gray-light text-white">
-        <h3 class="card-title">Danh sách sản phẩm</h3>
-        <div class="d-flex justify-content-end">
-            <a asp-action="Create" asp-controller="Product" class="btn btn-success">
-                <i class="fas fa-plus"></i> Thêm sản phẩm
+
+
+<div class="card card-primary card-outline">
+    <div class="card-header border-0">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title">
+                <i class="fas fa-boxes mr-2"></i>
+                Danh sách sản phẩm
+            </h3>
+            <a asp-action="Create" asp-controller="Product" class="btn btn-success btn-sm">
+                <i class="fas fa-plus-circle mr-1"></i> Thêm sản phẩm mới
             </a>
         </div>
     </div>
-    <div class="card-body">
-        <table id="productTable" class="table table-bordered table-hover table-striped align-middle">
-            <thead class="table-hover">
-                <tr>
-                    <th>#</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Ảnh</th>
-                    <th>Giá</th>
-                    <th>Số lượng</th>
-                    <th>Đã bán</th>
-                    <th>Danh mục</th>
-                    <th>Thương hiệu</th>
-                    <th>Giá vốn nhập</th>
-                    <th>Tùy chọn</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table id="productTable" class="table table-hover table-striped table-bordered">
+                <thead class="bg-primary">
                     <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Name</td>
-                        <td>
-                            <img src="/assets/images/productImages/@item.Picture" alt="@item.Name" class="img-thumbnail" style="width: 70px; height: 70px; object-fit: cover;">
-                        </td>
-                        <td>@item.Price.ToString("#,##0 VNĐ")</td>
-                        <td><b>@item.Quantity</b></td>
-                        <td><b>@item.Sold</b></td>
-                        <td>@item.Category.Name</td>
-                        <td>@item.Brand.Name</td>
-                        <td>@item.CapitalPrice.ToString("#,##0 VNĐ")</td>
-                        <td>
-                            <div class="btn-group">
-                                <a asp-action="Edit" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-warning btn-sm" title="Sửa">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a asp-action="AddQuantity" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-info btn-sm" title="Thêm số lượng">
-                                    <i class="fas fa-plus"></i>
-                                </a>
-                                <a asp-action="Delete" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-danger btn-sm confirmDeletion" title="Xóa">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </div>
-                        </td>
+                        <th width="50px">#</th>
+                        <th>Tên sản phẩm</th>
+                        <th width="100px">Ảnh</th>
+                        <th width="120px">Giá bán</th>
+                        <th width="100px">Tồn kho</th>
+                        <th width="100px">Đã bán</th>
+                        <th>Danh mục</th>
+                        <th>Thương hiệu</th>
+                        <th width="120px">Giá nhập</th>
+                        <th width="150px" class="text-center">Thao tác</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@key</td>
+                            <td class="font-weight-bold">@item.Name</td>
+                            <td class="p-1">
+                                <div class="product-img-container">
+                                    <img src="/assets/images/productImages/@item.Picture" alt="@item.Name" class="img-fluid rounded" onerror="this.src='/assets/images/default-product.png'">
+                                </div>
+                            </td>
+                            <td class="text-success font-weight-bold">@item.Price.ToString("#,##0") ₫</td>
+                            <td>
+                                <span class="badge @(item.Quantity > 0 ? "badge-success" : "badge-danger")">
+                                    @item.Quantity
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge badge-info">@item.Sold</span>
+                            </td>
+                            <td>@item.Category.Name</td>
+                            <td>@item.Brand.Name</td>
+                            <td class="text-muted">@item.CapitalPrice.ToString("#,##0") ₫</td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Edit" asp-controller="Product" asp-route-Id="@item.Id"
+                                       class="btn btn-outline-primary" title="Chỉnh sửa" data-toggle="tooltip">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="AddQuantity" asp-controller="Product" asp-route-Id="@item.Id"
+                                       class="btn btn-outline-info" title="Thêm số lượng" data-toggle="tooltip">
+                                        <i class="fas fa-plus-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-controller="Product" asp-route-Id="@item.Id"
+                                       class="btn btn-outline-danger confirmDeletion" title="Xóa" data-toggle="tooltip">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        key++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer clearfix">
+        <div class="float-right">
+            <span class="text-muted">Tổng cộng <strong>@Model.Count()</strong> sản phẩm</span>
+        </div>
     </div>
 </div>
 
-
 @section Css {
-    <link href="/backends/css/custom-style.css" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        /* Custom styles for product table */
+        .product-img-container {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+
+            .product-img-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        #productTable thead th {
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        #productTable tbody td {
+            vertical-align: middle;
+        }
+
+        .card-title i {
+            color: #6c757d;
+        }
+
+        .btn-outline-primary {
+            border-color: #4e73df;
+            color: #4e73df;
+        }
+
+            .btn-outline-primary:hover {
+                background-color: #4e73df;
+                color: white;
+            }
+
+        .btn-outline-info {
+            border-color: #36b9cc;
+            color: #36b9cc;
+        }
+
+            .btn-outline-info:hover {
+                background-color: #36b9cc;
+                color: white;
+            }
+
+        .btn-outline-danger {
+            border-color: #e74a3b;
+            color: #e74a3b;
+        }
+
+            .btn-outline-danger:hover {
+                background-color: #e74a3b;
+                color: white;
+            }
+
+        .table-responsive {
+            min-height: 300px;
+        }
+    </style>
 }
 
 @section Js {
@@ -86,15 +173,72 @@
     <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Initialize DataTable
             $('#productTable').DataTable({
-                responsive: true,
-                autoWidth: false,
-                lengthChange: false,
-                buttons: ["copy", "csv", "excel", "pdf", "print"],
-                columnDefs: [
-                    { orderable: false, targets: [2, 8] } // Disable sorting for Image and Options columns
-                ]
-            }).buttons().container().appendTo('#productTable_wrapper .col-md-6:eq(0)');
+                "responsive": true,
+                "autoWidth": false,
+                "lengthChange": true,
+                "lengthMenu": [10, 25, 50, 100],
+                "pageLength": 25,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Vietnamese.json"
+                },
+                "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                       "<'row'<'col-sm-12'tr>>" +
+                       "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                "buttons": [
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                        className: 'btn btn-success btn-sm'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                        className: 'btn btn-danger btn-sm'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print mr-1"></i> In',
+                        className: 'btn btn-info btn-sm'
+                    }
+                ],
+                "columnDefs": [
+                    { "orderable": false, "targets": [2, 9] }, // Disable sorting for Image and Actions columns
+                    { "searchable": false, "targets": [0, 2, 4, 5, 8, 9] } // Disable search for these columns
+                ],
+                "initComplete": function() {
+                    // Add custom filter for category
+                    this.api().columns([6]).every(function() {
+                        var column = this;
+                        var select = $('<select class="form-control form-control-sm"><option value="">Tất cả danh mục</option></select>')
+                            .appendTo($(column.header()).empty())
+                            .on('change', function() {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+
+                        column.data().unique().sort().each(function(d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                }
+            });
+
+            // Add buttons to container
+            $('#productTable_wrapper .col-md-6:eq(0)').append(
+                '<div class="btn-group btn-group-sm ml-2">' +
+                '<button type="button" class="btn btn-default" id="refreshTable"><i class="fas fa-sync-alt"></i></button>' +
+                '</div>'
+            );
+
+            // Refresh table button
+            $('#refreshTable').click(function() {
+                $('#productTable').DataTable().ajax.reload();
+            });
+
+            // Initialize tooltips
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 }

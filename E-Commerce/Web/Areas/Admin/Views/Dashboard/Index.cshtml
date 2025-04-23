@@ -1,170 +1,162 @@
 ﻿@model StatisticalChartModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Dashboard";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-
-<section class="content">
-    <div class="container-fluid">
-        <!-- Row for Stat boxes -->
-        <div class="row">
-            <div class="col-lg-3 col-md-6 mb-4">
-                <!-- Order Box -->
-                <div class="small-box bg-info rounded shadow-sm">
-                    <div class="inner">
-                        <h3 class="font-weight-bold text-white">@ViewBag.CountOrder</h3>
-                        <p class="text-white">Orders</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                    <a asp-controller="Order" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+<!-- Stat Boxes -->
+<div class="row g-4">
+    <!-- Order Box -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card shadow-sm border-0 rounded-4 bg-info text-white h-100 transition-all hover:shadow-lg hover:-translate-y-2">
+            <div class="card-body d-flex align-items-center">
+                <div class="inner flex-grow-1">
+                    <h3 class="fw-bold mb-0">@ViewBag.CountOrder</h3>
+                    <p class="mb-0">Đơn hàng</p>
+                </div>
+                <div class="icon fs-2">
+                    <i class="ion ion-bag"></i>
                 </div>
             </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <!-- Product Box -->
-                <div class="small-box bg-success rounded shadow-sm">
-                    <div class="inner">
-                        <h3 class="font-weight-bold text-white">@ViewBag.CountProduct<sup style="font-size: 20px">%</sup></h3>
-                        <p class="text-white">Products</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                    <a asp-controller="Product" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <!-- User Box -->
-                <div class="small-box bg-warning rounded shadow-sm">
-                    <div class="inner">
-                        <h3 class="font-weight-bold text-white">@ViewBag.CountUser</h3>
-                        <p class="text-white">Users</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <a asp-controller="User" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4">
-                <!-- Category Box -->
-                <div class="small-box bg-danger rounded shadow-sm">
-                    <div class="inner">
-                        <h3 class="font-weight-bold text-white">@ViewBag.CountCategory</h3>
-                        <p class="text-white">Categories</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a asp-controller="Category" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Filter Section -->
-        <div class="row">
-            <div class="col-md-4">
-                <div class="filter-box">
-                    <h4>Lọc dữ liệu theo:</h4>
-                    <select class="form-control filter-select">
-                        <option value="30">--- Lọc dữ liệu ---</option>
-                        <option value="7">7 ngày trước</option>
-                        <option value="30">Tháng qua</option>
-                        <option value="90">3 tháng trước</option>
-                        <option value="365">1 năm</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="filter-box">
-                    <h4>Tùy chọn:</h4>
-                    <label for="date_from">Từ ngày</label>
-                    <input type="date" class="form-control" id="date_from" asp-for="@Model.CreatedDate" />
-                    <label for="date_to">Đến ngày</label>
-                    <input type="date" class="form-control" id="date_to" asp-for="@Model.CreatedDate" />
-                    <button id="filterButton" class="btn btn-primary btn-block mt-3">Lọc</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Chart Section -->
-        <div class="row mt-5">
-            <div class="col-12">
-                <h5 class="text-center mb-4">Biểu đồ thống kê</h5>
-                <div id="myfirstchart" style="height: 350px;"></div>
-            </div>
+            <a asp-controller="Order" class="card-footer d-block text-white text-center py-2 bg-info-darken">Chi tiết <i class="fas fa-arrow-circle-right ms-2"></i></a>
         </div>
     </div>
-</section>
+    <!-- Product Box -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card shadow-sm border-0 rounded-4 bg-success text-white h-100 transition-all hover:shadow-lg hover:-translate-y-2">
+            <div class="card-body d-flex align-items-center">
+                <div class="inner flex-grow-1">
+                    <h3 class="fw-bold mb-0">@ViewBag.CountProduct</h3>
+                    <p class="mb-0">Sản phẩm</p>
+                </div>
+                <div class="icon fs-2">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+            </div>
+            <a asp-controller="Product" class="card-footer d-block text-white text-center py-2 bg-success-darken">Chi tiết <i class="fas fa-arrow-circle-right ms-2"></i></a>
+        </div>
+    </div>
+    <!-- User Box -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card shadow-sm border-0 rounded-4 bg-warning text-white h-100 transition-all hover:shadow-lg hover:-translate-y-2">
+            <div class="card-body d-flex align-items-center">
+                <div class="inner flex-grow-1">
+                    <h3 class="fw-bold mb-0">@ViewBag.CountUser</h3>
+                    <p class="mb-0">Người dùng</p>
+                </div>
+                <div class="icon fs-2">
+                    <i class="ion ion-person-add"></i>
+                </div>
+            </div>
+            <a asp-controller="User" class="card-footer d-block text-white text-center py-2 bg-warning-darken">Chi tiết <i class="fas fa-arrow-circle-right ms-2"></i></a>
+        </div>
+    </div>
+    <!-- Category Box -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card shadow-sm border-0 rounded-4 bg-danger text-white h-100 transition-all hover:shadow-lg hover:-translate-y-2">
+            <div class="card-body d-flex align-items-center">
+                <div class="inner flex-grow-1">
+                    <h3 class="fw-bold mb-0">@ViewBag.CountCategory</h3>
+                    <p class="mb-0">Danh mục</p>
+                </div>
+                <div class="icon fs-2">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+            </div>
+            <a asp-controller="Category" class="card-footer d-block text-white text-center py-2 bg-danger-darken">Chi tiết <i class="fas fa-arrow-circle-right ms-2"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Section -->
+<div class="row g-4 mt-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 rounded-4 p-4 bg-light">
+            <h4 class="fw-semibold mb-3">Lọc dữ liệu theo</h4>
+            <select class="form-select form-select-lg border-0 shadow-sm filter-select">
+                <option value="30">--- Lọc dữ liệu ---</option>
+                <option value="7">7 ngày trước</option>
+                <option value="30">Tháng qua</option>
+                <option value="90">3 tháng trước</option>
+                <option value="365">1 năm</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 rounded-4 p-4 bg-light">
+            <h4 class="fw-semibold mb-3">Tùy chọn ngày</h4>
+            <div class="mb-3">
+                <label for="date_from" class="form-label fw-semibold">Từ ngày</label>
+                <input type="date" class="form-control border-0 shadow-sm" id="date_from" asp-for="@Model.CreatedDate" />
+            </div>
+            <div class="mb-3">
+                <label for="date_to" class="form-label fw-semibold">Đến ngày</label>
+                <input type="date" class="form-control border-0 shadow-sm" id="date_to" asp-for="@Model.CreatedDate" />
+            </div>
+            <button id="filterButton" class="btn btn-primary btn-lg w-100">Lọc dữ liệu</button>
+        </div>
+    </div>
+</div>
+
+<!-- Chart Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-4 p-4">
+            <h5 class="text-center fw-bold mb-4">Biểu đồ thống kê</h5>
+            <div id="myfirstchart" style="height: 350px;"></div>
+        </div>
+    </div>
+</div>
 
 @section Css {
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
     <style>
-        .small-box {
-            position: relative;
-            display: block;
-            background: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-            .small-box:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
             }
 
-            .small-box .inner {
-                padding: 10px;
-            }
-
-            .small-box .icon {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                font-size: 40px;
-            }
-
-        .small-box-footer {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 0 0 15px 15px;
-            color: #fff;
+        .bg-info-darken {
+            background-color: #0a829c;
         }
 
-        .filter-box {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .bg-success-darken {
+            background-color: #218838;
         }
 
-            .filter-box label {
-                font-weight: bold;
-                display: block;
-                margin-bottom: 5px;
+        .bg-warning-darken {
+            background-color: #e0a800;
+        }
+
+        .bg-danger-darken {
+            background-color: #c82333;
+        }
+
+        .form-control, .form-select {
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus, .form-select:focus {
+                box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25) !important;
+                border-color: #28a745 !important;
             }
-
-        .filter-select, .form-control {
-            border-radius: 8px;
-        }
 
         .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+            background: linear-gradient(45deg, #007bff, #00aaff);
+            border: none;
         }
 
             .btn-primary:hover {
-                background-color: #0056b3;
-                border-color: #004085;
+                background: linear-gradient(45deg, #0056b3, #0088cc);
             }
 
-        .btn-block {
-            width: 100%;
+        .icon {
+            opacity: 0.7;
         }
     </style>
 }
@@ -173,9 +165,10 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function(){
-            var ChartMorris= new Morris.Line({
+            var ChartMorris = new Morris.Line({
                 element: 'myfirstchart',
                 data: [],
                 xkey: 'date',
@@ -186,40 +179,39 @@
             });
 
             $.ajax({
-                url:"@Url.Action("GetChartData", "Dashboard")",
-                type:"POST",
-                dataType:"json",
-                success:function(data){
+                url: "@Url.Action("GetChartData", "Dashboard")",
+                type: "POST",
+                dataType: "json",
+                success: function(data){
                     if(data){
                         ChartMorris.setData(data.map(function(item){
                             return {
-                                date:item.date,
-                                sold:item.sold,
-                                quantity:item.quantity,
-                                revenue:item.revenue,
-                                profit:item.profit
+                                date: item.date,
+                                sold: item.sold,
+                                quantity: item.quantity,
+                                revenue: item.revenue,
+                                profit: item.profit
                             };
                         }));
-                    }
-                    else{
+                    } else {
                         console.warn("No data received for Morris chart update");
                         ChartMorris.setData([]);
                     }
                 },
-                error:function(error){
+                error: function(error){
                     console.error("Error fetching data:", error);
                 }
             });
 
-            $(".filter-select").on('change',function(){
-                var days=$(this).val();
-                var endDate=new Date();
-                var startDate= new Date(endDate.getTime()-days*24*60*60*1000);
+            $(".filter-select").on('change', function(){
+                var days = $(this).val();
+                var endDate = new Date();
+                var startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);
                 $.ajax({
-                    url:"@Url.Action("GetChartDataBySelect", "Dashboard")",
-                    type:"POST",
-                    dataType:'json',
-                    data:{
+                    url: "@Url.Action("GetChartDataBySelect", "Dashboard")",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
                         startDate: startDate.toISOString().split('T')[0],
                         endDate: endDate.toISOString().split('T')[0],
                     },
@@ -227,49 +219,48 @@
                         if(data){
                             ChartMorris.setData(data.map(function(item){
                                 return {
-                                    date:item.date,
-                                    sold:item.sold,
-                                    quantity:item.quantity,
-                                    revenue:item.revenue,
-                                    profit:item.profit
+                                    date: item.date,
+                                    sold: item.sold,
+                                    quantity: item.quantity,
+                                    revenue: item.revenue,
+                                    profit: item.profit
                                 };
                             }));
-                        }else{
+                        } else {
                             console.warn("No data received for Morris chart update");
                             ChartMorris.setData([]);
                         }
                     },
-                    error:function(error){
+                    error: function(error){
                         console.error("Error fetching data:", error);
                     }
                 });
             });
 
-            //lọc theo tùy chọn
             $("#filterButton").click(function(){
                 var fromDate = $("#date_from").val();
                 var toDate = $("#date_to").val();
                 $.ajax({
-                    url:"@Url.Action("FilterData", "Dashboard")",
-                    data:{fromDate:fromDate,toDate:toDate},
-                    type:"POST",
-                    success:function(data){
+                    url: "@Url.Action("FilterData", "Dashboard")",
+                    data: { fromDate: fromDate, toDate: toDate },
+                    type: "POST",
+                    success: function(data){
                         if(data){
                             ChartMorris.setData(data.map(function(item){
                                 return {
-                                    date:item.date,
-                                    sold:item.sold,
-                                    quantity:item.quantity,
-                                    revenue:item.revenue,
-                                    profit:item.profit
+                                    date: item.date,
+                                    sold: item.sold,
+                                    quantity: item.quantity,
+                                    revenue: item.revenue,
+                                    profit: item.profit
                                 };
                             }));
-                        }
-                        else{
+                        } else {
                             console.warn("No data received for Morris chart update");
                             ChartMorris.setData([]);
                         }
-                    },error: function(error){
+                    },
+                    error: function(error){
                         console.error("Error fetching data:", error);
                     }
                 });
