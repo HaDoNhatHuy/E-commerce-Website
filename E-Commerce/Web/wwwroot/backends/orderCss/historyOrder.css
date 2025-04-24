@@ -1,0 +1,369 @@
+﻿.order-details-page {
+    padding: 40px 0;
+    background-color: #f9f9f9;
+}
+
+.order-header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+    .order-header h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+.order-id {
+    display: inline-block;
+    font-size: 16px;
+    background-color: #f0f0f0;
+    padding: 5px 15px;
+    border-radius: 20px;
+    color: #666;
+}
+
+.order-status-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    color: cornflowerblue;
+}
+
+    .order-status-banner.status-0 {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+
+    .order-status-banner.status-1 {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+    }
+
+    .order-status-banner.status-2 {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+    }
+
+    .order-status-banner .status-icon {
+        font-size: 24px;
+    }
+
+    .order-status-banner .status-text {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+.order-date {
+    font-size: 16px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+.info-card-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+    .info-card-header i {
+        font-size: 24px;
+        margin-right: 15px;
+        color: #3498db;
+    }
+
+    .info-card-header h4 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+        color: #333;
+    }
+
+.info-card-body {
+    padding: 20px;
+}
+
+.info-item {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.info-label {
+    width: 120px;
+    font-weight: 600;
+    color: #666;
+}
+
+.info-value {
+    flex: 1;
+    color: #333;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.summary-label {
+    font-weight: 500;
+    color: #666;
+}
+
+.summary-value {
+    font-weight: 600;
+    color: #333;
+}
+
+    .summary-value.discount {
+        color: #e74c3c;
+    }
+
+.summary-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 15px 0;
+}
+
+.summary-item.total {
+    margin-top: 10px;
+}
+
+    .summary-item.total .summary-label,
+    .summary-item.total .summary-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #3498db;
+    }
+
+.products-table-container {
+    overflow-x: auto;
+}
+
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .products-table th {
+        background-color: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #555;
+        border-bottom: 2px solid #eee;
+    }
+
+    .products-table td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+
+.product-info {
+    display: flex;
+    align-items: center;
+}
+
+.product-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.product-quantity {
+    font-weight: 600;
+    color: #666;
+}
+
+.product-price {
+    color: #666;
+}
+
+.product-total {
+    font-weight: 600;
+    color: #3498db;
+}
+
+.back-to-orders {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    color: #3498db;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    transition: all 0.3s;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .btn-back:hover {
+        background-color: #3498db;
+        color: white;
+    }
+
+    .btn-back i {
+        margin-right: 10px;
+    }
+
+/* Order Timeline */
+.order-timeline {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+    .order-timeline h5 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+.timeline-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.timeline-item {
+    position: relative;
+    flex: 1;
+    text-align: center;
+    padding: 0 10px;
+}
+
+    .timeline-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        top: 25px;
+        right: -50%;
+        width: 100%;
+        height: 2px;
+        background-color: #ddd;
+        z-index: 1;
+    }
+
+.timeline-icon {
+    background-color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    border: 2px solid #ddd;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-item.active .timeline-icon {
+    border-color: #2ecc71;
+    background-color: #f1fff5;
+}
+
+    .timeline-item.active .timeline-icon i {
+        color: #2ecc71;
+    }
+
+.timeline-item.canceled .timeline-icon {
+    border-color: #e74c3c;
+    background-color: #fff5f5;
+}
+
+    .timeline-item.canceled .timeline-icon i {
+        color: #e74c3c;
+    }
+
+.timeline-icon i {
+    font-size: 20px;
+    color: #aaa;
+}
+
+.timeline-content h6 {
+    font-weight: 600;
+    margin: 0 0 5px;
+    color: #333;
+}
+
+.timeline-content p {
+    font-size: 14px;
+    margin: 0;
+    color: #888;
+}
+
+/* Responsive Styles */
+@media (max-width: 991px) {
+    .timeline-item:not(:last-child)::after {
+        width: 80%;
+        right: -40%;
+    }
+}
+
+@media (max-width: 767px) {
+    .order-status-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+        .order-status-banner .status-icon,
+        .order-status-banner .status-text {
+            margin-bottom: 10px;
+        }
+
+    .info-item {
+        flex-direction: column;
+    }
+
+    .info-label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .timeline-container {
+        flex-direction: column;
+    }
+
+    .timeline-item {
+        display: flex;
+        align-items: center;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 25px;
+            width: 2px;
+            height: 30px;
+            background-color: #ddd;
+        }
+
+    .timeline-icon {
+        margin: 0 15px 0 0;
+    }
+}

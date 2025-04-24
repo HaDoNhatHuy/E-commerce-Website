@@ -7,8 +7,8 @@ using Web.Repository;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("Admin/Role")]
-    //[Authorize(Roles = "Admin")]
+    //[Route("Admin/Role")]
+    [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
         private readonly DataContext _dataContext;
@@ -18,18 +18,18 @@ namespace Web.Areas.Admin.Controllers
             _dataContext = dataContext;
             _roleManager = roleManager;
         }
-        [Route("Index")]
+        //[Route("Index")]
         public async Task<IActionResult> Index()
         {
             return View(await _dataContext.Roles.OrderByDescending(i => i.Id).ToListAsync());
         }
-        [Route("Create")]
+        //[Route("Create")]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-        [Route("Create")]
+        //[Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IdentityRole role)
@@ -42,7 +42,7 @@ namespace Web.Areas.Admin.Controllers
             return Redirect("Index");
         }
         [HttpGet]
-        [Route("Delete")]
+        //[Route("Delete")]
         public async Task<IActionResult> Delete(string Id)
         {
             if (string.IsNullOrEmpty(Id))
@@ -67,7 +67,7 @@ namespace Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [Route("Edit")]
+        //[Route("Edit")]
         public async Task<IActionResult> Edit(string Id)
         {
             if (string.IsNullOrEmpty(Id))
@@ -78,7 +78,7 @@ namespace Web.Areas.Admin.Controllers
             return View(role);
         }
         [HttpPost]
-        [Route("Edit")]
+        //[Route("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string Id, IdentityRole roleModel)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Web.Models;
 using Web.Repository;
@@ -6,6 +7,7 @@ using Web.Repository;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ShippingController : Controller
     {
         private readonly DataContext _dataContext;
@@ -13,7 +15,7 @@ namespace Web.Areas.Admin.Controllers
         {
             _dataContext = context;
         }
-        [Route("Index")]
+        //[Route("Index")]
         public async Task<IActionResult> Index()
         {
             var shippingList = await _dataContext.Shippings.ToListAsync();
@@ -21,7 +23,7 @@ namespace Web.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        [Route("StoreShipping")]
+        //[Route("StoreShipping")]
         public async Task<IActionResult> StoreShipping(ShippingModel shippingModel, string tinh, string quan, string phuong, decimal price)
         {
             shippingModel.City = tinh;

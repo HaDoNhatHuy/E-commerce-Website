@@ -6,7 +6,7 @@ using Web.Repository;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class OrderController : Controller
     {
         private readonly DataContext _dataContext;
@@ -30,7 +30,7 @@ namespace Web.Areas.Admin.Controllers
             return View(orderDetails);
         }
         [HttpPost]
-        [Route("UpdateOrder")]
+        //[Route("UpdateOrder")]
         public async Task<IActionResult> UpdateOrder(string orderCode, int status)
         {
             var order = await _dataContext.Orders.Where(i => i.OrderCode == orderCode).FirstOrDefaultAsync();

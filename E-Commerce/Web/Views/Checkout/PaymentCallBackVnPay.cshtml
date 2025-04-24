@@ -1,117 +1,88 @@
 ﻿@using Web.Models.VnPay
 @model PaymentResponseModel
-
 @{
     ViewData["Title"] = "Kết quả thanh toán qua VnPay";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="container my-5">
     <div class="payment-result">
-        <div class="result-header">
-            <h1 class="result-title">💳 Thanh toán thành công!</h1>
-            <p class="result-description">
-                Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Dưới đây là thông tin chi tiết về giao dịch của bạn:
-            </p>
+        <div class="payment-status">
+            <div class="checkmark-circle">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle-bg" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
         </div>
+        
+        <div class="result-header">
+            <h1 class="result-title">Thanh toán thành công</h1>
+            <p class="result-subtitle">Cảm ơn bạn đã sử dụng dịch vụ thanh toán của chúng tôi</p>
+        </div>
+        
         <div class="result-body">
             <div class="info-card">
                 <div class="info-item">
-                    <strong>🔖 Order ID:</strong> <span>@Model.OrderId</span>
+                    <div class="info-label">
+                        <i class="info-icon receipt"></i>
+                        <span>Order ID</span>
+                    </div>
+                    <div class="info-value">@Model.OrderId</div>
                 </div>
+                
                 <div class="info-item">
-                    <strong>📝 Mô tả đơn hàng:</strong> <span>@Model.OrderDescription</span>
+                    <div class="info-label">
+                        <i class="info-icon description"></i>
+                        <span>Mô tả đơn hàng</span>
+                    </div>
+                    <div class="info-value">@Model.OrderDescription</div>
                 </div>
+                
                 <div class="info-item">
-                    <strong>💰 Phương thức thanh toán:</strong> <span>@Model.PaymentMethod</span>
+                    <div class="info-label">
+                        <i class="info-icon payment"></i>
+                        <span>Phương thức thanh toán</span>
+                    </div>
+                    <div class="info-value">@Model.PaymentMethod</div>
                 </div>
+                
                 <div class="info-item">
-                    <strong>🔍 Mã giao dịch:</strong> <span>@Model.TransactionId</span>
+                    <div class="info-label">
+                        <i class="info-icon transaction"></i>
+                        <span>Mã giao dịch</span>
+                    </div>
+                    <div class="info-value">@Model.TransactionId</div>
                 </div>
+                
                 <div class="info-item">
-                    <strong>📌 Mã thanh toán:</strong> <span>@Model.PaymentId</span>
+                    <div class="info-label">
+                        <i class="info-icon confirmation"></i>
+                        <span>Mã thanh toán</span>
+                    </div>
+                    <div class="info-value">@Model.PaymentId</div>
+                </div>
+            </div>
+            
+            <div class="receipt-footer">
+                <div class="timestamp">
+                    <i class="time-icon"></i>
+                    <span>@DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</span>
                 </div>
             </div>
         </div>
+        
         <div class="result-footer">
-            <a asp-controller="Account" asp-action="History" class="btn btn-primary">
-                📜 Xem lịch sử đơn hàng
+            <a asp-controller="Account" asp-action="History" class="btn-history">
+                <span>Xem lịch sử đơn hàng</span>
+                <i class="arrow-icon"></i>
+            </a>
+            <a href="/" class="btn-home">
+                <span>Trở về trang chủ</span>
             </a>
         </div>
     </div>
 </div>
+
 @section Css{
-    <style>
-        .payment-result {
-            background: linear-gradient(135deg, #4caf50, #81c784);
-            color: #fff;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .result-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .result-title {
-            font-size: 3rem;
-            font-weight: bold;
-        }
-
-        .result-description {
-            font-size: 2rem;
-            margin-top: 10px;
-            font-style: italic;
-        }
-
-        .result-body {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .info-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .info-item {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-            .info-item strong {
-                color: #f8f8f8;
-            }
-
-        .result-footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-            .result-footer .btn-primary {
-                background-color: #f5f5f5;
-                color: #4caf50;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 25px;
-                font-size: 2rem;
-                font-weight: bold;
-                transition: all 0.3s ease-in-out;
-            }
-
-                .result-footer .btn-primary:hover {
-                    background-color: #ffffff;
-                    color: #388e3c;
-                    transform: scale(1.05);
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                }
-
-    </style>
+    <link href="/backends/payment/vnPayStyle.css" rel="stylesheet" />
 }

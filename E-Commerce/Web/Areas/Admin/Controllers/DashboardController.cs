@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Web.Repository;
 
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class DashboardController : Controller
     {
         private readonly DataContext _dataContext;
@@ -27,7 +29,7 @@ namespace Web.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        [Route("GetChartData")]
+        //[Route("GetChartData")]
         public IActionResult GetChartData()
         {
             var data = _dataContext.Statisticals.Select(s => new
@@ -41,7 +43,7 @@ namespace Web.Areas.Admin.Controllers
             return Json(data);
         }
         [HttpPost]
-        [Route("GetChartDataBySelect")]
+        //[Route("GetChartDataBySelect")]
         public IActionResult GetChartDataBySelect(DateTime startDate, DateTime endDate)
         {
             var data = _dataContext.Statisticals
@@ -57,7 +59,7 @@ namespace Web.Areas.Admin.Controllers
             return Json(data);
         }
         [HttpPost]
-        [Route("FilterData")]
+        //[Route("FilterData")]
         public IActionResult FilterData(DateTime? fromDate, DateTime? toDate)
         {
             var query = _dataContext.Statisticals.AsQueryable();

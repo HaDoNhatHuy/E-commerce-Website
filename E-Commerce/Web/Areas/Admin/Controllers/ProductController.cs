@@ -10,7 +10,7 @@ using Web.Repository;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private readonly DataContext _dataContext;
@@ -164,7 +164,7 @@ namespace Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         //Add Product Quantity
-        [Route("AddQuantity")]
+        //[Route("AddQuantity")]
         [HttpGet]
         public async Task<IActionResult> AddQuantity(int Id)
         {
@@ -173,7 +173,7 @@ namespace Web.Areas.Admin.Controllers
             ViewBag.Id = Id;
             return View();
         }
-        [Route("StoreProductQuantity")]
+        //[Route("StoreProductQuantity")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> StoreProductQuantity(ProductQuantityModel productQuantityModel)

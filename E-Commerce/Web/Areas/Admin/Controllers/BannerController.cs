@@ -8,8 +8,8 @@ using Web.Repository;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("Admin/Banner")]
-    //[Authorize(Roles = " Admin")]
+    //[Route("Admin/Banner")]
+    [Authorize(Roles = " Admin")]
     public class BannerController : Controller
     {
         private readonly DataContext _dataContext;
@@ -29,7 +29,7 @@ namespace Web.Areas.Admin.Controllers
         {
             return View();
         }
-        [Route("Create")]
+        //[Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BannerModel banner)
@@ -74,14 +74,14 @@ namespace Web.Areas.Admin.Controllers
                 return View(banner);
             }
         }
-        [Route("Edit")]
+        //[Route("Edit")]
         public async Task<IActionResult> Edit(int Id)
         {
             var existBanner = await _dataContext.Banners.FindAsync(Id);
             return View(existBanner);
         }
         [HttpPost]
-        [Route("Edit")]
+        //[Route("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(BannerModel banner)
         {
@@ -111,7 +111,7 @@ namespace Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
-        [Route("Delete")]
+        //[Route("Delete")]
         public async Task<IActionResult> Delete(int Id)
         {
             var banner = await _dataContext.Banners.FindAsync(Id);

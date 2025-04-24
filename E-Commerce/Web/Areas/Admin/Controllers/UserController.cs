@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,8 @@ using Web.Repository;
 namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("Admin/User")]
+    //[Route("Admin/User")]
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly DataContext _dataContext;
@@ -22,7 +24,7 @@ namespace Web.Areas.Admin.Controllers
             _dataContext = dataContext;
         }
         [HttpGet]
-        [Route("Index")]
+        //[Route("Index")]
         public async Task<IActionResult> Index()
         {
             //return View(await _userManager.Users.OrderByDescending(i => i.Id).ToListAsync());
@@ -36,7 +38,7 @@ namespace Web.Areas.Admin.Controllers
             return View(userWithRoles);
         }
         [HttpGet]
-        [Route("Create")]
+        //[Route("Create")]
         public async Task<IActionResult> Create()
         {
             var roles = await _roleManager.Roles.ToListAsync();
@@ -45,7 +47,7 @@ namespace Web.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Create")]
+        //[Route("Create")]
         public async Task<IActionResult> Create(AppUserModel user)
         {
             if (ModelState.IsValid)
@@ -95,7 +97,7 @@ namespace Web.Areas.Admin.Controllers
             return View(user);
         }
         [HttpGet]
-        [Route("Edit")]
+        //[Route("Edit")]
         public async Task<IActionResult> Edit(string Id)
         {
             if (string.IsNullOrEmpty(Id))
@@ -113,7 +115,7 @@ namespace Web.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Edit")]
+        //[Route("Edit")]
         public async Task<IActionResult> Edit(string Id, AppUserModel user)
         {
             var existingUser = await _userManager.FindByIdAsync(Id);
@@ -149,7 +151,7 @@ namespace Web.Areas.Admin.Controllers
             return View(existingUser);
         }
         [HttpGet]
-        [Route("Delete")]
+        //[Route("Delete")]
         public async Task<IActionResult> Delete(string Id)
         {
             if (string.IsNullOrEmpty(Id))

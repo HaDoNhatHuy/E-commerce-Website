@@ -1,46 +1,121 @@
 ﻿@model IEnumerable<OrderDetails>
 @{
-    ViewData["Title"] = "HistoryDetails";
+    ViewData["Title"] = "Chi tiết đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
     decimal total = 0;
     decimal subTotal = 0;
     var firstItem = Model.FirstOrDefault();
 }
-<div class="page-content">
-    <div class="order-details">
-        <div class="container">
-            <h2 class="text-center mb-4">Order Details</h2>
 
-            <!-- Order Summary -->
-            <div class="order-summary">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <!-- Shipping Information -->
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h4>Shipping Information</h4>
+<div class="order-details-page">
+    <div class="container">
+        <div class="order-header">
+            <h2>Chi tiết đơn hàng</h2>
+            <span class="order-id">Mã đơn hàng: #@ViewBag.OrderCode</span>
+        </div>
+
+        <div class="order-status-banner status-@ViewBag.Status">
+            @if (ViewBag.Status == 0)
+            {
+                <div class="status-icon"><i class="icon-clock"></i></div>
+                <div class="status-text">Đang xử lý</div>
+            }
+            else if (ViewBag.Status == 1)
+            {
+                <div class="status-icon"><i class="icon-check"></i></div>
+                <div class="status-text">Hoàn thành</div>
+            }
+            else
+            {
+                <div class="status-icon"><i class="icon-close"></i></div>
+                <div class="status-text">Đã hủy</div>
+            }
+            <div class="order-date">Ngày đặt hàng: @ViewBag.OrderDate.ToString("dd/MM/yyyy")</div>
+        </div>
+
+        <div class="order-content">
+            <div class="row">
+                <!-- Thông tin khách hàng -->
+                <div class="col-lg-4">
+                    <div class="info-card customer-info">
+                        <div class="info-card-header">
+                            <i class="icon-user"></i>
+                            <h4>Thông tin khách hàng</h4>
+                        </div>
+                        <div class="info-card-body">
+                            <div class="info-item">
+                                <div class="info-label">Họ tên:</div>
+                                <div class="info-value">@firstItem.UserName</div>
                             </div>
-                            <div class="card-body">
-                                <p><strong>Name:</strong> @firstItem.UserName</p>
-                                <p><strong>Email:</strong> @firstItem.Email</p>
-                                <p><strong>Phone:</strong> @firstItem.Phone</p>
-                                <p><strong>Address:</strong> @firstItem.Address</p>
+                            <div class="info-item">
+                                <div class="info-label">Email:</div>
+                                <div class="info-value">@firstItem.Email</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Số điện thoại:</div>
+                                <div class="info-value">@firstItem.Phone</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Địa chỉ:</div>
+                                <div class="info-value">@firstItem.Address</div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Purchased Items -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Purchased Items</h4>
+                    <!-- Order Summary Card -->
+                    <div class="info-card order-summary">
+                        <div class="info-card-header">
+                            <i class="icon-wallet"></i>
+                            <h4>Tổng quan đơn hàng</h4>
+                        </div>
+                        <div class="info-card-body">
+                            <div class="summary-item">
+                                <div class="summary-label">Tạm tính:</div>
+                                <div class="summary-value">@total.ToString("#,##0 VNĐ")</div>
                             </div>
-                            <div class="card-body">
-                                <table class="table table-hover table-bordered">
+                            <div class="summary-item">
+                                <div class="summary-label">Phí vận chuyển:</div>
+                                <div class="summary-value">@ViewBag.ShippingFee.ToString("#,##0 VNĐ")</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Giảm giá:</div>
+                                <div class="summary-value discount">-@ViewBag.DiscountValue.ToString("#,##0 VNĐ")</div>
+                            </div>
+                            <div class="summary-divider"></div>
+                            <div class="summary-item total">
+                                @{
+                                    var GrandTotal = total + ViewBag.ShippingFee - ViewBag.DiscountValue;
+                                }
+                                <div class="summary-label">Tổng cộng:</div>
+                                <div class="summary-value">@GrandTotal.ToString("#,##0 VNĐ")</div>
+                            </div>
+
+                            <div class="back-to-orders">
+                                <a asp-action="History" asp-controller="Account" class="btn btn-back">
+                                    <i class="icon-long-arrow-left"></i>
+                                    <span>Quay lại danh sách đơn hàng</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purchased Items -->
+                <div class="col-lg-8">
+                    <div class="info-card purchased-items">
+                        <div class="info-card-header">
+                            <i class="icon-shopping-cart"></i>
+                            <h4>Sản phẩm đã mua</h4>
+                        </div>
+                        <div class="info-card-body">
+                            <div class="products-table-container">
+                                <table class="products-table">
                                     <thead>
                                         <tr>
-                                            <th>Product</th>
-                                            <th>Quantity</th>
-                                            <th>Price</th>
-                                            <th>Total</th>
+                                            <th>Sản phẩm</th>
+                                            <th>Số lượng</th>
+                                            <th>Đơn giá</th>
+                                            <th>Thành tiền</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -49,107 +124,62 @@
                                             subTotal = item.Quantity * item.Price;
                                             total += subTotal;
                                             <tr>
-                                                <td>@item.Product.Name</td>
-                                                <td>@item.Quantity</td>
-                                                <td>@item.Product.Price</td>
-                                                <td>@subTotal.ToString("#,##0 VNĐ")</td>
+                                                <td class="product-info">
+                                                    <div class="product-name">@item.Product.Name</div>
+                                                </td>
+                                                <td class="product-quantity">@item.Quantity</td>
+                                                <td class="product-price">@item.Product.Price.ToString("#,##0 VNĐ")</td>
+                                                <td class="product-total">@subTotal.ToString("#,##0 VNĐ")</td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Order Summary Sidebar -->
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Order Summary</h4>
-                            </div>
-                            <div class="card-body">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between">
-                                        <span>Subtotal:</span>
-                                        <span>@total.ToString("#,##0 VNĐ")</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between">
-                                        <span>Shipping:</span>
-                                        <span>@ViewBag.ShippingFee.ToString("#,##0 VNĐ")</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between">
-                                        <span>Discount:</span>
-                                        <span>-@ViewBag.DiscountValue.ToString("#,##0 VNĐ")</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between font-weight-bold">
-                                        <span>Total:</span>
-                                        @{
-                                            var GrandTotal = total + ViewBag.ShippingFee - ViewBag.DiscountValue;
-                                        }
-                                        <span>@GrandTotal.ToString("#,##0 VNĐ")</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                            <!-- Order Timeline -->
+                            <div class="order-timeline">
+                                <h5>Trạng thái đơn hàng</h5>
+                                <div class="timeline-container">
+                                    <div class="timeline-item @(ViewBag.Status >= 0 ? "active" : "")">
+                                        <div class="timeline-icon">
+                                            <i class="icon-check-circle"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h6>Đặt hàng</h6>
+                                            <p>@ViewBag.OrderDate.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
 
-                        <!-- Order Status -->
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                <h4>Order Status</h4>
-                            </div>
-                            <div class="card-body">
-                                @if (ViewBag.Status == 0)
-                                {
-                                    <p><strong>Status:</strong> Pending</p>
-                                }
-                                else if (ViewBag.Status == 1)
-                                {
-                                    <p><strong>Status:</strong> Done</p>
-                                }
-                                else
-                                {
-                                    <p><strong>Status:</strong> Canceled</p>
-                                }
-                                <p><strong>Order Date:</strong> @ViewBag.OrderDate.ToString("dd/MM/yyyy")</p>
-                                <p><strong>Order ID:</strong> #@ViewBag.OrderCode</p>
+                                    <div class="timeline-item @(ViewBag.Status == 1 ? "active" : ViewBag.Status == 2 ? "canceled" : "")">
+                                        <div class="timeline-icon">
+                                            @if (ViewBag.Status == 1)
+                                            {
+                                                <i class="icon-check-circle"></i>
+                                            }
+                                            else if (ViewBag.Status == 2)
+                                            {
+                                                <i class="icon-times-circle"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="icon-circle"></i>
+                                            }
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h6>@(ViewBag.Status == 2 ? "Đã hủy" : "Hoàn thành")</h6>
+                                            <p>@(ViewBag.Status != 0 ? ViewBag.OrderDate.AddDays(3).ToString("dd/MM/yyyy") : "Đang xử lý")</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Back to Orders Button -->
-            <div class="text-center mt-4">
-                <a asp-action="History" asp-controller="Account" class="btn btn-outline-primary-2">
-                    <span>BACK TO ORDERS</span><i class="icon-long-arrow-left"></i>
-                </a>
-            </div>
         </div>
     </div>
 </div>
+
 @section Css {
-    <style>
-        .order-details .card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .order-details .card-header {
-            background-color: #f8f9fa;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .order-details .table {
-            margin-bottom: 0;
-        }
-
-        .order-details .btn-outline-primary-2 {
-            padding: 10px 20px;
-            font-size: 14px;
-        }
-
-    </style>
+    <link href="/backends/orderCss/historyOrder.css" rel="stylesheet" />
 }
-

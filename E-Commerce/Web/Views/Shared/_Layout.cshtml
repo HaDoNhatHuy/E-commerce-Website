@@ -156,7 +156,20 @@
                                 </ul>
                             </li>
                         </ul><!-- End .top-menu -->
-
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <div class="header-dropdown">
+                                <a href="#">My Account</a>
+                                <div class="header-menu">
+                                    <ul>
+                                        <li><a asp-action="AccountInfo" asp-controller="Account" asp-area="">Dashboard</a></li>
+                                        <li><a asp-action="History" asp-controller="Account" asp-area="">Orders</a></li>
+                                        <li><a asp-action="UpdateAccount" asp-controller="Account" asp-area="">Change Infomations</a></li>
+                                    </ul>
+                                </div><!-- End .header-menu -->
+                            </div>
+                            <!-- End .header-dropdown -->
+                        }
                         <div class="header-dropdown">
                             <a href="#">USD</a>
                             <div class="header-menu">
@@ -1186,27 +1199,27 @@
         @if (TempData["success"] != null)
         {
             <text>
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Thành công!',
-                                        /* text:'@TempData["success"]', *///sử dụng cái này bị lỗi font nên đổi lại Html.Raw
-                                        // text: '@Html.Raw((TempData["success"]))',
-                                        text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["success"]?.ToString() ?? ""))',
-                                        timer: 2000,
-                                        showConfirmButton: false
-                                    });
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Thành công!',
+                                                /* text:'@TempData["success"]', *///sử dụng cái này bị lỗi font nên đổi lại Html.Raw
+                                                // text: '@Html.Raw((TempData["success"]))',
+                                                text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["success"]?.ToString() ?? ""))',
+                                                timer: 2000,
+                                                showConfirmButton: false
+                                            });
             </text>
         }
         else if (TempData["error"] != null)
         {
             <text>
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Thất bại!',
-                                        text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["error"]?.ToString() ?? ""))',
-                                        timer: 2000,
-                                        showConfirmButton: false
-                                    });
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Thất bại!',
+                                                text: '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["error"]?.ToString() ?? ""))',
+                                                timer: 2000,
+                                                showConfirmButton: false
+                                            });
             </text>
         }
     </script>
